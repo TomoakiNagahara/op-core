@@ -20,6 +20,32 @@
  */
 class Validator extends OnePiece5
 {
+	static function isPositiveNumber($var)
+	{
+		if(!is_numeric($var)){
+			return false;
+		}
+		
+		if( $var === 0 ){
+			return false;
+		}
+		
+		return $var > 0 ? true: false;
+	}
+	
+	static function isNegativeNumber($var)
+	{
+		if(!is_numeric($var)){
+			return false;
+		}
+		
+		if( $var === 0 ){
+			return false;
+		}
+		
+		return $var < 0 ? true: false;
+	}
+	
 	/**
 	 * <pre>
 	 * OK:
@@ -47,6 +73,9 @@ class Validator extends OnePiece5
 	 *  1
 	 *  1.0
 	 *  1.1
+	 * +1
+	 * +1.0
+	 * +1.1
 	 *
 	 * NG:
 	 *  0
@@ -120,11 +149,7 @@ class Validator extends OnePiece5
 			return false;
 		}
 		
-		if( is_string($var) ){
-			return strpos($var, '.') === false ? true: false;
-		}else{
-			return is_int($var);
-		}
+		return is_float($var) ? false: true;
 	}
 	
 	/**
@@ -143,7 +168,7 @@ class Validator extends OnePiece5
 	 * 
 	 * @return boolean
 	 */
-	static function isFlat($var)
+	static function isFloat($var)
 	{
 		return is_float($var);
 	}
