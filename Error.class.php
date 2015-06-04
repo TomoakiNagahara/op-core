@@ -172,7 +172,7 @@ class Error
 				$temp = explode(PHP_EOL, $message.PHP_EOL);
 				$message = self::_i18n($temp[0], $from );
 				if( isset($temp[1]) ){
-					$message .= trim($temp[1],'\\');
+					$message .= ' ![.gray['.trim($temp[1],'\\').']]';
 				}
 			}
 			

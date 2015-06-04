@@ -133,3 +133,7 @@ span.null{
 span.NULL{
   color: red;
 }
+
+.gray{
+	color: gray;
+}
