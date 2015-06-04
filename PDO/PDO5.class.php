@@ -345,11 +345,19 @@ class PDO5 extends OnePiece5
 		}catch( PDOException $e){
 			$file = $e->getFile();
 			$line = $e->getLine();
+			$code = $e->getCode();
 			$text = $e->GetMessage();
-			if( preg_match('|^SQLSTATE\[28000\]\s\[1045\]|',$text) ){
-				$text = "Access was denied. \\{$this->user}@{$this->host}:{$this->port}\\";
+			switch($code){
+				case 1045:
+					$text = "Access was denied. \\{$this->user}@{$this->host}:{$this->port}\\";
+					break;
+				case 2002:
+					$text = 'No such file or directory.';
+					break;
+				default:
+				$this->mark($code);
 			}
-			$this->StackError("$text");
+			$this->StackError("$text",'en');
 			return false;
 		}
 		
