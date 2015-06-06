@@ -204,29 +204,22 @@ abstract class NewWorld5 extends OnePiece5
 	}
 	
 	/**
-	 * Output content type.
-	 */
-	function ContentType()
-	{
-		$mime = $this->_mime;
-		$charset = $this->GetEnv('charset');
-		$this->SetEnv('mime', $mime);
-		header("Content-type: $mime; charset=\"$charset\"");
-	}
-	
-	/**
 	 * Output other header.
 	 */
 	function Headers()
 	{
+		//	init
+		$mime = $this->_mime;
+		$charset = $this->GetEnv('charset');
+		$this->SetEnv('mime', $mime);
+
+		//	Output content-type header.
+		header("Content-type: $mime; charset=\"$charset\"");
+		
+		
 		/*
 		header("Content-Security-Policy: default-src 'self'");
 		header("Strict-Transport-Security: max-age=31536000; includeSubDomains"); // force https
-		*/
-		
-		/* cache control
-		header("Cache-Control: no-cache, no-store, must-revalidate");
-		header("pragma: no-cache");
 		*/
 		
 		/* permit cross domain
@@ -293,9 +286,6 @@ abstract class NewWorld5 extends OnePiece5
 			default:
 				$this->StackError("Does not support this mime. ({$main}/{$sub})");
 		}
-		
-		//	Output content-type header.
-		$this->ContentType();
 		
 		//	Other headers
 		$this->Headers();
