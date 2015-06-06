@@ -49,8 +49,14 @@ class Autoloader
 			}
 		}
 		
+		//	Init include path.
+		$include_path = array();
+		
 		//	Get include path.
-		$include_path = explode( PATH_SEPARATOR, ini_get('include_path') );
+	//	$include_path = explode( PATH_SEPARATOR, ini_get('include_path') );
+		
+		//	Current directory.
+		$include_path[] = '.';
 		
 		//	Add op-core's root.
 		$include_path[] = $_SERVER['OP_ROOT'];
@@ -80,11 +86,12 @@ class Autoloader
 				$io = include_once($file_path);
 			}
 		}
+		
 		/*
 		// Checking autoload successful.
 		if(!class_exists($class_name, false)){
-			trigger_error("Unable to auto load class: $class_name", E_USER_NOTICE);
-			OnePiece5::Mark("Unable to auto load class: $class_name");
+		//	trigger_error("Unable to auto load class: $class_name", E_USER_NOTICE);
+		//	OnePiece5::Mark("Unable to auto load class: $class_name");
 		}
 		*/
 	}

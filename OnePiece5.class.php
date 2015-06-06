@@ -41,7 +41,11 @@ $doc_root = $_SERVER['DOC_ROOT'] = $_SERVER['DOCUMENT_ROOT'].'/';
 
 //	Register autoloader.
 include('Autoloader.class.php');
-spl_autoload_register('Autoloader::Autoload',true,true);
+if(!spl_autoload_register('Autoloader::Autoload',true,true)){
+	function __autoload($class){
+		Autoloader::Autoload($class);
+	}
+}
 
 //	Init Env
 Env::Bootstrap();
@@ -91,7 +95,7 @@ class OnePiece5
 			$this->Init();
 		}
 		
-		$_SERVER[Env::_NAME_SPACE_]['INIT'] += 1;
+		$_SERVER[Env::_NAME_SPACE_]['INIT'] = true;
 	}
 	
 	/**

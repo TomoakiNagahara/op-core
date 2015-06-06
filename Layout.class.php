@@ -189,7 +189,8 @@ class Layout extends OnePiece5
 		}
 		parent::__call($name, $args);
 	}
-	
+
+	/*
 	static function __callStatic($name, $args)
 	{
 		if( $dispatcher = $this->Dispatcher() ){
@@ -204,4 +205,5 @@ class Layout extends OnePiece5
 		}
 		parent::__callStatic($name, $args);
 	}
+	*/
 }
