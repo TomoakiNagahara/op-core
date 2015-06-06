@@ -351,6 +351,12 @@ class PDO5 extends OnePiece5
 			$line = $e->getLine();
 			$code = $e->getCode();
 			$text = $e->GetMessage();
+			if(!$code){
+				if( preg_match('/SQLSTATE\[([0-9]+)\] \[([0-9]+)\]/',$text,$match) ){
+					$state = $match[1];
+					$code  = $match[2];
+				}
+			}
 			switch($code){
 				case 1045:
 					$text = "Access was denied. \\{$this->user}@{$this->host}:{$this->port}\\";

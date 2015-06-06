@@ -49,7 +49,7 @@ class ErrorMySQL extends OnePiece5
 			$database = $match[1];
 			$temp[2] = preg_replace($patt, "\\ \\1 \\", $temp[2]);
 		}else{
-			$this->Mark($temp[2]);
+			$this->Mark($temp);
 		}
 	
 		//	Branch
