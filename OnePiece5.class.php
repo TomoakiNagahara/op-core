@@ -403,7 +403,7 @@ class OnePiece5
 	 * @param string|array|Config $value
 	 * @param number $expire 2592000 = 60*60*24*30
 	 */
-	static function SetCache($key, $value, $expire=2592000)
+	function SetCache($key, $value, $expire=2592000)
 	{
 		OnePiece5::Cache()->Set($key, $value, $expire);
 	}
@@ -411,7 +411,7 @@ class OnePiece5
 	/**
 	 * Get the value from memcache.
 	 */
-	static function GetCache($key)
+	function GetCache($key)
 	{
 		return OnePiece5::Cache()->Get($key);
 	}
