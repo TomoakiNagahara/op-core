@@ -22,6 +22,8 @@ class Model_File extends Model_Model
 	{
 		if(!$path){
 			$path = './';
+		}else{
+			$path = $this->ConvertPath($path);
 		}
 		
 		$path = rtrim( $path, '/' ) . '/';
