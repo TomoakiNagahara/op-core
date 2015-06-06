@@ -230,14 +230,18 @@ class PDO5 extends OnePiece5
 	
 	private function _query_error()
 	{
+		static $_error;
+		
 		if( $this->driver === 'mysql' ){
-			$path = $this->ConvertPath('op:/PDO/ErrorMySQL.class.php');
-			if( include($path) ){
-				$error = new ErrorMySQL();
-				$message = $error->Get($this->pdo);
-			}else{
-				$this->StackError("Failed to the include of ErrorMySQL.");
+			if(!$_error){
+				$path = $this->ConvertPath('op:/PDO/ErrorMySQL.class.php');
+				if( include($path) ){
+					$_error = new ErrorMySQL();
+				}else{
+					$this->StackError("Failed to the include of ErrorMySQL. ($path)");
+				}
 			}
+			$message = $_error->Get($this->pdo);
 		}else{
 			$temp = $this->pdo->errorInfo();
 			$error_id = $temp[0];
