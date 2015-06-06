@@ -216,6 +216,23 @@ abstract class NewWorld5 extends OnePiece5
 		//	Output content-type header.
 		header("Content-type: $mime; charset=\"$charset\"");
 		
+		//	Cache control
+		switch($mime){
+			case 'text/css':
+			case 'text/javascript':
+				// "Thu, 15 Apr 2010 20:00:00 GMT";
+				$age	 = $this->Admin() ? 100000: 60*60*24*1;
+				$time	 = time() + $age;
+				$expire	 = gmdate('r',$time);
+				$expire	 = str_replace(' +0000', '', $expire);
+				header("Expires: $expire GMT");
+				header("Cache-Control: private, max-age=$age");
+				header("pragma:");
+				break;
+			default:
+				header("Cache-Control: no-cache, no-store, must-revalidate");
+				header("pragma: no-cache");
+		}
 		
 		/*
 		header("Content-Security-Policy: default-src 'self'");
