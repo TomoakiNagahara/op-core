@@ -211,24 +211,42 @@ abstract class NewWorld5 extends OnePiece5
 		//	init
 		$mime = $this->_mime;
 		$charset = $this->GetEnv('charset');
-		$this->SetEnv('mime', $mime);
-
+		
 		//	Output content-type header.
 		header("Content-type: $mime; charset=\"$charset\"");
+		
+		//	X-Powered-By
+		header("X-Powered-By: onepiece-framework");
 		
 		//	Cache control
 		switch($mime){
 			case 'text/css':
 			case 'text/javascript':
-				// "Thu, 15 Apr 2010 20:00:00 GMT";
-				$age	 = $this->Admin() ? 100000: 60*60*24*1;
+				$age	 = $this->Admin() ? 3600: 60*60*24*1;
 				$time	 = time() + $age;
 				$expire	 = gmdate('r',$time);
 				$expire	 = str_replace(' +0000', '', $expire);
 				header("Expires: $expire GMT");
-				header("Cache-Control: private, max-age=$age");
+				header("Cache-Control: max-age=$age");
 				header("pragma:");
+				
+				/**
+				 * @see http://php.net/manual/en/function.apache-request-headers.php
+				 * FastCGI(Nginx) is use to from 5.4.0.
+				 */
+				
+				//	Etag
+				if( $et = Toolbox::GetRequest('et') ){
+					$etag = md5($et);
+					header("Etag: $etag");
+					$headers = apache_request_headers();
+					if( isset($headers['If-None-Match']) and $headers['If-None-Match'] === $etag ){
+						header('HTTP/1.1 304 Not Modified');
+						return false;
+					}
+				}
 				break;
+				
 			default:
 				header("Cache-Control: no-cache, no-store, must-revalidate");
 				header("pragma: no-cache");
@@ -253,6 +271,8 @@ abstract class NewWorld5 extends OnePiece5
 		
 		//	Brower checking mime.
 		header("X-Content-Type-Options: nosniff");
+		
+		return true;
 	}
 	
 	/**
@@ -287,12 +307,17 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Content()
 	{
-		Env::Set('mime',$this->_mime);
+		Env::Set('mime', $this->_mime);
 		
-		//	
+		//	headers
+		if(!$this->Headers()){
+			return;
+		}
+		
+		//	Separate mime, main and sub.
 		list($main, $sub) = explode('/', $this->_mime);
 		
-		//	
+		//	Branch at mime's main.
 		switch($main){
 			case 'text':
 				$this->ContentIsText($sub);
@@ -303,9 +328,6 @@ abstract class NewWorld5 extends OnePiece5
 			default:
 				$this->StackError("Does not support this mime. ({$main}/{$sub})");
 		}
-		
-		//	Other headers
-		$this->Headers();
 		
 		//	Output content to stdout.
 		print $this->_content;
