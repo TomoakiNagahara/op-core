@@ -224,8 +224,7 @@ abstract class NewWorld5 extends OnePiece5
 			case 'text/javascript':
 				$age	 = $this->Admin() ? 3600: 60*60*24*1;
 				$time	 = time() + $age;
-				$expire	 = gmdate('r',$time);
-				$expire	 = str_replace(' +0000', '', $expire);
+				$expire	 = gmdate('D, d M Y H:i:s',$time);
 				header("Expires: $expire GMT");
 				header("Cache-Control: max-age=$age");
 				header("pragma:");
