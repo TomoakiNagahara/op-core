@@ -152,7 +152,10 @@ abstract class NewWorld5 extends OnePiece5
 			//	Set default mime.
 			$this->_mime = strtolower($route['mime']);
 			
-			//	headers
+			//	Set execute file's mime.
+			Env::Set('mime', $this->_mime);
+			
+			//	Output headers.
 			if(!$this->Headers()){
 				return;
 			}
@@ -311,8 +314,6 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Content()
 	{
-		Env::Set('mime', $this->_mime);
-		
 		//	Separate mime, main and sub.
 		list($main, $sub) = explode('/', $this->_mime);
 		
