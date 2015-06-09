@@ -152,6 +152,12 @@ abstract class NewWorld5 extends OnePiece5
 			//	Set default mime.
 			$this->_mime = strtolower($route['mime']);
 			
+			//  Execute end-point file.
+			$this->Execute($route);
+			
+			//	Save to content buffer.
+			$this->_content .= ob_get_contents(); ob_clean();
+			
 			//	Set execute file's mime.
 			Env::Set('mime', $this->_mime);
 			
@@ -159,12 +165,6 @@ abstract class NewWorld5 extends OnePiece5
 			if(!$this->Headers()){
 				return;
 			}
-			
-			//  Execute end-point file.
-			$this->Execute($route);
-			
-			//	Save to content buffer.
-			$this->_content .= ob_get_contents(); ob_clean();
 			
 			//	Execute layout system.
 			if( $this->_mime == 'text/html' ){
@@ -227,6 +227,9 @@ abstract class NewWorld5 extends OnePiece5
 		header("X-Powered-By: onepiece-framework");
 		
 		//	Cache control
+		/**
+		 * @see https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=ja
+		 */
 		switch($mime){
 			case 'text/css':
 			case 'text/javascript':
