@@ -2177,25 +2177,7 @@ class Form5 extends OnePiece5
 	
 	function CheckReplace($config)
 	{
-        /*
-		$request = $this->GetRequest();
-		
-		if(isset($config->charset)){
-			$charset = $config->charset;
-		}else{
-			$charset = $this->GetEnv('charset');
-		}
-		
-		foreach($config->input as $input_name => $input){
-			if( isset($input->replace) ){
-				list( $patt, $repl ) = explode( ',', $input->replace );
-				$config->value = preg_replace( "/$patt/", $repl, $config->value );
-			}
-		}
-		*/
-
-        $this->mark('CheckReplace-method is does not implementation yet.');
-
+		$this->mark('CheckReplace-method is does not implementation yet.');
 		return true;
 	}
 	
