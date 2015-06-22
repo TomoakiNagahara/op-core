@@ -800,6 +800,9 @@ class Form5 extends OnePiece5
 					continue;
 				}
 				
+				//	Trimming a value.
+				$value = $this->Trim($input, $value);
+				
 				// save session
 				if(is_string($value)){
 					$session[$form_name][$input_name]['value'] = $value;
@@ -2179,6 +2182,37 @@ class Form5 extends OnePiece5
 	{
 		$this->mark('CheckReplace-method is does not implementation yet.');
 		return true;
+	}
+	
+	/**
+	 * Trimming a value.
+	 * 
+	 * @param  Config  $input
+	 * @param  string  $value
+	 * @return string
+	 */
+	function Trim(Config $input, $value)
+	{
+		if( empty($input->trim) ){
+			return $value;
+		}
+		
+		if(!is_string($value)){
+			return $value;
+		}
+		
+		//  Remove space and tab.
+		$value = trim($value);
+		
+		//	Remove Japanese space.
+		$value = trim($value,'　');
+		
+		//  Specify character that want to remove.
+		if(is_string($input->trim)){
+			$value = trim($value,$input->trim);
+		}
+		
+		return $value;
 	}
 	
 	function CheckValidate(Config $input, $form_name, $value=null )
