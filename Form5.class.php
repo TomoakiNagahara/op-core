@@ -2627,7 +2627,7 @@ class Form5 extends OnePiece5
 	function ValidatePermitEmail( $input, $form_name, $value )
 	{
 		//	check part of address
-		$patt = '/^([a-z0-9][-_a-z0-9\.\+]+)@[-_a-z0-9]+/i';
+		$patt = '/^[a-z0-9][-_a-z0-9\.\+]+@[\.-_a-z0-9]+\.[a-z][a-z]+/i';
 		if(!preg_match( $patt, $value, $match ) ){
 			$this->SetInputError( $input->name, $form_name, 'permit', $value );
 			return false;
