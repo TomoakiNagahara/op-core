@@ -80,7 +80,6 @@ class Form5 extends OnePiece5
 		
 		//  If case of file upload.
 		if( isset($_FILES[$input_name]) ){
-		//	$this->d( $_FILES[$input_name] );
 			
 			if( $_FILES[$input_name]['size'] == 0 ){
 				$request = null;
@@ -94,7 +93,7 @@ class Form5 extends OnePiece5
 		
 		//  charset
 		$charset = isset($form->charset) ? $form->charset: $this->GetEnv('charset');
-				
+		
 		//  convert
 		if(is_null($input_name)){
 			//  many
@@ -212,15 +211,6 @@ class Form5 extends OnePiece5
 			return false;
 		}
 		
-		/*
-		//	Get token table
-		$token = $this->GetSession('token');
-		
-		//	Save new token
-		$token[$form_name] = $token_key;
-		$this->SetSession('token',$token);
-		*/
-		
 		$this->_token[$form_name] = $token_key;
 		
 		return true;
@@ -231,11 +221,6 @@ class Form5 extends OnePiece5
 		if(!$this->CheckConfig( $form_name )){
 			return false;
 		}
-		
-		/*
-		$token = $this->GetSession('token');
-		$token_key = isset($token[$form_name]) ? $token[$form_name]: null;
-		*/
 		
 		$token_key = isset($this->_token[$form_name]) ? $this->_token[$form_name]: null;
 		
@@ -251,7 +236,6 @@ class Form5 extends OnePiece5
 	
 	private function CheckTokenKey( $form_name )
 	{
-	//	if(!$this->CheckConfig( $form_name )){
 		if(!$config = $this->GetConfig($form_name)){
 			return false;
 		}
@@ -339,14 +323,14 @@ class Form5 extends OnePiece5
 	{
         $fqdn = $this->GetEnv('fqdn');
 		$this->mark($fqdn);
-	
+		
 		if( $fqdn === $_SERVER['HTTP_REFERER']){
 			$io = true;
 		}else{
 			$io = false;
 			$this->SetStatus($form_name, 'NG: CSRF');
 		}
-	
+		
 		return $io;
 	}
 	
@@ -741,7 +725,7 @@ class Form5 extends OnePiece5
 		// get session
 		$session = $this->GetSession('form');
 		
-		// submit value
+		// Submitted value.
 		$request = $this->GetRequest( null, $form_name);
 		
 		// 
@@ -1287,14 +1271,6 @@ class Form5 extends OnePiece5
 			return false;
 		}
 		
-		//  str to lower
-		/*
-		if( isset($input->name) ){
-			$input->name = strtolower($input->name);
-			$input_name  = $input->name;
-		}
-		*/
-		
 		//	Stop the convert to lowercase.
 		$input_name = $input->name;
 		
@@ -1502,18 +1478,16 @@ class Form5 extends OnePiece5
 		if(!$form_current = $this->GetCurrentFormName() ){
 			$this->StackError("Form is not started.");
 			return false;
-		} 
+		}
 		
 		if( $form_current !== $form_name ){
 			$this->StackError("Close form name is not match. (open=$form_current, close=$form_name)");
 			return false;
 		}
 		
-		printf("</form>");
+		echo '</form>';
 		
 		$this->SetCurrentFormName(null);
-		
-		return null;
 	}
 	
 	public function Clear( $form_name, $force=false, $location=false )
@@ -2137,6 +2111,7 @@ class Form5 extends OnePiece5
 			return false;
 		}
 		
+		//	Option
 		if( isset($input->options) ){
 			foreach($input->options as $child){
 				$child->name = $input->name;
@@ -2152,7 +2127,7 @@ class Form5 extends OnePiece5
 				return false;
 			}
 		}
-	
+		
 		return true;
 	}
 	
@@ -2293,7 +2268,6 @@ class Form5 extends OnePiece5
 		}
 		if( isset($input->validate->allow) ){
 			if(!$io = $this->ValidateAllow($input, $form_name, $value)){
-				//$this->mark($io);
 				return false;
 			}
 		}
@@ -2310,9 +2284,7 @@ class Form5 extends OnePiece5
 	
 	function ValidateRequied( $input, $form_name, $value )
 	{
-	//	$this->mark($input->name.'='.$value);
-		
-		if( is_null($value) ){
+		if( empty($value) ){
 			if( $value = $this->GetSaveValue($input->name, $form_name) ){
 				//	check value is saved value. (submitted value)
 			}else if( isset($input->value) and strlen($input->value) ){
@@ -2397,8 +2369,6 @@ class Form5 extends OnePiece5
 	
 	function ValidateAllow( $input, $form_name, $value )
 	{
-		$this->mark(__METHOD__."( \$input, $form_name, $value )", 'form_flow');
-		
 		if( preg_match( $input->validate->allow, $value, $match ) ){
 			$this->SetStatus($form_name, "OK: Validate-Allow. ($input->name, {$match[0]})");
 			return true;
@@ -2547,7 +2517,6 @@ class Form5 extends OnePiece5
 				if(is_array($value)){
 					$value = implode('@',$value);
 				}
-				//$io = filter_var( $value, FILTER_VALIDATE_EMAIL);
 				$io = $this->ValidatePermitEmail($input, $form_name, $value);
 				break;
 			
@@ -2728,12 +2697,5 @@ class Form5 extends OnePiece5
 		}
 		
 		return true;
-	}
-	
-	/***************************************************************************************/
-	
-	function Decorate($input_name, $config)
-	{
-		printf( $config, $this->GetLabel($input_name), $this->GetInput($input_name), $this->GetError($input_name));
 	}
 }
