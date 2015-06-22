@@ -72,7 +72,7 @@ class ErrorMySQL extends OnePiece5
 				break;
 	
 			case 1142:
-				$message = " DELETE command was denied. \(host: $host, user: $user)\ ";
+				$message = "SQL query was denied. \(host: $host, user: $user)\ ";
 				break;
 	
 			case 1146:
