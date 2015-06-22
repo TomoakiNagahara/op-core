@@ -2199,7 +2199,7 @@ class Form5 extends OnePiece5
 		return true;
 	}
 	
-	function CheckValidate( $input, $form_name, $value=null )
+	function CheckValidate(Config $input, $form_name, $value=null )
 	{
 		if(!$this->CheckConfig( $form_name, $input->name )){
 			return false;
@@ -2209,17 +2209,6 @@ class Form5 extends OnePiece5
 			// send value
 			$value = $this->GetRequest( $input->name, $form_name );
 		}
-			
-		//  trim
-		if(!empty($input->trim)){
-			$this->SetStatus($form_name,"XX: trim ({$input->name})");
-			//  normal
-			$value = trim($value);
-			//  custom
-			if(is_string($input->trim)){
-				$value = trim($value,$input->trim);
-			}
-		}
 		
 		//  this is file upload remover checkbox.
 		if( $input->type == 'file' and is_array($value) ){
@@ -2228,6 +2217,11 @@ class Form5 extends OnePiece5
 		
 		// check required
 		if(!empty($input->validate->required)){
+			//  Remove space and tab.
+			$value = rtrim($value);
+			//	Remove Japanese space.
+			$value = rtrim($value,'　');
+			//	Do validate.
 			if(!$this->ValidateRequied($input, $form_name, $value)){
 				return false;
 			}
