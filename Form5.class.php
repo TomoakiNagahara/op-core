@@ -142,7 +142,7 @@ class Form5 extends OnePiece5
 		//	Since safety was confirmed, will change the token.
 	//	$this->GenerateTokenKey($form_name); // token may not match.
 		
-		return 'secure' == $this->status->$form_name->message ? true: false;
+		return 'secure' === $this->status->$form_name->message ? true: false;
 	}
 	
 	public function GetStatus( $form_name )
@@ -167,9 +167,15 @@ class Form5 extends OnePiece5
 	
 	private function SetStatus( $form_name, $message )
 	{
+		if(!$this->Admin()){
+			return;
+		}
+		
+		/*
 		if(!$this->CheckConfig( $form_name )){
 			return false;
 		}
+		*/
 		
 		if(!isset($this->status->$form_name->stack)){
 			$this->status->$form_name->stack = array();
@@ -773,8 +779,8 @@ class Form5 extends OnePiece5
 			//  charset
 			$input->charset = $charset;
 			
-			//  check send value
-			if( $io = $this->CheckInputValue( $input, $form_name ) ){
+			//  Check sent value.
+			if( $io = $this->CheckInputValue($input, $form_name /*, $value */) ){
 				
 				// does not save
 				if(isset($input->save) and !$input->save){
@@ -785,7 +791,7 @@ class Form5 extends OnePiece5
 				if( $input->type === 'file' ){
 					$value = $this->SaveFile($input, $form_name);
 					if( is_null($value) ){
-						// throw
+						//	File has not been submit.
 					}else if($value === false){
 						$fail = true;
 					}else{
@@ -804,8 +810,8 @@ class Form5 extends OnePiece5
 				// save cookie
 				if( isset($input->cookie) and !is_null($value) ){
 					//  Remove check index.
-					if( empty($value[0]) ){
-						unset($value[0]);
+					if( isset($value[0]) and empty($value[0]) ){
+						unset($value[0]); // TODO: Is this necessary for what?
 					}
 					$expire = $input->cookie === true ? 0: $input->cookie;
 					$this->SetCookie("$form_name/$input_name", $value, $expire );
@@ -1178,7 +1184,7 @@ class Form5 extends OnePiece5
 		
 		//  Check
 		if(!isset($config->name)){
-			$this->StackError('Is this $config a single config form? There is no form name in the $config.($config->name)');
+			$this->StackError('Form name is empty. Please check \$config->name\.','en');
 			return false;
 		}
 		
@@ -1202,11 +1208,12 @@ class Form5 extends OnePiece5
 		}
 
 		//	Debug
+		/*
 		if( $this->_log ){
-		//	$this->_log[] = __METHOD__ . " | " . $_SERVER['REQUEST_URI'];
 			$this->_log[] = __METHOD__ . " | Last time: " . $this->GetSession('request_uri');
 			$this->SetSession('request_uri',$_SERVER['REQUEST_URI']);
 		}
+		*/
 		
 		// default
 		$this->status->$form_name = new Config();
