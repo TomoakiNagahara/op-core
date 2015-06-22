@@ -311,7 +311,8 @@ class PDO5 extends OnePiece5
 		$this->port     = isset($args['port'])     ? $args['port']     : '3306';
 		$this->user     = isset($args['user'])     ? $args['user']     : null;
 		$password       = isset($args['password']) ? $args['password'] : null;
-		$this->database = isset($args['database']) ? $args['database'] : null;
+		$name           = isset($args['name'])     ? $args['name']     : null;
+		$this->database = isset($args['database']) ? $args['database'] : $name;
 		$this->charset  = isset($args['charset'])  ? $args['charset']  : strtolower($this->GetEnv('charset'));
 		$options        = array();
 		
