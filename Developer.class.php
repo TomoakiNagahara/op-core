@@ -83,8 +83,8 @@ class Developer extends OnePiece5
 		}
 		
 		//  Hide mark label links setting.
-		$key = 'hide_there_links';
-		$str = 'Hide there links';
+		$key = 'hide_these_links';
+		$str = 'Hide these links';
 		$var = 1;
 		if( self::GetSaveMarkLabelValue($key) ){
 			return;
