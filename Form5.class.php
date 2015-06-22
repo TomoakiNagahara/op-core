@@ -2233,10 +2233,6 @@ class Form5 extends OnePiece5
 		
 		// check required
 		if(!empty($input->validate->required)){
-			//  Remove space and tab.
-			$value = rtrim($value);
-			//	Remove Japanese space.
-			$value = rtrim($value,'　');
 			//	Do validate.
 			if(!$this->ValidateRequied($input, $form_name, $value)){
 				return false;
@@ -2310,7 +2306,13 @@ class Form5 extends OnePiece5
 		}
 		
 		if(is_array($value)){
+			//	In case of checkbox.
 			$value = implode('',$value);
+		}else if(is_string($value)){
+			//  Remove space and tab.
+			$value = rtrim($value);
+			//	Remove Japanese space.
+			$value = rtrim($value,'　');
 		}
 		
 		if( strlen($value) ){
