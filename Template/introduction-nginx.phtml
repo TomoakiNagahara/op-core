@@ -104,7 +104,7 @@ server {
 		location ~ \.(<?php print $extensions ?>)$ {
 			fastcgi_pass   127.0.0.1:9000;
 			fastcgi_param  SCRIPT_FILENAME  $document_root<?php print $uri ?>app.php; <i class="blue"># <span class="i18n">Always app.php is executed.</span></i>
-			fastcgi_param  SERVER_ADMIN     tomoaki.nagahara@gmail.com;
+			fastcgi_param  SERVER_ADMIN     <?php print $mail ?>;
 			include  fastcgi_params;
 		}
 		
