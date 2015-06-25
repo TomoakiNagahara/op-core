@@ -627,7 +627,7 @@ class Form5 extends OnePiece5
 		
 		//  Get saved value.
 		foreach( $form->input as $input_name => $input ){
-			if( $input_name == 'submit' ){
+			if( $input->type === 'submit' ){
 				continue;
 			}
 			$return[$input_name] = $this->GetInputValue( $input_name, $form_name );
@@ -644,12 +644,11 @@ class Form5 extends OnePiece5
 		
 		$config = array();
 		foreach( $form->input as $input_name => $input ){
+			if( $input->type === 'submit' ){
+				continue;
+			}
 			$config[$input_name] = $this->GetInputValueRaw( $input_name, $form_name );
 		}
-		
-		//  remove submit button
-		unset($config['submit']);
-		unset($config['submit_button']);
 		
 		return $config;
 	}
