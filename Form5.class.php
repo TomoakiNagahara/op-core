@@ -625,7 +625,7 @@ class Form5 extends OnePiece5
 		if( is_null($value) ){
 			if( !empty($input->cookie) ){
 				$value = $this->GetCookie($form_name.'/'.$input_name);
-			}else if( isset($input->value) ){
+			}else if( isset($input->value) and $input->type !== 'checkbox' ){
 				$value = $input->value;
 			}
 		}
