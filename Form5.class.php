@@ -558,24 +558,6 @@ class Form5 extends OnePiece5
 			default:
 		}
 		
-		/* // Do nl2br is Form5::Value only.
-		switch( $type = strtolower(gettype($value)) ){
-			case 'null':
-				return null;
-				
-			case 'string':
-				return nl2br($value);
-				
-			case 'boolean':
-			case 'integer':
-			case 'array':
-				break;
-				
-			default:
-				$this->mark("undefined type. ($type)");
-		}
-		*/
-		
 		//	In case of checkbox or multiple select.
 		if( is_array($value) ){
 			if( strlen(join('',$value)) ){
@@ -601,7 +583,7 @@ class Form5 extends OnePiece5
 		if(!$input = $this->GetConfig( $form_name, $input_name )){
 			return false;
 		}
-
+		
 		//  get joint, pass to call method.
 		if( is_null($joint) ){
 			$joint = isset($input->joint) ? $input->joint: '';
@@ -616,11 +598,11 @@ class Form5 extends OnePiece5
 		}
 		
 		//  If array
-		if(is_array($value)){
+		if( is_array($value) ){
 			//  not check value is removed. 
 			$value = array_diff($value,array(''));
 		}
-				
+		
 		//  If null, default value is used.
 		if( is_null($value) ){
 			if( !empty($input->cookie) ){
@@ -629,7 +611,7 @@ class Form5 extends OnePiece5
 				$value = $input->value;
 			}
 		}
-				
+		
 		return $value;
 	}
 	
@@ -2231,9 +2213,8 @@ class Form5 extends OnePiece5
 			return true;
 		}
 		
-		// check required
+		// Check required.
 		if(!empty($input->validate->required)){
-			//	Do validate.
 			if(!$this->ValidateRequied($input, $form_name, $value)){
 				return false;
 			}
@@ -2317,13 +2298,6 @@ class Form5 extends OnePiece5
 		
 		if( strlen($value) ){
 			$io = true;
-		/**
-		 * move to pre routine.
-		}else if( is_null($value) and $this->GetSaveValue($input->name, $form_name)){
-			$io = true;
-		}else if( is_null($value) and isset($input->value) and strlen($input->value) ){
-			$io = true;
-		*/
 		}else{
 			$io = false;
 		}
