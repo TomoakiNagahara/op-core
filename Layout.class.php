@@ -33,10 +33,10 @@ class Layout extends OnePiece5
 				if( $this instanceof App ){
 					$method = "\$app->SetLayoutDir('your-use-layout-directory');";
 				}else{
-					$method = "\$this->SetEnv('layout-dir','app:/path/to/your/self');";
+					$method = "\$this->SetEnv('layout-dir','app:/path/of/directory');";
 				}
 				//	Stack Error
-				$this->StackError("Layout directory is null, Use to \\$method\.",'en');
+				$this->StackError("Layout directory was null. Ex: \\$method\.",'en');
 			}
 		}
 		return $layout_dir;
@@ -53,13 +53,12 @@ class Layout extends OnePiece5
 			if(is_null($layout)){
 				//  Does not set layout.
 				if( $this instanceof App ){
-					$method = "\$app->SetLayoutName('your-use-layout-name');";
+					$method = "\$app->SetLayoutName('layout-name');";
 				}else{
-					$method = "\$this->SetEnv('layout','app:/path/to/your/self');";
+					$method = "\$this->SetEnv('layout','app:/path/of/directory');";
 				}
-		
 				//	Stack Error
-				$this->StackError("Layout name is null, Use to \\$method\.",'en');
+				$this->StackError("Layout name was null. Ex: \\$method\.",'en');
 			}
 		}
 		return $layout;
