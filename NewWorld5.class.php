@@ -140,7 +140,7 @@ abstract class NewWorld5 extends OnePiece5
 		if(!$route){
 			$route = Router::GetRoute();
 		}
-
+		
 		//	Save route table.
 		Env::Set('route',$route);
 		
@@ -290,6 +290,13 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Layout()
 	{
+		//	Skip layout processing.
+		if( $this->GetEnv('not_use_layout') ){
+			$this->Content();
+			return;
+		}
+		
+		//	Generate layout object.
 		static $layout = null;
 		if(!$layout){
 			$layout = new Layout();
