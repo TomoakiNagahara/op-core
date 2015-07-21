@@ -2,8 +2,7 @@
 /**
  * OpException.class.php
  *
- * Creation: 2015-03-02
- *
+ * @creation  2015-03-02
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright 2015 (C) Tomoaki Nagahara All right reserved.
@@ -12,9 +11,8 @@
 
 /**
  * OpException
- *
- * Creation: 2015-03-02
- *
+ * 
+ * @creation  2013
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright 2015 (C) Tomoaki Nagahara All right reserved.
