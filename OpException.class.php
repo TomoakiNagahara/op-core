@@ -55,6 +55,7 @@ class OpException extends Exception
 		return $this->_lang;
 	}
 	
+	/*
 	function isSelftest($var=null)
 	{
 		if( $var ){
@@ -72,4 +73,5 @@ class OpException extends Exception
 	{
 		return OnePiece5::GetEnv('wizard');
 	}
+	*/
 }
