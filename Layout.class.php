@@ -86,7 +86,7 @@ class Layout extends OnePiece5
 			$layout		 = $this->_GetLayout();
 			
 			//	Do not want to layout. (False is if not want layout.)
-			if( $layout === false ){
+			if( empty($layout) ){
 				$this->Content();
 				return;
 			}
