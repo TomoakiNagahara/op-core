@@ -34,6 +34,13 @@ abstract class NewWorld5 extends OnePiece5
 	 * @var string
 	 */
 	const _UNIT_URL_SELFTEST_ = '/_self-test/';
+
+	/**
+	 * Use to check call of content.
+	 * 
+	 * @var string
+	 */
+	const _IS_CONTENT_ = 'IS_CONTENT';
 	
 	/**
 	 * routing table
@@ -96,7 +103,13 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function __destruct()
 	{
-		//  Dispatched check.
+		//	Checking call of content.
+		if(!Env::Get(self::_IS_CONTENT_)){
+			$url = $_SERVER["REQUEST_URI"];
+			$this->StackError("Did not call \Content\ method. \($url)\ ",'en');
+		}
+		
+		//  Checking of Dispatched.
 		if(!$this->_isDispatch and strlen($this->_content)){
 			$class_name = get_class($this);
 			$message = "\\$class_name\ does not call the \Dispatch\ method.";
@@ -316,6 +329,7 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function GetContent()
 	{
+		$this->StackError("This method will abolished.",'en');
 		return $this->_content;
 	}
 	
@@ -324,6 +338,9 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Content()
 	{
+		//	Checking call of Content method.
+		Env::Set(self::_IS_CONTENT_, true);
+		
 		//	Separate mime, main and sub.
 		list($main, $sub) = explode('/', $this->_mime);
 		
@@ -352,11 +369,12 @@ abstract class NewWorld5 extends OnePiece5
 				$this->_doJson();
 				break;
 				
-				//	plain text
+			//	plain text
 			case 'csv':
 			case 'plain':
 				break;
-
+			
+			//	Variable text
 			case 'javascript':
 			case 'css':
 			case 'html':

@@ -81,6 +81,9 @@ class App_i18n extends App
 						break;
 						
 					default:
+						//	Set calling flag.
+						Env::Set(self::_IS_CONTENT_, true);
+						
 						//	Transfer real path. (ex. /img/logo.png)
 						header("Location: {$request_uri}{$query}"); exit;
 				}
