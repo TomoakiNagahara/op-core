@@ -53,6 +53,11 @@ class App_i18n extends App
 			if(!array_key_exists($args[0], $list) ){
 				$lang = $this->i18n()->GetLang();
 				$url = "/{$lang}/".trim(join('/',$args),'/').$query;
+				
+				//	Set Content method call flag.
+				Env::Set(self::_IS_CONTENT_, true);
+				
+				//	Transfer.
 				header("Location: $url"); exit;
 			}
 			
@@ -81,7 +86,7 @@ class App_i18n extends App
 						break;
 						
 					default:
-						//	Set calling flag.
+						//	Set Content method call flag.
 						Env::Set(self::_IS_CONTENT_, true);
 						
 						//	Transfer real path. (ex. /img/logo.png)
