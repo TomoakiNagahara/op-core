@@ -112,6 +112,13 @@ class Error
 			$message = OnePiece5::Wiki2($message);
 			$message = strip_tags($message);
 			$message = OnePiece5::Decode($message);
+			
+			//	Translation.
+			if( isset($backtraces['translation']) ){
+				$from = $backtraces['translation'];
+				$message = self::_i18n($message, $from);
+			}
+			
 			return $message;
 		}
 	}
