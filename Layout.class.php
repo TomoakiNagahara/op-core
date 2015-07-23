@@ -112,6 +112,12 @@ class Layout extends OnePiece5
 		//	Execute layout controller.
 		include($execute_file);
 		
+		//	Check variable.
+		if(empty($_layout)){
+			$this->StackError('\\$_layout\ variable was empty.','en');
+			return false;
+		}
+		
 		//  Rebuild layout directory.
 		$layout_dir = dirname($execute_file) . '/';
 		
