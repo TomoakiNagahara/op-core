@@ -2043,13 +2043,16 @@ class Form5 extends OnePiece5
 			
 			$message = '';
 			$value2  = '';
-			$input   = $this->GetConfig( $form_name, $input_name );
+			$form	 = $this->GetConfig( $form_name );
+			$input   = $form->input->$input_name;
 			$label   = isset($input->label) ? $input->label: $input->name;
 			
 			foreach($this->status->$form_name->error->$input_name as $key => $value){
 				
 				if( isset($input->error->$key) ){
 					$format = '![ $html ['.$input->error->$key.']]';
+				}else if( isset($form->error->$key) ){
+					$format = '![ $html ['.$form->error->$key.']]';
 				}else{
 					$format = $this->i18n()->Get('\$label\ is error. This field is \$key\. (\$value\)');
 					$format = "![ $html [$format]]";
