@@ -1102,18 +1102,22 @@ class Form5 extends OnePiece5
 			}
 		}
 		
-		if( isset($_forms) ){
-			$config = Toolbox::toObject($_forms);
-		}else
-		if( isset($_form) ){
-			$config = Toolbox::toObject($_form);
-		}else{
-			
+		//	
+		foreach(array('form','_form','forms','_forms') as $key){
+			if( isset(${$key}) ){
+				$config = ${$key};
+			}
 		}
 		
-		if(!isset($config)){
+		//	
+		if( empty($config) ){
 			$this->StackError("Does not find config variable. ($path)");
 			return false;
+		}
+		
+		//	
+		if( is_array($config) ){
+			$config = Toolbox::toConfig($config);
 		}
 		
 		return $config;
@@ -2435,7 +2439,6 @@ class Form5 extends OnePiece5
 	function ValidatePermit( $input, $form_name, $value )
 	{
 		switch( $key = $input->validate->permit ){
-			
 			// English only
 			case 'english':
 				//  Array is convert string.
