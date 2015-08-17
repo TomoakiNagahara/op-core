@@ -463,6 +463,14 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		$this->_content .= ob_get_contents();
 		ob_clean();
+
+		//	Get sent request header.
+		$headers = apache_request_headers();
+		if( !Toolbox::isLocalhost() and empty($headers['X-Requested-With']) /* !== 'XMLHttpRequest' */ ){
+			$this->_json = array();
+			$this->_json['status'] = false; 
+			$this->_json['error']  = 'X-Requested-With headers has not been sent.';
+		}
 		
 		if( $this->Admin() ){
 			//	Help to debug information.
