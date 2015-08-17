@@ -95,7 +95,7 @@ class Form5 extends OnePiece5
 		$charset = $form->charset;
 		
 		//  convert
-		if(is_null($input_name)){
+		if( is_null($input_name) ){
 			//  many
 			foreach( $form->input as $input_name => $input ){
 				$value = &$request[$input_name];
@@ -661,12 +661,20 @@ class Form5 extends OnePiece5
 		return $value;
 	}
 	
-	public function GetInputOptionLabel( $option_name, $input_name, $form_name )
+	function GetInputOptionLabel( $option_name, $input_name, $form_name )
 	{
 		return $label;
 	}
 	
-	public function SetInputValue( $value, $input_name, $form_name )
+	/**
+	 * Set input value by manual.
+	 * 
+	 * @param  string  $value
+	 * @param  string  $input_name
+	 * @param  string  $form_name
+	 * @return boolean
+	 */
+	function SetInputValue( $value, $input_name, $form_name )
 	{
 		$input = $this->GetConfig( $form_name, $input_name );
 		if( $io = $this->CheckInputValue( $input, $form_name, $value ) ){
@@ -683,12 +691,12 @@ class Form5 extends OnePiece5
 		return $io;
 	}
 	
-	public function GetSaveValue( $input_name, $form_name )
+	function GetSaveValue( $input_name, $form_name )
 	{
 		return $this->GetSavedValue( $input_name, $form_name );
 	}
 	
-	public function GetSavedValue( $input_name, $form_name )
+	function GetSavedValue( $input_name, $form_name )
 	{
 		$form = $this->GetSession('form');
 		
@@ -703,6 +711,12 @@ class Form5 extends OnePiece5
 
     /**************************************************************/
 
+	/**
+	 * Auto save submitted value.
+	 * 
+	 * @param  string  $form_name
+	 * @return boolean
+	 */
 	private function SaveRequest( $form_name )
 	{
 		if(!$this->CheckTokenKey( $form_name )){
@@ -764,7 +778,7 @@ class Form5 extends OnePiece5
 			if( $io = $this->CheckInputValue($input, $form_name, $value) ){
 				
 				// does not save
-				if(isset($input->save) and !$input->save){
+				if( isset($input->save) and !$input->save ){
 					continue;
 				}
 				
@@ -785,11 +799,14 @@ class Form5 extends OnePiece5
 				$value = $this->Trim($input, $value);
 				
 				// save session
-				if(is_string($value)){
+				$session[$form_name][$input_name]['value'] = $value;
+				/*
+				if( is_string($value) ){
 					$session[$form_name][$input_name]['value'] = $value;
 				}else if(is_array($value)){
 					$session[$form_name][$input_name]['value'] = $value;
 				}
+				*/
 				
 				// save cookie
 				if( isset($input->cookie) and !is_null($value) ){
@@ -1170,20 +1187,14 @@ class Form5 extends OnePiece5
 			}
 		}
 		
-		//  Check
+		//  check form name
 		if(!isset($config->name)){
 			$this->StackError('Form name is empty. Please check \$config->name\.','en');
-			return false;
-		}
-		
-		//  check form name
-		if(empty($config->name)){
-			$this->StackError('Empty form name.');
 			return false;
 		}else{
 			$form_name = $config->name;
 		}
-		
+				
 		//  check exists config
 		if(isset($this->config->$form_name)){
 			$this->StackError("This form_name is already exists. ($form_name)");
@@ -1191,7 +1202,7 @@ class Form5 extends OnePiece5
 		}
 		
 		//  support "plural form"
-		if(isset($config->inputs) and empty($config->input)){
+		if( isset($config->inputs) and empty($config->input) ){
 			$config->input = $config->inputs;
 		}
 		
@@ -2110,7 +2121,7 @@ class Form5 extends OnePiece5
 		if( isset($input->options) ){
 			foreach($input->options as $child){
 				$child->name = $input->name;
-				if(!$io = $this->CheckInputValue($child, $form_name)){						
+				if(!$io = $this->CheckInputValue($child, $form_name)){
 					return false;
 				}
 			}
@@ -2118,7 +2129,7 @@ class Form5 extends OnePiece5
 		
 		//  validate
 		if(!empty($input->validate)){
-			if(!$this->CheckValidate($input, $form_name, $value)){					
+			if(!$this->CheckValidate($input, $form_name, $value)){
 				return false;
 			}
 		}
@@ -2207,11 +2218,11 @@ class Form5 extends OnePiece5
 		}
 		
 		if(!$value){
-			// send value
+			// Submitted value.
 			$value = $this->GetRequest( $input->name, $form_name );
 		}
 		
-		//  this is file upload remover checkbox.
+		//  This is file upload remover checkbox.
 		if( $input->type == 'file' and is_array($value) ){
 			return true;
 		}
@@ -2281,12 +2292,8 @@ class Form5 extends OnePiece5
 	
 	function ValidateRequied( $input, $form_name, $value )
 	{
-		if( empty($value) ){
-			if( $value = $this->GetSaveValue($input->name, $form_name) ){
-				//	check value is saved value. (submitted value)
-			}else if( isset($input->value) and strlen($input->value) ){
-				//	check value is default value.
-			}
+		$input_name = $input->name;
+		
 		if( is_null($value) ){
 			$value = $this->GetSavedValue($input_name, $form_name);
 		}
@@ -2301,18 +2308,12 @@ class Form5 extends OnePiece5
 			$value = rtrim($value,'　');
 		}
 		
-		if( strlen($value) ){
-			$io = true;
+		if( $io = strlen($value) ? true: false ){
+			$this->SetStatus($form_name, "OK: Required. ($input_name, $value)");
 		}else{
-			$io = false;
+			$this->SetInputError( $input_name, $form_name, 'required', 'empty');
 		}
-		
-		if($io){
-			$this->SetStatus($form_name, "OK: Required. ($input->name, $value)");
-		}else{
-			$this->SetInputError( $input->name, $form_name, 'required', 'empty');
-		}
-		
+				
 		return $io;
 	}
 	
