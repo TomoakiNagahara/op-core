@@ -51,14 +51,28 @@ class App_i18n extends App
 			
 			//	Check language code.
 			if(!array_key_exists($args[0], $list) ){
+				
+				//	Get current language code.
 				$lang = $this->i18n()->GetLang();
+				
+				//	In case of localhost.
+				if( count($list) <= 1 ){
+					if( strlen($args[0]) === 2 ){
+						$lang = $args[0];
+						$skip = true;
+					}
+				}
+				
+				//	Build URL.
 				$url = "/{$lang}/".trim(join('/',$args),'/').$query;
 				
 				//	Set Content method call flag.
 				Env::Set(self::_IS_CONTENT_, true);
 				
 				//	Transfer.
-				header("Location: $url"); exit;
+				if( empty($skip) ){
+					header("Location: $url"); exit;
+				}
 			}
 			
 			//	Get language code.
