@@ -83,10 +83,11 @@ server {
 	<?php if( $uri === '/' ): ?> 
 	<i class="blue"># No.2: <span class="i18n">Specify a file extension to controlled from <i>NewWorld</i>.</span></i>
 	location ~ \.(<?php print $extensions ?>)$ {
-		fastcgi_pass	127.0.0.1:9000;
-		fastcgi_param	SCRIPT_FILENAME  $document_root/app.php; <i class="blue"># <span class="i18n">Always <i>app.php</i> is executed.</span></i>
-		fastcgi_param	SERVER_ADMIN	 <?php print $mail ?>;
-		include			fastcgi_params;
+		fastcgi_pass   127.0.0.1:9000;
+		fastcgi_param  SCRIPT_FILENAME  $document_root/app.php; <i class="blue"># <span class="i18n">Always <i>app.php</i> is executed.</span></i>
+		fastcgi_param  SERVER_ADMIN     <?php print $mail ?>;
+		fastcgi_param  PHP_VALUE        "catch_workers_output=no; display_errors=on";
+		include        fastcgi_params;
 	}
 	
 	<i class="blue"># <span class="i18n">403 In case of forbidden error. (deny access.)</span></i>
@@ -105,6 +106,7 @@ server {
 			fastcgi_pass   127.0.0.1:9000;
 			fastcgi_param  SCRIPT_FILENAME  $document_root<?php print $uri ?>app.php; <i class="blue"># <span class="i18n">Always app.php is executed.</span></i>
 			fastcgi_param  SERVER_ADMIN     <?php print $mail ?>;
+			fastcgi_param  PHP_VALUE        "catch_workers_output=no; display_errors=on";
 			include  fastcgi_params;
 		}
 		
