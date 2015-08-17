@@ -330,7 +330,7 @@ class PDO5 extends OnePiece5
 		}
 		
 		try{
-			//	Support to PHP 5.1 ( USE db_name is not supports. )
+			//	Support to PHP 5.1 ("USE db_name" is not supports.)
 			$db  = $this->database ? 'dbname='.$this->database.';': null;
 			if( $this->charset ){
 				if( $this->driver === 'mysql' ){
@@ -370,11 +370,6 @@ class PDO5 extends OnePiece5
 			}
 			$this->StackError("$text",'en');
 			return false;
-		}
-		
-		//  Database select
-		if( $this->database ){
-			$this->SetDatabase( $this->database, $this->charset );
 		}
 		
 		//  connected flag
