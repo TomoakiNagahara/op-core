@@ -760,8 +760,8 @@ class Form5 extends OnePiece5
 			//  charset
 			$input->charset = $charset;
 			
-			//  Check sent value.
-			if( $io = $this->CheckInputValue($input, $form_name /*, $value */) ){
+			//  Check submitted value.
+			if( $io = $this->CheckInputValue($input, $form_name, $value) ){
 				
 				// does not save
 				if(isset($input->save) and !$input->save){
@@ -2203,7 +2203,7 @@ class Form5 extends OnePiece5
 		return $value;
 	}
 	
-	function CheckValidate(Config $input, $form_name, $value=null )
+	function CheckValidate(Config $input, $form_name, $value /*=null*/ )
 	{
 		if(!$this->CheckConfig( $form_name, $input->name )){
 			return false;
@@ -2290,6 +2290,8 @@ class Form5 extends OnePiece5
 			}else if( isset($input->value) and strlen($input->value) ){
 				//	check value is default value.
 			}
+		if( is_null($value) ){
+			$value = $this->GetSavedValue($input_name, $form_name);
 		}
 		
 		if(is_array($value)){
