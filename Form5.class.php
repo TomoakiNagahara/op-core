@@ -92,7 +92,7 @@ class Form5 extends OnePiece5
 		}
 		
 		//  charset
-		$charset = isset($form->charset) ? $form->charset: $this->GetEnv('charset');
+		$charset = $form->charset;
 		
 		//  convert
 		if(is_null($input_name)){
@@ -1194,14 +1194,11 @@ class Form5 extends OnePiece5
 		if(isset($config->inputs) and empty($config->input)){
 			$config->input = $config->inputs;
 		}
-
-		//	Debug
-		/*
-		if( $this->_log ){
-			$this->_log[] = __METHOD__ . " | Last time: " . $this->GetSession('request_uri');
-			$this->SetSession('request_uri',$_SERVER['REQUEST_URI']);
+		
+		//  Check charset
+		if( empty($config->charset) ){
+			$config->charset = Env::Get('charset');
 		}
-		*/
 		
 		// default
 		$this->status->$form_name = new Config();
@@ -1212,7 +1209,7 @@ class Form5 extends OnePiece5
 		$config = $this->Escape($config);
 		
 		// save config. save key is limits.
-		foreach(array('name','method','action','multipart','id','class','style','error','errors','file_name') as $key ){
+		foreach(array('name','method','action','multipart','id','class','style','error','errors','file_name','charset') as $key ){
 			if( isset($config->$key) ){
 				$this->config->$form_name->$key = $config->$key;
 			}
