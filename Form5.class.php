@@ -794,7 +794,7 @@ class Form5 extends OnePiece5
 				// save cookie
 				if( isset($input->cookie) and !is_null($value) ){
 					//  Remove check index.
-					if( isset($value[0]) and empty($value[0]) ){
+					if( isset($value[0]) and strlen($value[0]) === 0 ){
 						unset($value[0]); // TODO: Is this necessary for what?
 					}
 					$expire = $input->cookie === true ? 0: $input->cookie;
