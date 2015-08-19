@@ -134,6 +134,19 @@ span.NULL{
   color: red;
 }
 
+.normal{
+	font-weight: normal;
+}
+
+.italic{
+	font-style: italic;
+}
 .gray{
 	color: gray;
+}
+
+.ex{
+	margin: 0.5em;
+	font-weight: normal;
+	font-style: italic;
 }

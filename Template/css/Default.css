@@ -333,13 +333,14 @@ div.td{
 	font-weight:bold;
 }
 
+/* Normal */
 .normal{
-	font-weight:normal;
+	font-weight: normal;
 }
 
 /* Italics. base the Cursive. */
 .italic{
-	font-style:italic;
+	font-style: italic;
 }
 
 /* Italics. base the Gothic. */
