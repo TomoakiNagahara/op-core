@@ -1790,6 +1790,15 @@ class Form5 extends OnePiece5
 					
 					//  child
 					foreach( $input->options as $index => $option ){
+						if( !isset($option->value) ){
+							$this->StackError("This option was not set value attribute. ({$input->name})");
+						}
+						if( !isset($option->label) ){
+							if( isset($option->value) ){
+								$option->label = $option->value;
+							}
+						}
+						
 						//	Create input config from parent input.
 						$child = Toolbox::Copy($input);
 						$child->child = true;
@@ -2103,8 +2112,6 @@ class Form5 extends OnePiece5
 	/**
 	 * Pass to CheckValidate method.
 	 * 
-	 * Is this necessary?
-	 * 
 	 * @param  Config $input
 	 * @param  string $form_name
 	 * @param  string|null $value
@@ -2112,6 +2119,8 @@ class Form5 extends OnePiece5
 	 */
 	function CheckInputValue( &$input, $form_name, $value=null )
 	{
+		/*
+		// Is this necessary?
 		if( !is_null($value) and !is_string($value)){
 			$name = $input->name;
 			$type = $input->type;
@@ -2120,6 +2129,7 @@ class Form5 extends OnePiece5
 			$this->StackError("Argument value is only string, yet.\n $ex");
 			return false;
 		}
+		*/
 		
 		//	Option
 		if( isset($input->options) ){
