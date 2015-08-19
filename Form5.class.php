@@ -1304,10 +1304,10 @@ class Form5 extends OnePiece5
 				}
 			}
 			
-			//	Check value. (Why necessary is this?)
+			//	Check value. (Why necessary is this? <- Checkboxe was used empty options setting.)
 			if(!isset($input->options) and (!isset($input->value) or !strlen($input->value)) ){
-				$this->mark("![.red[Empty $type value. ($form_name, $input_name)]]");
-				$this->StackError("Empty options of $type. ($form_name, $input_name)");
+				$ex = "![.ex p[Ex: \$form->input->{$input_name}->value = 1;]]";
+				$this->StackError("Empty options of $type. ($form_name, $input_name) \n $ex");
 			}
 			
 			//	Options
@@ -2113,7 +2113,11 @@ class Form5 extends OnePiece5
 	function CheckInputValue( &$input, $form_name, $value=null )
 	{
 		if( !is_null($value) and !is_string($value)){
-			$this->StackError('argument value is only string, yet');
+			$name = $input->name;
+			$type = $input->type;
+			$string = serialize($value);
+			$ex = "![.ex p[name = $name\n type = $type\n value = $string]]";
+			$this->StackError("Argument value is only string, yet.\n $ex");
 			return false;
 		}
 		
