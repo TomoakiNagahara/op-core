@@ -2020,9 +2020,9 @@ class Form5 extends OnePiece5
 	 * @param string $html
 	 * @param string $form_name
 	 */
-	function Error( $input_name, $html='span 0xff0000', $form_name=null )
+	function Error( $input_name, /*$html='span 0xff0000',*/ $form_name=null )
 	{
-		print $this->GetInputError( $input_name, $form_name, $html );
+		print $this->GetInputError( $input_name, $form_name/*, $html*/ );
 	}
 	
 	/*
@@ -2054,7 +2054,7 @@ class Form5 extends OnePiece5
      * @param  string $html
      * @return boolean|string
      */
-	function GetInputError( $input_name, $form_name=null, $html='span 0xff0000' )
+	function GetInputError( $input_name, $form_name=null, $html=null )
 	{
 		if(!$this->CheckConfig($form_name,$input_name)){
 			return false;
@@ -2068,12 +2068,22 @@ class Form5 extends OnePiece5
 			$input   = $form->input->$input_name;
 			$label   = isset($input->label) ? $input->label: $input->name;
 			
+			if(!$html){
+				if( isset($input->error->style) ){
+					$html = $input->error->style;
+				}else if( isset($form->error->style) ){
+					$html = $form->error->style;
+				}else{
+				//	$html = 'p color:red';
+				}
+			}
+			
 			foreach($this->status->$form_name->error->$input_name as $key => $value){
 				
 				if( isset($input->error->$key) ){
-					$format = '![ $html ['.$input->error->$key.']]';
+					$format = "![ $html [".$input->error->$key."]]";
 				}else if( isset($form->error->$key) ){
-					$format = '![ $html ['.$form->error->$key.']]';
+					$format = "![ $html [".$form->error->$key."]]";
 				}else{
 					$format = $this->i18n()->Get('\$label\ is error. This field is \$key\. (\$value\)');
 					$format = "![ $html [$format]]";
