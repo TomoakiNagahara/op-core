@@ -1296,11 +1296,12 @@ class Form5 extends OnePiece5
 		
 		//  Options
 		if( in_array($type,array('checkbox','radio','select','group')) ){
-			//	Uniform
+			//	Uniform of option or options.
 			if( empty($input->options) and isset($input->option) ){
 				$input->options = $input->option;
 				unset($input->option);
 			}
+			
 			
 			//	Check value. (Why necessary is this? <- Checkboxe was used empty options setting.)
 			if( !isset($input->options) and !isset($input->value) and $type !== 'group' and !strlen($input->value) ){
@@ -1704,8 +1705,8 @@ class Form5 extends OnePiece5
 			if( $type === 'group' ){
 				$value = join( $input->joint, $value );
 			}else{
-			$value = isset($value[$id]) ? $value[$id]: '';
-		}
+				$value = isset($value[$id]) ? $value[$id]: '';
+			}
 		}
 		
 		//  name
@@ -1768,28 +1769,23 @@ class Form5 extends OnePiece5
 				break;
 				
 			default:
-				
 				//  single or multi
 				if( isset($input->options) ){
-					//  multi
 					
-					//	get joint character
-					$joint = isset($input->joint) ? $input->joint: null;
-					
-					//	value of childs
-					if( $value and $joint ){
-						$value_child = explode( $joint, $value );
-					}
+					//	Separate value.
+					$values = explode( $input->joint, $value );
 					
 					//  child
 					foreach( $input->options as $index => $option ){
+						
+						//	Notice value
 						if( !isset($option->value) and $type!=='group' ){
 							$this->StackError("This option was not set value attribute. ({$input->name})");
 						}
-						if( !isset($option->label) ){
-							if( isset($option->value) ){
-								$option->label = $option->value;
-							}
+						
+						//	Supplement label
+						if( empty($option->label) ){
+							$option->label = $option->value;
 						}
 						
 						//	Create input config from parent input.
@@ -1808,22 +1804,16 @@ class Form5 extends OnePiece5
 							$child->group = true;
 						}
 						
-						//  Set to label
+						//  Set to label and checkbox.
 						if( $child->type === 'radio' or $child->type === 'checkbox' ){
 							$child->label = isset($option->label) ? $option->label: $option->value;
+						//	$child->checked = $input->value == $child->value ? true: null;
+						}else{
+							//	Each option value.
+							$child->value = array_shift($values);
 						}
 						
-						//	Set to value
-						if( isset($value_child) ){
-							$child->value = array_shift($value_child);
-						}
-						
-						//  default checked
-						if( isset($input->value) ){
-							if( $input->value == $child->value ){
-								$child->checked = true;
-							}
-						}
+						//	Create input tag.
 						$tag .= $this->CreateInputTag($child, $form_name);
 					}
 				}else{
@@ -1835,7 +1825,7 @@ class Form5 extends OnePiece5
 						//  value
 						$value = $input->value;
 						//  label
-						if(!isset($label)){
+						if( empty($label) ){
 							$label = $value;
 						}
 						$label_tag = sprintf('<label id="%s-label" %s>', $id, $attr);
