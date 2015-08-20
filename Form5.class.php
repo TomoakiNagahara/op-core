@@ -1302,6 +1302,10 @@ class Form5 extends OnePiece5
 				unset($input->option);
 			}
 			
+			//	Supplement joint character.
+			if( empty($input->joint) ){
+				$input->joint = "\n";
+			}
 			
 			//	Check value. (Why necessary is this? <- Checkboxe was used empty options setting.)
 			if( !isset($input->options) and !isset($input->value) and $type !== 'group' and !strlen($input->value) ){
