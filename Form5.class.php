@@ -1811,7 +1811,6 @@ class Form5 extends OnePiece5
 						//  Set to label and checkbox.
 						if( $child->type === 'radio' or $child->type === 'checkbox' ){
 							$child->label = isset($option->label) ? $option->label: $option->value;
-						//	$child->checked = $input->value == $child->value ? true: null;
 						}else{
 							//	Each option value.
 							$child->value = array_shift($values);
@@ -1848,6 +1847,11 @@ class Form5 extends OnePiece5
 					//	If case of submit
 					if( $type === 'submit'){
 						$name = null;
+					}
+					
+					//	This is an ad hoc solution. (Very bad solution.)
+					if( !empty($input->child) ){
+						$value = $input->value;
 					}
 					
 					//  create tag
