@@ -1295,17 +1295,15 @@ class Form5 extends OnePiece5
 		}
 		
 		//  Options
-		if( in_array($type,array('checkbox','radio','select')) ){
-			
-			//	Supports option (not options)
-			if( empty($input->options) ){
-				if( isset($input->option) ){
-					$input->options = $input->option;
-				}
+		if( in_array($type,array('checkbox','radio','select','group')) ){
+			//	Uniform
+			if( empty($input->options) and isset($input->option) ){
+				$input->options = $input->option;
+				unset($input->option);
 			}
 			
 			//	Check value. (Why necessary is this? <- Checkboxe was used empty options setting.)
-			if(!isset($input->options) and (!isset($input->value) or !strlen($input->value)) ){
+			if( !isset($input->options) and !isset($input->value) and $type !== 'group' and !strlen($input->value) ){
 				$ex = "![.ex p[Ex: \$form->input->{$input_name}->value = 1;]]";
 				$this->StackError("Empty options of $type. ($form_name, $input_name) \n $ex");
 			}
@@ -1540,7 +1538,7 @@ class Form5 extends OnePiece5
 		$join = array();
 		$tail = '';
 		$value_of_input = null;
-
+		
 		//  attribute
 		foreach($input as $key => $var){
 			switch($key){
@@ -1722,17 +1720,11 @@ class Form5 extends OnePiece5
 				break;
 				
 			case 'select':
-				if( isset($input->options) ){
-					$options = $input->options;
-				}else{
-					$options = array();
-				}
-				
 				//	If group case, use by parent was rewritten value.
 				if(!empty($input->group)){
 					$value = $input->value;
 				}
-				$tag = sprintf('<select name="%s" %s>%s</select>'.$tail, $name, $attr, $this->CreateOption( $options, $value));
+				$tag = sprintf('<select name="%s" %s>%s</select>'.$tail, $name, $attr, $this->CreateOption( $input->options, $value));
 				break;
 				
 			case 'file':
@@ -1776,6 +1768,7 @@ class Form5 extends OnePiece5
 				break;
 				
 			default:
+				
 				//  single or multi
 				if( isset($input->options) ){
 					//  multi
@@ -1790,7 +1783,7 @@ class Form5 extends OnePiece5
 					
 					//  child
 					foreach( $input->options as $index => $option ){
-						if( !isset($option->value) ){
+						if( !isset($option->value) and $type!=='group' ){
 							$this->StackError("This option was not set value attribute. ({$input->name})");
 						}
 						if( !isset($option->label) ){
