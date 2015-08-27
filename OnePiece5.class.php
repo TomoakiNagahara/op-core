@@ -1038,7 +1038,7 @@ class OnePiece5
 	{
 		//	Document root path
 		$url = $this->ConvertUrl($url,false);
-	
+		
 		//	Check infinity loop.
 		if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
 			//	Does not for infinity.

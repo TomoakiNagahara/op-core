@@ -497,4 +497,24 @@ class App extends NewWorld5
 			$this->Doctor()->Registration( $model_name, $data );
 		}
 	}
+	
+	/**
+	 * Set Favicon URL
+	 * 
+	 * @param string URL
+	 */
+	function SetFavicon($var)
+	{
+		Env::Set('favicon',$var);
+	}
+	
+	/**
+	 * Get Favicon URL
+	 * 
+	 * @return string URL
+	 */
+	function GetFavicon()
+	{
+		return Toolbox::ConvertURL(Env::Get('favicon'));
+	}
 }
