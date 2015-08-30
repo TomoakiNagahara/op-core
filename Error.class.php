@@ -271,7 +271,7 @@ class Error
 		
 		//	STYLE
 		$message .= '<style type="text/css">'.PHP_EOL;
-		$message .= file_get_contents(OnePiece5::ConvertPath('op:/Template/dump.css'));
+		$message .= file_get_contents(OnePiece5::ConvertPath('op:/Template/css/Dump.css'));
 		$message .= '</style>'.PHP_EOL;
 		
 		//	HEAD CLOSE
