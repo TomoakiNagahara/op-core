@@ -246,7 +246,7 @@ class Doctor extends OnePiece5
 		}else{
 			$io = $this->_is_diagnosis;
 		}
-		return $this->_is_diagnosis;
+		return $io;
 	}
 	
 	function Diagnose($password=null, $user='root')
