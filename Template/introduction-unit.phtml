@@ -3,9 +3,10 @@
 
 //	Init unit name
 if( empty($unit_name) ){
-	$this->StackError("Unit name is empty. \($unit_name)\\",'en');
+	$this->StackError("Unit name is empty.\n Ex: array('unit_name'=>'each-unit-name') ",'en');
+	return;
 }
- 
+
 switch( $unit_name ){
 	case '_self-test':
 		$_unit_name = 'selftest';
