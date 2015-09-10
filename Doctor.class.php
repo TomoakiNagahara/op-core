@@ -785,7 +785,9 @@ class Doctor extends OnePiece5
 			//	Get table struct.
 			$db_name    = $temp->database;
 			$table_name = $temp->table;
-			$struct = $this->PDO()->GetTableStruct($table_name, $db_name);
+			if(!$struct = $this->PDO()->GetTableStruct($table_name, $db_name)){
+				continue;
+			}
 			
 			foreach($struct as $column_name => $detail){ 
 				foreach($detail as $key => $var){
