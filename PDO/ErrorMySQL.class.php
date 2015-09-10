@@ -49,9 +49,9 @@ class ErrorMySQL extends OnePiece5
 			$database = $match[1];
 			$temp[2] = preg_replace($patt, "\\ \\1 \\", $temp[2]);
 		}else{
-			$this->Mark($temp);
+		//	$this->D($temp);
 		}
-	
+		
 		//	Branch
 		switch($error_no){
 			case 1044:
@@ -66,28 +66,36 @@ class ErrorMySQL extends OnePiece5
 				$message = "You have an error in your SQL syntax. ";
 				$message.= "Check the manual that corresponds to your MySQL server version. ";
 				break;
-	
+
+			case 1068:
+				$message = "Primary key was multiply defined.";
+				break;
+				
+			case 1075:
+				$message = "Incorrect table definition. Column can be only one auto column. Redefinition of the key is required.";
+				break;
+				
 			case 1091:
 				$message = "Cannot DROP \PRIMARY KEY\. Check that column/key exists.";
 				break;
-	
+				
 			case 1142:
 				$message = "SQL query was denied. \(host: $host, user: $user)\ ";
 				break;
-	
+				
 			case 1146:
 				//	Table '_database_._table_' doesn't exist
 				$database = ConfigSQL::Quote( $database, $this->_driver );
 				$table    = ConfigSQL::Quote( $table,    $this->_driver );
 				$message  = "Table does not exist. ({$database}.{$table})";
 				break;
-	
+				
 			default:
 				$message = $temp[2];
 				$message = preg_replace("|'([-_a-z0-9\.]+)'|", ' \\ \\1 \\ ', $message);
-				$message = rtrim($message).".";
+				$message = "\#$error_no:\ ".rtrim($message).".";
 		}
-	
-		return "{$message} \SQLSTATE:{$error_id}\ ";
-	}	
+		
+		return $message;
+	}
 }
