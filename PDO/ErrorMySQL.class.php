@@ -30,15 +30,15 @@ class ErrorMySQL extends OnePiece5
 		$error_no = $temp[1];
 	
 		//	Get host and user.
-		$patt = "|'([\.-_a-z0-9]+)'@'([\.-_a-z0-9]+)'|";
+		$patt = "|'([.-_a-z0-9]+)'@'([.-_a-z0-9]+)'|";
 		if( preg_match($patt,$temp[2],$match) ){
 			$user = $match[1];
 			$host = $match[2];
 		}
-	
+		
 		//	Get database and table.
-		$patt_1 = "|'([\.-_a-z0-9]+)'|";
-		$patt_2 = "|'([\.-_a-z0-9]+)\.([\.-_a-z0-9]+)'|";
+		$patt_1 = "|'([.-_a-z0-9]+)'|";
+		$patt_2 = "|'([.-_a-z0-9]+)\.([.-_a-z0-9]+)'|";
 		if( preg_match($patt_2,$temp[2],$match) ){
 			//	Escape at backslash.
 			$database = $match[1];
