@@ -126,8 +126,8 @@ class DoctorX extends OnePiece5
 		foreach($this->_error as $error){
 			$from	 = $error['translation'];
 			$temp	 = explode($nl, $error['message'].$nl);
-			$message = $this->i18n()->Bulk($temp[0], $from);
-			$query = trim($temp[1],'\\');
+			$message = $this->i18n()->Get($temp[0], $from);
+			$query   = trim($temp[1],'\\');
 			print $this->p("![li .small[{$message}{$nl} ![.gray[{$query}]] ]]");
 		}
 		print '</ol>';
