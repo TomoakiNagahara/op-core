@@ -20,7 +20,7 @@ class Model_GMail extends Model_Model
 	private $_GMAIL_PASSWORD;
 	private $_SERVER;
 	private $_imap;
-	private $_expire	 = 3600; 
+	private $_expire	 = 3600;
 	private $_charset	 = 'utf-8';
 	
 	function __destruct()
@@ -237,6 +237,31 @@ class Model_GMail extends Model_Model
 		return $result;
 	}
 	
+	function isHtmlMail($no)
+	{
+		$structure = $this->GetStructure($no);
+		switch($structure['subtype']){
+			case 'HTML':
+			case 'ALTERNATIVE':
+				$io = true;
+				break;
+			default:
+				$io = false;
+		}
+		return $io;
+	}
+	
+	function isMultipart($no)
+	{
+		$structure = $this->GetStructure($no);
+		return $structure['type'] === TYPEMULTIPART ? true: false;
+	}
+	
+	function isAttachment($no)
+	{
+		
+	}
+	
 	function GetBodyRaw($no)
 	{
 		$key = md5(__METHOD__.', '.$this->_GMAIL_ACCOUNT.', '.$no);
@@ -259,13 +284,18 @@ class Model_GMail extends Model_Model
 			}
 		}
 		
-		$struct = $this->GetStructure($no);
-		switch($struct['type']){
+		$structure = $this->GetStructure($no);
+		switch($structure['type']){
 			case TYPETEXT:
-				$body = $this->ConvertEncoding($value, $struct["encoding"], $struct["parameters"]/*[0]*/["charset"]);
+				$encoding = $structure["encoding"];
+				$charset  = $structure["parameters"]["charset"];
+				$body = $this->ConvertEncoding($value, $encoding, $charset);
 				break;
 				
 			case TYPEMULTIPART:
+				$body = $this->GetBodyMultipart($no, $section, $value);
+				break;
+				
 			case TYPEMESSAGE:
 			case TYPEAPPLICATION:
 			case TYPEAUDIO:
@@ -274,12 +304,21 @@ class Model_GMail extends Model_Model
 			case TYPEMODEL:
 			case TYPEOTHER:
 			default:
-				$this->StackError("Does not support MIME type. ({$struct['type']})");
+				$this->StackError("Does not support MIME type. ({$structure['type']})");
 		}
 		
 		return $body;
 	}
 
+	function GetBodyMultipart($no, $section, $body)
+	{
+		$structure	 = $this->GetStructure($no);
+		$part		 = $structure['parts'][$section-1];
+		$encoding	 = $part['encoding'];
+		$charset	 = $part['parameters']['charset'];
+		return $this->ConvertEncoding($body, $encoding, $charset);
+	}
+	
 	function ConvertEncoding($value, $encoding_type, $charset)
 	{
 		switch($encoding_type){
