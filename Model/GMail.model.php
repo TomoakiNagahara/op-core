@@ -298,23 +298,23 @@ class Model_GMail extends Model_Model
 		
 		$structure = $this->GetStructure($no);
 		switch($structure['type']){
-			case TYPETEXT:
+			case TYPETEXT:	// 0
 				$encoding = $structure["encoding"];
 				$charset  = $structure["parameters"]["charset"];
 				$body = $this->ConvertEncoding($value, $encoding, $charset);
 				break;
 				
-			case TYPEMULTIPART:
+			case TYPEMULTIPART:	// 1
 				$body = $this->GetBodyMultipart($no, $section, $value);
 				break;
 				
-			case TYPEMESSAGE:
-			case TYPEAPPLICATION:
-			case TYPEAUDIO:
-			case TYPEIMAGE:
-			case TYPEVIDEO:
-			case TYPEMODEL:
-			case TYPEOTHER:
+			case TYPEMESSAGE:	// 2
+			case TYPEAPPLICATION://3
+			case TYPEAUDIO:		// 4
+			case TYPEIMAGE:		// 5
+			case TYPEVIDEO:		// 6
+			case TYPEMODEL:		// 7
+			case TYPEOTHER:		// 8
 			default:
 				$this->StackError("Does not support MIME type. ({$structure['type']})");
 		}
@@ -348,7 +348,17 @@ class Model_GMail extends Model_Model
 	
 	function GetBodyHtml($no)
 	{
-		
+		$structure = $this->GetStructure($no);
+		if( $structure['subtype'] === 'HTML' ){
+			$body = $this->GetBody($no);
+		}else{
+			foreach($structure['parts'] as $i => $part){
+				if( $part['subtype'] === 'HTML' ){
+					$body = $this->GetBody($no, $i+1);
+				}
+			}
+		}
+		return $body;
 	}
 	
 	function ConvertEncoding($value, $encoding_type, $charset=null)
