@@ -210,12 +210,18 @@ class Model_GMail extends Model_Model
 	function ParseStructure($structure)
 	{
 		foreach($structure as $key => $var){
-			if( $key === 'parameters'){
-				$result[$key] = $this->ParseStructureParameters($var);
-			}else if($key === 'parts'){
-				$result[$key] = $this->ParseStructureParts($var);
-			}else{
-				$result[$key] = $var;
+			switch($key){
+				case 'parameters':
+				case 'dparameters':
+					$result[$key] = $this->ParseStructureParameters($var);
+					break;
+					
+				case 'parts':
+					$result[$key] = $this->ParseStructureParts($var);
+					break;
+					
+				default:
+					$result[$key] = $var;
 			}
 		}
 		return $result;
@@ -224,7 +230,12 @@ class Model_GMail extends Model_Model
 	function ParseStructureParameters($parameters)
 	{
 		foreach($parameters as $i => $parameter){
-			$result[strtolower($parameter->attribute)] = $parameter->value;
+			$key = strtolower($parameter->attribute);
+			if( isset($result[$key]) ){
+				$this->StackError("$key is already exists.");
+				$result[$i][$key] = $parameter->value;
+			}
+			$result[$key] = $parameter->value;
 		}
 		return $result;
 	}
@@ -257,9 +268,10 @@ class Model_GMail extends Model_Model
 		return $structure['type'] === TYPEMULTIPART ? true: false;
 	}
 	
-	function isAttachment($no)
+	function isAttachedFile($no)
 	{
-		
+		$structure = $this->GetStructure($no);
+		return $structure['subtype'] === 'MIXED' ? true: false;
 	}
 	
 	function GetBodyRaw($no)
@@ -309,7 +321,7 @@ class Model_GMail extends Model_Model
 		
 		return $body;
 	}
-
+	
 	function GetBodyMultipart($no, $section, $body)
 	{
 		$structure	 = $this->GetStructure($no);
@@ -317,6 +329,26 @@ class Model_GMail extends Model_Model
 		$encoding	 = $part['encoding'];
 		$charset	 = $part['parameters']['charset'];
 		return $this->ConvertEncoding($body, $encoding, $charset);
+	}
+	
+	function GetBodyText($no)
+	{
+		$structure = $this->GetStructure($no);
+		if( $structure['type'] === TYPETEXT ){
+			$body = $this->GetBody($no);
+		}else{
+			foreach($structure['parts'] as $i => $part){
+				if( $part['type'] === TYPETEXT ){
+					$body = $this->GetBody($no, $i+1);
+				}
+			}
+		}
+		return $body;
+	}
+	
+	function GetBodyHtml($no)
+	{
+		
 	}
 	
 	function ConvertEncoding($value, $encoding_type, $charset)
@@ -349,5 +381,44 @@ class Model_GMail extends Model_Model
 				break;
 		}
 		return $encode;
+	}
+	
+	function GetAttachedFileNum($no)
+	{
+		$num = 0;
+		$structure = $this->GetStructure($no);
+		foreach($structure['parts'] as $i => $part ){
+			if( $part['type'] !== TYPETEXT ){
+				$num++;
+			}
+		}
+		return $num;
+	}
+	
+	function GetAttachedFileList($no)
+	{
+		$list = null;
+		$structure = $this->GetStructure($no);
+		foreach($structure['parts'] as $i => $part ){
+			if( isset($part['parameters']['name']) ){
+				$temp = array();
+				$temp['section'] = $i+1;
+				$temp['name'] = $part['parameters']['name'];
+				$list[] = $temp;
+			}
+		}
+		return $list;
+	}
+
+	function GetAttachedFileName($no, $section)
+	{
+		$name = null;
+		$structure = $this->GetStructure($no);
+		foreach($structure['parts'] as $i => $part ){
+			if( isset($part['parameters']['name']) ){
+				$name = $part['parameters']['name'];
+			}
+		}
+		return $name;
 	}
 }
