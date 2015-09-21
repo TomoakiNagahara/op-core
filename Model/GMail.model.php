@@ -327,7 +327,7 @@ class Model_GMail extends Model_Model
 		$structure	 = $this->GetStructure($no);
 		$part		 = $structure['parts'][$section-1];
 		$encoding	 = $part['encoding'];
-		$charset	 = $part['parameters']['charset'];
+		$charset	 = isset($part['parameters']['charset']) ? $part['parameters']['charset']: null;
 		return $this->ConvertEncoding($body, $encoding, $charset);
 	}
 	
@@ -351,35 +351,36 @@ class Model_GMail extends Model_Model
 		
 	}
 	
-	function ConvertEncoding($value, $encoding_type, $charset)
+	function ConvertEncoding($value, $encoding_type, $charset=null)
 	{
 		switch($encoding_type){
-			case ENC7BIT:
-				$encode = mb_convert_encoding($value, $this->_charset, $charset);
+			case ENC7BIT:	// 0
 				break;
 	
-			case ENC8BIT:
+			case ENC8BIT:	// 1
 				$encode = imap_8bit($value);
 				$encode = imap_qprint($encode);
-				$encode = mb_convert_encoding($encode, $this->_charset, $charset);
 				break;
 	
-			case ENCBASE64:
+			case ENCBASE64:	// 3
 				$encode = imap_base64($value);
-				$encode = mb_convert_encoding($encode, $this->_charset, $charset);
 				break;
 	
-			case ENCQUOTEDPRINTABLE:
+			case ENCQUOTEDPRINTABLE: // 4
 				$encode = imap_qprint($value);
-				$encode = mb_convert_encoding($encode, $this->_charset, $charset);
 				break;
 					
-			case ENCBINARY:
-			case ENCOTHER:
+			case ENCBINARY:	// 2
+			case ENCOTHER:	// 5
 			default:
 				$this->StackError("Does not define encoding type. ($encoding_type)");
 				break;
 		}
+
+		if( $charset ){
+			$encode = mb_convert_encoding($encode, $this->_charset, $charset);
+		}
+		
 		return $encode;
 	}
 	
