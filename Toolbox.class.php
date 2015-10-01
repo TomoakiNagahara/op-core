@@ -302,6 +302,7 @@ class Toolbox
 	 * @param  integer $prefix
 	 * @return boolean
 	 */
+	/*
 	static function CIDR( $ip1, $ip2, $prefix )
 	{
 		OnePiece5::StackError("Used checking. Is this use?");
@@ -311,6 +312,7 @@ class Toolbox
 		$ip2 = ip2long($ip2) >> $mask << $mask;
 		return $ip1 === $ip2 ? true: false;
 	}
+	*/
 	
 	/*
 	function ConvertConfigFromPath( $args )
@@ -319,6 +321,7 @@ class Toolbox
 	}
 	*/
 	
+	/*
 	static function ConvertConfigToArray( $args )
 	{
 		OnePiece5::StackError("Used checking. Is this use?");
@@ -354,7 +357,9 @@ class Toolbox
 		
 		return $config;
 	}
+	*/
 	
+	/*
 	static function GetFileListFromDir($path='./')
 	{
 		OnePiece5::StackError("Used checking. Is this use?");
@@ -375,9 +380,10 @@ class Toolbox
 		
 		return $list;
 	}
+	*/
 	
 	/**
-	 * Get URL
+	 * Generate URL
 	 * 
 	 * @param  array $conf
 	 * @return string
