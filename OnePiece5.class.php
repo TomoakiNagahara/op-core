@@ -1133,21 +1133,16 @@ class OnePiece5
 		if( file_exists($file) ){
 			//  absolute
 			$path = $file;
-		}else if( file_exists($path = self::ConvertPath($file)) ){
-			//  abstract
 		}else if( $dir = Env::Get('template-dir') ){
 			// the path is converted.
-			$dir  = self::ConvertPath($dir);
-			$path = rtrim($dir,'/').'/'.$file;
-		}else{
-			$path = $file;
-		}
-		
-		// 2nd check
-		if(!file_exists($path)){
-			$message = $this->i18n()->Bulk("This template file does not exist.");
-			$this->StackError("$message path=$path");
-			return false;
+			$dir  = $this->ConvertPath($dir);
+			$path = rtrim($dir,'/').'/'.$file_path;
+			
+			// 2nd check
+			if(!file_exists($path)){
+				$this->StackError("Template file does not exist.\n file=$file, dir=$dir",'en');
+				return false;
+			}
 		}
 		
 		// extract array
