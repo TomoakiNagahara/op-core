@@ -105,9 +105,8 @@ class OnePiece5
 	{
 		//  Called Init?
 		if(!$this->_is_init){
-			$format  = '%s has not call parent::init().';
-			$message = sprintf( $format, get_class($this));
-			$this->StackError( $message );
+			$class = get_class($this);
+			$this->StackError("\\$class\ has not call \parent::init()\.",'en');
 		}
 	}
 	
@@ -340,11 +339,11 @@ class OnePiece5
 		$value = OnePiece5::Escape($value);
 		
 		if( is_null($expire) ){
-			OnePiece5::StackError("expire does not set. (ex. 0 is 365days, -1 is out of valid expire.)");
+			OnePiece5::StackError("\expire\ value does not set. (ex. 0 is 365days, -1 is out of valid expire.)",'en');
 		}
 		
 		if( headers_sent($file,$line) ){
-			OnePiece5::StackError("Header has already been sent. File: {$file}, Line number #{$line}.");
+			OnePiece5::StackError("Header has already been sent. \File: {$file}\, Line number \#$line\.");
 			return false;
 		}
 		
@@ -374,7 +373,7 @@ class OnePiece5
 			$_COOKIE[$_key] = $_value;
 		}else{
 			OnePiece5::mark('SetCookie is failed.');
-			OnePiece5::StackError("SetCookie is fail: {$key}={$value}");
+			OnePiece5::StackError("SetCookie is fail: \{$key}={$value}\\",'en');
 		}
 		
 		return $io;
@@ -976,7 +975,7 @@ class OnePiece5
 	function SetHeader( $str, $replace=null, $code=null )
 	{
 		//	2015-04-06
-		self::StackError("Will abolished.");
+		self::StackError("Will abolished.",'en');
 		
 		$cgi = $this->GetEnv('cgi'); // FastCGI
 		
@@ -995,7 +994,7 @@ class OnePiece5
 	
 		if(headers_sent()){
 			$io = false;
-			$this->StackError("already header sent.");
+			$this->StackError("Already header sent.",'en');
 		}else{
 			$io = true;
 			$str = str_replace( array("\n","\r"), '', $str );
@@ -1017,7 +1016,7 @@ class OnePiece5
 	{
 		if( headers_sent() ){
 			$io = false;
-			$this->StackError("already header sent.");
+			$this->StackError("Already header sent.",'en');
 		}else{
 			$io = true;
 			$str = str_replace( array("\n","\r"), '', $str );
@@ -1096,7 +1095,7 @@ class OnePiece5
 			$temp = ob_get_contents();
 			$io   = ob_end_clean();
 		}else{
-			$this->StackError("ob_start failed.");
+			$this->StackError("\ob_start\ is failed.",'en');
 		}
 				
 		return $temp;
@@ -1112,7 +1111,7 @@ class OnePiece5
 	function Template( $file_path, $data=null )
 	{
 		if(!is_string($file_path)){
-			$this->StackError("Passed arguments is not string. (".gettype($file_path).")");
+			$this->StackError("Passed arguments is not string. \(".gettype($file_path).")\\",'en');
 			return false;
 		}
 		
@@ -1126,7 +1125,7 @@ class OnePiece5
 		if( $this->GetEnv('allowDoubleDot') ){
 			//  OK
 		}else if( preg_match('|\.\./|',$file) ){ 
-			$this->StackError("Does not allow parent directory.($file)");
+			$this->StackError("Does not allow parent directory. \($file)\\",'en');
 			return false;
 		}
 		
@@ -1154,7 +1153,7 @@ class OnePiece5
 		// extract array
 		if( is_array($data) and count($data) ){
 			if(isset($data[0])){
-				$this->Mark('Missing? $data is array. (not assoc) / ex. $this->Template("index.phtml",array("test"=>"success")');
+				$this->StackError('\$data\ is array. (not assoc array)'."\n".'Ex. $this->Template("index.phtml", array("test"=>"success")','en');
 			}else{
 				extract($data);
 			}
@@ -1179,7 +1178,7 @@ class OnePiece5
 	{
 		if( $domain ){
 			//	Added about 2014-Q4.
-			OnePiece5::StackError("\domain\ option is obsolete. Please use \Toolbox::GetDomain\ method.");
+			OnePiece5::StackError("\domain\ option is obsolete. Please use \Toolbox::GetDomain\ method.",'en');
 		}
 		return Toolbox::ConvertURL($meta);
 	}
@@ -1258,9 +1257,7 @@ class OnePiece5
 	{
 		//  Notice
 		if( strpos( $name, '_') !== false ){
-			$message = 'Underscore(_) is reserved. For the feature functions. (maybe, namespace)';
-			$message = self::i18n()->Bulk($message);
-			$this->StackError("$message");
+			$this->StackError("Underscore(_) is reserved. For the feature functions. (maybe, namespace)",'en');
 		}
 	}
 	
@@ -1328,12 +1325,12 @@ class OnePiece5
 			$path = $op_root.'PDO/PDO5.class.php';
 			
 			if(!file_exists($path)){
-				$this->StackError("Does not exists file. ($path)");
+				$this->StackError("Does not exists file. \($path)\\",'en');
 				return false;
 			}
 			
 			if(!include_once($path) ){
-				$this->StackError("Does not include file. ($path)");
+				$this->StackError("Does not include file. \($path)\\",'en');
 				return false;
 			}
 			
@@ -1452,7 +1449,7 @@ class OnePiece5
 			return $string;
 		}else if(!is_string($string)){
 			self::mark( 'Does not string - '.self::GetCallerLine() );
-			self::StackError("Does not string.");
+			self::StackError("Does not string.",'en');
 		}
 		
 		if( class_exists('Wiki2Engine',true) ){
