@@ -359,6 +359,9 @@ class PDO5 extends OnePiece5
 				}
 			}
 			switch($code){
+				case 0:
+					$text .= " (Maybe, not installed)";
+					break;
 				case 1045:
 					$text = "Access was denied. \\{$this->user}@{$this->host}:{$this->port}\\";
 					break;
