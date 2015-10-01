@@ -102,6 +102,8 @@ class Model_GMail extends Model_Model
 		if(!$value = $this->Cache()->Get($key) ){
 			if( $value = imap_header($this->GetImap(), $no) ){
 				$this->Cache()->Set($key, $value, $this->_expire);
+			}else{
+				$this->StackError("Bad message number. ($no)");
 			}
 		}
 		return $value;
@@ -153,13 +155,77 @@ class Model_GMail extends Model_Model
 			}
 			$addr = $v->mailbox;
 			$host = $v->host;
+			
+			$mail = $addr.'@'.$host;
+			$mail = trim($mail);
+			$mail = trim($mail,'<>');
+			
+			list($first, $family) = $this->ParseName($personal, $addr);
+			
 			$result['addr'] = $addr;
 			$result['host'] = $host;
-			$result['mail'] = $addr.'@'.$host;
+			$result['mail'] = $mail;
 			$result['personal'] = $personal;
+			$result['name']['first']  = $first;
+			$result['name']['family'] = $family;
 			$results[] = $result;
 		}
 		return $results;
+	}
+	
+	/**
+	 * Get First and Family name.
+	 * 
+	 * @param  string $personal
+	 * @param  string $address
+	 * @return array(First, Family)
+	 */
+	function ParseName($personal, $address)
+	{	
+		if( empty($personal) ){
+			return $this->ParseNameByAddress($address);
+		}
+		
+		$personal = str_replace('　', ' ', $personal);
+		$personal = trim($personal);
+		$personal = trim($personal,'"\'<>');
+		
+		if( strpos($personal,' ') ){
+			$full_name = explode(' ',$personal);
+			$first  = array_shift($full_name);
+			$family = array_pop($full_name);
+		}else if( mb_strlen($personal,'utf-8') === 4 ){
+			if( preg_match('/^[a-z\s]+$/i', $personal) ){
+				// Alphabet only
+				$first = $family = null;
+			}else{
+				$name = preg_split('//u', $personal);
+				$family = $name[1].$name[2];
+				$first  = $name[3].$name[4];
+			}
+		}else{
+			return $this->ParseNameByAddress($address);
+		}
+		
+		return array($first, $family);
+	}
+	
+	/**
+	 * Get First and Family name by address part.
+	 * 
+	 * @param  string $address
+	 * @return array(First, Family)
+	 */
+	function ParseNameByAddress($address)
+	{
+		if( mb_substr_count($address, '.') !== 1 ){
+			return array(null, null);
+		}
+		
+		list($address) = explode('+', $address.'+');
+		list($first, $family) = explode('.', $address);
+		
+		return array(ucfirst($first), ucfirst($family));
 	}
 	
 	function GetFrom($no)
