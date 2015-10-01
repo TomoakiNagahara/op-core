@@ -590,15 +590,10 @@ class Toolbox
 		//	Which are modifier.
 		switch( $modifier = $match[1] ){
 			case 'op':
-				$real = $_SERVER['OP_ROOT'];
-				break;
-				
 			case 'app':
-				$real = $_SERVER['APP_ROOT'];
-				break;
-				
 			case 'doc':
-				$real = $_SERVER['DOC_ROOT'];
+			case 'proj':
+				$real = $_SERVER[strtoupper($modifier).'_ROOT'];
 				break;
 				
 			case 'dot':
