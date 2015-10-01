@@ -297,12 +297,34 @@ class PDO5 extends OnePiece5
 		return $this->_dsn;
 	}
 	
-	function Connect( $config )
+	/**
+	 * Connection database.
+	 * 
+	 * String is file path.
+	 * Config is convert to array.
+	 * 
+	 * @param  string|array|Config $mixed
+	 * @return boolean
+	 */
+	function Connect($mixed)
 	{
-		if( is_object($config) ){
-			$args = Toolbox::toArray($config);
+		//	File path
+		if( is_string($mixed) ){
+			if( file_exists($mixed) ){
+				include($mixed);
+				$args = Toolbox::toArray($database);
+			}else{
+				$this->StackError("Does not file exists. ($mixed)");
+				return false;
+			}
+		}else if( is_object($mixed) ){
+			$args = Toolbox::toArray($mixed);
+		}else if( is_array($mixed)){
+			$args = $mixed;
 		}else{
-			$args = $config;
+			$type = gettype($mixed);
+			$this->StackError("This arguments type is not supported. ($type)");
+			return false;
 		}
 		
 		//  init
