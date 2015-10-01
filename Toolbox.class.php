@@ -649,7 +649,7 @@ class Toolbox
 		if(!$app){
 			$app = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 		}
-		return preg_replace('|^app:/|', $app, $path);
+		return preg_replace('|^app:/+|', $app, $path);
 	}
 	
 	/**
@@ -660,7 +660,7 @@ class Toolbox
 	static function ConvertURLforApp($url)
 	{
 		$app = rtrim(self::GetRewriteBase(),'/').'/';
-		return preg_replace('|^app:/|', $app, $url);
+		return preg_replace('|^app:/+|', $app, $url);
 	}
 	
 	/**
