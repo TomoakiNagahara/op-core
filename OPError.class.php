@@ -1,6 +1,6 @@
 <?php
 /**
- * Error.class.php
+ * OPError.class.php
  * 
  * Creation: 2014-11-29
  * 
@@ -11,7 +11,7 @@
  */
 
 /**
- * Error
+ * OPError
  * 
  * Creation: 2014-02-18
  * 
@@ -20,7 +20,7 @@
  * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
  * @package   op-core
  */
-class Error
+class OPError
 {
 	/**
 	 * Session's name space.
@@ -50,7 +50,7 @@ class Error
 	}
 	
 	static function Set( $e, $translation=null )
-	{
+	{		
 		$name = null;
 		
 		if( $e instanceof Exception ){

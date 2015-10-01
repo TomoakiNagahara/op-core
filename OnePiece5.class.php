@@ -54,41 +54,41 @@ class OnePiece5
 	function __call( $name, $args )
 	{
 		$class = get_class($this);
-		Error::MagicMethodCall( $class, $name, $args );
+		OPError::MagicMethodCall( $class, $name, $args );
 	}
 	
 	static function __callStatic( $name , $args )
 	{
 		$class = get_class($this);
-		Error::MagicMethodCallStatic( $class, $name, $args);
+		OPError::MagicMethodCallStatic( $class, $name, $args);
 	}
 	
 	function __set( $name, $args )
 	{
 		$class	 = get_class($this);
 		$call	 = OnePiece5::GetCallerLine();
-		Error::MagicMethodSet( $class, $name, $args, $call );
+		OPError::MagicMethodSet( $class, $name, $args, $call );
 	}
 	
 	function __get( $name )
 	{
 		$class = get_class($this);
 		$call  = $this->GetCallerLine();
-		Error::MagicMethodGet( $class, $name, $call );
+		OPError::MagicMethodGet( $class, $name, $call );
 	}
 	
 	function __isset( $name )
 	{
 		$class = get_class($this);
 		$call = $this->GetCallerLine();
-		Error::MagicMethodGet( $class, $name, $call );
+		OPError::MagicMethodGet( $class, $name, $call );
 	}
 	
 	function __unset( $name )
 	{
 		$class = get_class($this);
 		$call = $this->GetCallerLine();
-		Error::MagicMethodGet( $class, $name, $call );
+		OPError::MagicMethodGet( $class, $name, $call );
 	}
 	
 	/*
@@ -144,7 +144,7 @@ class OnePiece5
 	 */
 	static function ErrorHandler( $no, $str, $file, $line, $context )
 	{
-		Error::Handler( $no, $str, $file, $line, $context );
+		OPError::Handler( $no, $str, $file, $line, $context );
 	}
 	
 	/**
@@ -155,7 +155,7 @@ class OnePiece5
 	 */
 	static function ErrorExceptionHandler( $e )
 	{
-		Error::ExceptionHandler( $e );
+		OPError::ExceptionHandler( $e );
 	}
 
 	/**
@@ -198,7 +198,7 @@ class OnePiece5
 	 */
 	function FetchError()
 	{
-		return Error::Get();
+		return OPError::Get();
 	}
 	
 	/**
@@ -206,7 +206,7 @@ class OnePiece5
 	 */
 	function PrintError()
 	{
-		Error::Report();
+		OPError::Report();
 	}
 	
 	/**
