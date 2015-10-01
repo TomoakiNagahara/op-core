@@ -624,6 +624,10 @@ class Toolbox
 			case 'layout':
 				$real = Env::Get('layout-root');
 				break;
+			
+			default:
+				$real = './';
+				OnePiece5::StackError("Does not define this modifier. ($modifier)");
 		}
 		
 		//	Generate full path.
