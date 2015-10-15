@@ -440,9 +440,10 @@ class Form5 extends OnePiece5
 		
 		if(!isset($this->config->$form_name->input->$input_name)){
 			if( $this->GetTokenKeyName($form_name) === $input_name ){
+				//	Is token key.
 				return false;
 			}
-			$this->mark("![.red[This input-name doesn't exist in form-config. ($input_name, $form_name)]]");
+			$this->StackError("This input-name doesn't exist in form-config. \(form: {$form_name}, input: {$input_name})\ ",'en');
 			return false;
 		}
 		
