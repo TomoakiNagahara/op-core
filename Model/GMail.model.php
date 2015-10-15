@@ -19,9 +19,14 @@ class Model_GMail extends Model_Model
 	private $_GMAIL_ACCOUNT;
 	private $_GMAIL_PASSWORD;
 	private $_SERVER;
-	private $_imap;
 	private $_expire	 = 3600;
 	private $_charset	 = 'utf-8';
+	
+	/**
+	 * IMAP stream resource.
+	 * @var resource
+	 */
+	private $_imap;
 	
 	/**
 	 * Flag of delete of message.
@@ -44,6 +49,7 @@ class Model_GMail extends Model_Model
 	{
 		parent::Init();
 		
+		//	Checking of Installed of IMAP module.
 		if(!function_exists('imap_open') ){
 			$this->StackError("Does not install PHP IMAP functions.");
 			return false;
@@ -120,9 +126,13 @@ class Model_GMail extends Model_Model
 			if( $this->_deleted ){
 				imap_expunge($this->_imap);
 			}
+			
+			//	Close of IMAP stream.
 			if(!imap_close($this->_imap)){
 				$this->StackError("Could not close IMAP.");
 			}
+			
+			//	Init.
 			$this->_imap = null;
 		}
 	}
