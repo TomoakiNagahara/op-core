@@ -112,7 +112,7 @@ abstract class NewWorld5 extends OnePiece5
 		}
 		
 		//	Output bufferring content. and finish.
-		ob_end_flush();
+	//	ob_end_flush();
 		
 		//  Do parent destruct.
 		return parent::__destruct();
