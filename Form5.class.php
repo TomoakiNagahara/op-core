@@ -102,18 +102,26 @@ class Form5 extends OnePiece5
 				if( is_null($value) ){
 					continue;
 				}
+				
+				/*
 				if( isset($input->replace) ){
-//					$value = $this->CheckReplace( $value, $input->replace, $charset );
+					$value = $this->CheckReplace( $value, $input->replace, $charset );
 				}
+				*/
+				
 				if( isset($input->convert) ){
 					$value = $this->CheckConvert( $value, $input->convert, $charset );
 				}
 			}
 		}else{
 			// single
+			
+			/*
 			if( !is_null($request) and isset($input->replace) ){
-//				$request = $this->CheckReplace( $request, $input->replace, $charset );
+				$request = $this->CheckReplace( $request, $input->replace, $charset );
 			}
+			*/
+			
 			if( !is_null($request) and isset($input->convert) ){
 				$request = $this->CheckConvert( $request, $input->convert, $charset );
 			}
