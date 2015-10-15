@@ -923,7 +923,7 @@ class OnePiece5
 		$args = str_replace("\0", '\0', $args);
 		
 		//  Anti ASCII Control code.
-		$args = trim( $args, "\x00..\x1F");
+	//	$args = str_replace("\x00..\x1F",'',$args);
 		
 		/**
 		 * htmlentities's double_encoding off funciton is PHP Version 5.2.3 latter.
