@@ -23,6 +23,12 @@ class Model_GMail extends Model_Model
 	private $_expire	 = 3600;
 	private $_charset	 = 'utf-8';
 	
+	/**
+	 * Flag of delete of message.
+	 * @var boolean
+	 */
+	private $_deleted;
+	
 	function __destruct()
 	{
 		$this->Close();
@@ -70,6 +76,10 @@ class Model_GMail extends Model_Model
 	function Close()
 	{
 		if( $this->_imap ){
+			//	Delete of message.
+			if( $this->_deleted ){
+				imap_expunge($this->_imap);
+			}
 			if(!imap_close($this->_imap)){
 				$this->StackError("Could not close IMAP.");
 			}
@@ -497,5 +507,13 @@ class Model_GMail extends Model_Model
 			}
 		}
 		return $name;
+	}
+	
+	function Delete($no)
+	{
+		$this->_deleted = true;
+		if(!imap_delete($this->GetImap(), $no)){
+			$this->StackError("Delete of message was failed.");
+		}
 	}
 }
