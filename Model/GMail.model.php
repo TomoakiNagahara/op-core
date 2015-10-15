@@ -49,22 +49,62 @@ class Model_GMail extends Model_Model
 			return false;
 		}
 		
-		return true;
-	}
-	
-	function SetAccount($account, $password)
-	{
 		//	Initialized
 		$this->_GMAIL_HOST		 = 'imap.googlemail.com';
 		$this->_GMAIL_PORT		 = 993;
-		$this->_GMAIL_ACCOUNT	 = $account;
-		$this->_GMAIL_PASSWORD	 = $password;
 		$this->_SERVER = "{{$this->_GMAIL_HOST}:{$this->_GMAIL_PORT}/novalidate-cert/imap/ssl}";
+		
+		return true;
 	}
 	
-	function Open()
+	function SetAccount($account, $password=null)
 	{
-		if(!$this->_imap = imap_open($this->_SERVER."INBOX", $this->_GMAIL_ACCOUNT, $this->_GMAIL_PASSWORD)){
+		$this->_GMAIL_ACCOUNT	 = $account;
+		$this->_GMAIL_PASSWORD	 = $password;
+	}
+	
+	function SetPassword($password)
+	{
+		$this->_GMAIL_PASSWORD	 = $password;
+	}
+	
+	function GetAccount()
+	{
+		if( $account = $this->_GMAIL_ACCOUNT ){
+			// OK
+		}else if( $account = $this->GetEnv('GMAIL_ACCOUNT')){
+			// OK
+		}else{
+			// NG
+			$account = null;
+		}
+		return $account;
+	}
+	
+	function GetPassword()
+	{
+		if( $password = $this->_GMAIL_PASSWORD ){
+			// OK
+		}else if( $password = $this->GetEnv('GMAIL_PASSWORD')){
+			// OK
+		}else{
+			// NG
+			$password = null;
+		}
+		return $password;
+	}
+	
+	function Open($account=null, $password=null)
+	{
+		if(!$account){
+			$account = $this->GetAccount();
+		}
+		
+		if(!$password){
+			$password = $this->GetPassword();
+		}
+		
+		if(!$this->_imap = imap_open($this->_SERVER."INBOX", $account, $password)){
 			$this->StackError("Does not open mailbox.");
 			$io = false;
 		}else{
