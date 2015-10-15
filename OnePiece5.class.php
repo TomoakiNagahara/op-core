@@ -1437,16 +1437,6 @@ class OnePiece5
 	 */
 	static function Wiki2( $string, $options=null )
 	{
-		//  Check
-		if(is_null($string)){
-			return '';
-		}else if(is_numeric($string)){
-			return $string;
-		}else if(!is_string($string)){
-			self::mark( 'Does not string - '.self::GetCallerLine() );
-			self::StackError("Does not string.",'en');
-		}
-		
 		if( class_exists('Wiki2Engine',true) ){
 			return nl2br(trim(Wiki2Engine::Wiki2( $string, $options ))) . PHP_EOL;
 		}else{

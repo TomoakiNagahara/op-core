@@ -28,8 +28,15 @@ class Wiki2Engine extends OnePiece5
 	
 	static function Wiki2( $string, $options = null )
 	{
-		if(!is_string($string)){
+		//  Check
+		if(is_null($string)){
 			return '';
+		}else if(is_numeric($string)){
+			return $string;
+		}else if(!is_string($string)){
+			OnePiece5::mark( 'Does not string - '.self::GetCallerLine(1) );
+			OnePiece5::StackError("Does not string.",'en');
+			return;
 		}
 		
 		//	Default option
