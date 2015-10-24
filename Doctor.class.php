@@ -20,11 +20,6 @@
 class Doctor extends OnePiece5
 {
 	/**
-	 * 
-	 */
-	const _KEY_SELFTEST_ = 'SELFTEST_CONFIG';
-	
-	/**
 	 * OnePiece's PDO5 object
 	 * 
 	 * @var PDO5
@@ -43,7 +38,7 @@ class Doctor extends OnePiece5
 	 * 
 	 * @var boolean
 	 */
-	private $_is_diagnosis = null; // is_healthy
+	private $_is_diagnosis = null;
 	
 	/**
 	 * Blue print
@@ -107,6 +102,7 @@ class Doctor extends OnePiece5
 		if(!$this->Admin()){
 			$this->StackError("You are not an administrator.",'en');
 		}
+		$this->LoadConfig();
 	}
 	
 	/**
@@ -146,11 +142,41 @@ class Doctor extends OnePiece5
 	}
 	
 	/**
-	 * Registaration class name.
-	 *
-	 * @param string $name
+	 * Save to session.
+	 * 
+	 * @param string $class  class name
+	 * @param Config $config
 	 */
-	function Registration($label, Config $config)
+	function SaveConfig($class, Config $config)
+	{
+		$session = $this->GetSession('config');
+		$session[$class] = $config;
+		$this->SetSession('config', $session);
+	}
+	
+	/**
+	 * Load from session.
+	 */
+	function LoadConfig()
+	{
+		$session = $this->GetSession('config');
+		
+		if(!$session){
+			return;
+		}
+		
+		foreach($session as $label => $config){ 
+			$this->Registration($label, $config);
+		}
+	}
+	
+	/**
+	 * Registaration class name.
+	 * 
+	 * @param string $class  class name
+	 * @param Config $config
+	 */
+	function Registration($class, Config $config)
 	{
 		//	Init config.
 		$config = Toolbox::toConfig($config);
@@ -158,8 +184,7 @@ class Doctor extends OnePiece5
 		
 		//	Pre process.
 		$this->_registaration($config);
-	//	$this->d($config->table);
-		$this->_selftest_config[$label] = $config;
+		$this->_selftest_config[$class] = $config;
 	}
 	
 	private function _registaration($config)

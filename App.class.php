@@ -23,6 +23,13 @@ if(!include_once('NewWorld5.class.php')){
 class App extends NewWorld5
 {
 	/**
+	 * op-unit-selftest directory name.
+	 *
+	 * @var string
+	 */
+	const _UNIT_URL_SELFTEST_ = '/_self-test/';
+	
+	/**
 	 * SmatURL's key separate character 
 	 * 
 	 * @var string
@@ -382,7 +389,7 @@ class App extends NewWorld5
 		$admin_ip	 = Env::Get('admin-ip');
 		$admin_email = Env::Get('admin-mail');
 		
-		//	Checking Administrators settings.
+		//	Checking Administrator's settings.
 		if(!Toolbox::isLocalhost() and (!$admin_ip or !$admin_email) ){
 			$this->SetLayoutName(false);
 			$path = $this->ConvertPath('op:/Template/introduction-app.phtml');
@@ -393,6 +400,7 @@ class App extends NewWorld5
 			$route['debug'][] = __FILE__.', '.__METHOD__.', '.__LINE__;
 		}else
 		
+		//	In case of Admin.
 		if( $this->Admin() ){
 			$ext  = Router::CalcExtension($_SERVER['REQUEST_URI']);
 			$mime = Router::CalcMime($ext);
@@ -400,23 +408,26 @@ class App extends NewWorld5
 			if( $mime === 'text/html' ){
 				//	Get current uri.
 				list($uri) = explode('?',$_SERVER['REQUEST_URI'].'?');
-				$uri = rtrim($this->ConvertURL('app:/_self-test/'), '/');
-
+				$uri = rtrim($this->ConvertURL('app:/'.self::_UNIT_URL_SELFTEST_), '/');
+				
 				//	Compare of URI.
-				if( preg_match("|^$uri|i",$_SERVER['REQUEST_URI']) ){
+				if( preg_match("|^$uri|",$_SERVER['REQUEST_URI']) ){
 					//	Does not diagnosis.
 				}else{
 					//	Do diagnosis.
 					$this->InitSelftest();
-					$io = $this->Doctor()->Diagnose();
-					if( $io == false ){
+					if(!$this->Doctor()->Diagnose()){
+						//	Set call of Content method flag.
+						Env::Set(self::_IS_CONTENT_, true);
+						
 						//	Transfer self-test page.
-						$this->Location('app:/_self-test');
+						$this->Location($uri); 
 					}
 				}
 			}
 		}
 		
+		//	Execute page controller.(End-poind)
 		parent::Dispatch($route);
 	}
 	

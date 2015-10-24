@@ -20,8 +20,6 @@
  */
 class OpException extends Exception
 {
-	private $_isSelftest = null;
-	
 	/**
 	 * Message's original language.
 	 * 
@@ -47,19 +45,28 @@ class OpException extends Exception
 		parent::__construct( $message, $code, $previous );
 	}
 	
+	/**
+	 * Language of message. 
+	 * 
+	 * @return string
+	 */
 	function getLang()
 	{
 		return $this->_lang;
 	}
 	
-	/*
+	/**
+	 * Self-test flag.
+	 * 
+	 * @param  boolean $var
+	 * @return boolean
+	 */
 	function isSelftest($var=null)
 	{
+		static $io;
 		if( $var ){
-			$this->_isSelftest = $var;
+			$io = $var;
 		}
-		return $this->_isSelftest;
+		return $io;
 	}
-	
-	*/
 }

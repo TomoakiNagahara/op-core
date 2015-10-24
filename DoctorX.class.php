@@ -2,8 +2,7 @@
 /**
  * DoctorX.class.php
  * 
- * Creation: 2015-03-02
- * 
+ * @creation  2015-03-02
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
@@ -13,8 +12,7 @@
 /**
  * DoctorX
  * 
- * Creation: 2015-03-02
- *
+ * @creation  2015-03-02
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>

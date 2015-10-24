@@ -29,13 +29,6 @@ abstract class NewWorld5 extends OnePiece5
 	const _NOT_FOUND_PAGE_ = 'NotFoundPage';
 	
 	/**
-	 * op-unit-selftest directory name.
-	 * 
-	 * @var string
-	 */
-	const _UNIT_URL_SELFTEST_ = '/_self-test/';
-
-	/**
 	 * Use to check call of content.
 	 * 
 	 * @var string
@@ -341,7 +334,7 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Content()
 	{
-		//	Checking call of Content method.
+		//	Set call of Content method flag.
 		Env::Set(self::_IS_CONTENT_, true);
 		
 		//	Separate mime, main and sub.

@@ -32,15 +32,29 @@ abstract class Model_Model extends OnePiece5
 			
 			//  get database config
 			$database = $this->config()->database();
+			if(!$database instanceof Config ){
+				throw new OpException("Database connection configuration was not \Config\ object.",'en');
+			}
 			
 			//	databaes name
 			if( isset($database->name) ){
 				$database->database = $database->name;
 			}
 			
-			//  database connection
+			//	In case of Admin.
+			if( $this->Admin() ){
+				//	Save Config for Doctor.
+				$class  = get_class($this);
+				$config = $this->Config()->selftest();
+				$this->Doctor()->SaveConfig($class, $config);
+			}
+			
+			//	database connection
 			if(!$io = $pdo->Connect($database)){
-				throw new OpException("Connection was failed.",'en');
+				//	Exception.
+				$e = new OpException("Connection was failed.",'en');
+				$e->isSelftest(true);
+				throw $e;
 			}
 		}
 		return $pdo;
@@ -100,6 +114,7 @@ abstract class Config_Model extends OnePiece5
 	function __select()
 	{
 		$config = new Config();
+		$config->table = $this->table_name();
 		$config->where->deleted = null;
 		$config->limit = 1;
 		$config->cache = 1;
@@ -109,6 +124,7 @@ abstract class Config_Model extends OnePiece5
 	function __insert()
 	{
 		$config = new Config();
+		$config->table = $this->table_name();
 		$config->set->created = gmdate('Y-m-d H:i:s');
 		return $config;
 	}
@@ -116,6 +132,7 @@ abstract class Config_Model extends OnePiece5
 	function __update()
 	{
 		$config = new Config();
+		$config->table = $this->table_name();
 		$config->set->updated = gmdate('Y-m-d H:i:s');
 		$config->limit = 1;
 		return $config;
@@ -124,6 +141,7 @@ abstract class Config_Model extends OnePiece5
 	function __delete()
 	{
 		$config = new Config();
+		$config->table = $this->table_name();
 		$config->set->deleted = gmdate('Y-m-d H:i:s');
 		$config->limit = 1;
 		return $config;

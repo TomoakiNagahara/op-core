@@ -290,32 +290,36 @@ class i18n extends OnePiece5
 			$this->_pdo = parent::PDO();
 		}
 		
-		if( is_null($_is_connect) and !$io = $this->_pdo->isConnect()){
-			
+		if( is_null($_is_connect) and !$this->_pdo->isConnect() ){
+			//	Try connection.
 			try {
 				$_is_connect = $this->_pdo->Connect( $this->Config()->database() );
 			}catch ( OpException $e ){
 				$_is_connect = false;
+				$lang    = $e->GetLang();
 				$message = $e->GetError();
-				$lang = $e->GetLang();
-				$this->Mark("![.red[$message]]");
+				$this->StackError("$message",$lang);
 			}
 			
 			//	Connection was failed.
 			if(!$_is_connect){
+				/*
 				//	Error process.
 				if(empty($message)){
 					$error = $this->FetchError();
 					$message = $error['message'];
 				}
 				$this->Mark("![.red[$message]]",__CLASS__);
+				*/
 				
+				/*
 				//	Transfer self-test page.
 				$page = NewWorld5::_UNIT_URL_SELFTEST_;
 				if(!preg_match("|$page|",$_SERVER['REQUEST_URI'],$match)){
 					$url = $this->ConvertURL("app:/{$page}").'?class=i18n';
-					$this->Location($url);
+				//	$this->Location($url);
 				}
+				*/
 				
 				//	Setup self-test.
 				$this->Doctor()->Registration(__CLASS__,$this->Config()->selftest());
