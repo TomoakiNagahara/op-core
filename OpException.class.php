@@ -20,7 +20,6 @@
  */
 class OpException extends Exception
 {
-	private $_wizard = null;
 	private $_isSelftest = null;
 	
 	/**
@@ -62,14 +61,5 @@ class OpException extends Exception
 		return $this->_isSelftest;
 	}
 	
-	function SetWizard()
-	{
-		OnePiece5::SetEnv('wizard',true);
-	}
-	
-	function GetWizard()
-	{
-		return OnePiece5::GetEnv('wizard');
-	}
 	*/
 }
