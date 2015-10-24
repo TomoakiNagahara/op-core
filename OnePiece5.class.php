@@ -1039,11 +1039,13 @@ class OnePiece5
 		$url = $this->ConvertUrl($url,false);
 		
 		//	Check infinity loop.
-		if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
+		if( $_SERVER['REQUEST_METHOD'] === 'POST' ){
 			//	Does not for infinity.
 		}else{
-			$temp = explode('?',$_SERVER['REQUEST_URI']);
-			if( $io = rtrim($url,'/') == rtrim($temp[0],'/') ){
+			//	Get current URI. (remove URL query)
+			list($request_uri) = explode('?',$_SERVER['REQUEST_URI']);
+			//	Compare URL.
+			if( $io = rtrim($url,'/') === rtrim($request_uri,'/') ){
 				$this->mark("![.red[Location is Infinite loop. ($url)]]");
 				return false;
 			}
@@ -1055,9 +1057,8 @@ class OnePiece5
 			$location['post']	 = $_POST;
 			$location['get']	 = $_GET;
 			$location['referer'] = $_SERVER['REQUEST_URI'];
-			$this->SetSession( 'Location', $location );
-			if($exit){
-				$this->__destruct();
+			$this->SetSession('Location', $location);
+			if( $exit ){
 				exit(0);
 			}
 		}
