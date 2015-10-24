@@ -71,6 +71,11 @@ abstract class Model_Model extends OnePiece5
  */
 abstract class Config_Model extends OnePiece5
 {
+	const COLUMN_CREATED	 = 'created';
+	const COLUMN_UPDATED	 = 'updated';
+	const COLUMN_DELETED	 = 'deleted';
+	const COLUMN_TIMESTAMP	 = 'timestamp';
+	
 	function __database()
 	{
 		$database = new Config();
