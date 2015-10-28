@@ -544,7 +544,7 @@ class OnePiece5
 			
 			switch(strtolower($format)){
 				case 'mark':
-					$format = '$file ($line) ';
+					$format = '$file [$line] ';
 					break;
 					
 				case 'incident':
@@ -627,7 +627,7 @@ class OnePiece5
 	static function Mark( $str='', $mark_labels=false )
 	{
 		//	display is Admin-ip only.
-		if(!self::admin()){ return; }
+		if(!self::Admin()){ return; }
 		
 		//	disable mark
 		if(!self::GetEnv('mark') === false){
