@@ -2,7 +2,10 @@
 /**
  * App.class.php
  * 
- * @author tomoaki.nagahara@gmail.com
+ * @version   1.0
+ * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
  */
 
 /**

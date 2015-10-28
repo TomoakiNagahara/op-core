@@ -1,4 +1,14 @@
-<?php /* @var $this App */ ?>
+<?php
+/**
+ * jQuery-load.phtml
+ * 
+ * @version   1.0
+ * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
+ */
+/* @var $this App */
+?>
 <?php $v = empty($version) ? 1: $version; ?>
 <!-- jQuery -->
 <?php if( isset($_SERVER[Env::_NAME_SPACE_]['INIT']) and Toolbox::isLocalhost() ): ?>
