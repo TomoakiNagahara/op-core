@@ -117,6 +117,18 @@ class i18n extends OnePiece5
 	}
 	
 	/**
+	 * Initialize language code. (Set of default language code.)
+	 * 
+	 * @param string $lang
+	 */
+	function InitLang( $lang )
+	{
+		if(!$this->GetLang()){
+			$this->SetLang($lang);
+		}
+	}
+	
+	/**
 	 * Set language code.
 	 * 
 	 * @param string $lang
