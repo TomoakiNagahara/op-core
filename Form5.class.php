@@ -98,10 +98,13 @@ class Form5 extends OnePiece5
 		if( is_null($input_name) ){
 			//  many
 			foreach( $form->input as $input_name => $input ){
-				$value = &$request[$input_name];
-				if( is_null($value) ){
+				//	
+				if(!isset($request[$input_name])){
 					continue;
 				}
+				
+				//	
+				$value = &$request[$input_name];
 				
 				/*
 				if( isset($input->replace) ){
