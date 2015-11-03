@@ -1327,10 +1327,11 @@ class Form5 extends OnePiece5
 			
 			//	Options
 			if( isset($input->options) ){
-			foreach( $input->options as $option_name => $option ){
-				if( !empty($option->selected) or !empty($option->checked) ){
-					if( isset($option->value) ){
-						$input->value = $option->value;
+				foreach( $input->options as $option_name => $option ){
+					if( !empty($option->selected) or !empty($option->checked) ){
+						if( isset($option->value) ){
+							$input->value = $option->value;
+						}
 					}
 				}
 			}
