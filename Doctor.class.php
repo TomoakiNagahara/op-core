@@ -546,6 +546,7 @@ class Doctor extends OnePiece5
 			}
 		}
 		
+		
 		//	Each check.
 		foreach($column as $key => $var){
 			switch($key){
@@ -563,14 +564,6 @@ class Doctor extends OnePiece5
 					$var = 'auto_increment';
 				break;
 			}
-			
-			/*
-			//	Illigal key name.
-			if(!isset($struct[$key])){
-				$this->StackError("This key has not been set. \($key)\\",'en');
-				continue;
-			}
-			*/
 			
 			//	In case of NULL
 			if( $key === 'null' ){
@@ -591,7 +584,19 @@ class Doctor extends OnePiece5
 				}
 				$io = count(array_diff($arr1, $arr2)) === 0 ? true: false;
 			}else{
-				$io = $struct[$key] == $var ? true: false;
+				if( $key === 'length' or $key === 'default' ){
+					$io = (int)$struct[$key] === $var ? true: false;
+				}else{
+					$io = $struct[$key] === $var ? true: false;
+				}
+				
+				/*
+				if(!$io){
+					$this->mark($key);
+					$this->mark($var);
+					$this->d($struct);
+				}
+				*/
 			}
 			
 			//	Diagnosis
