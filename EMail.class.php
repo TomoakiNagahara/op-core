@@ -12,6 +12,15 @@
 /**
  * EMail
  * 
+ * <pre>
+ * $mail = new EMail();
+ * $mail->From('Form address', 'From name');
+ * $mail->To('To address', 'To name');
+ * $mail->Subject('Title');
+ * $mail->Content('Message');
+ * $mail->Send();
+ * </pre>
+ * 
  * @creation  2015-04-08
  * @version   1.0
  * @package   op-core
@@ -111,20 +120,22 @@ class EMail extends OnePiece5
 		
 		switch($type){
 			case 'mta':
-				$reslut = $this->_mta();
+				$result = $this->_mta();
 				break;
 			case 'socket':
-				$reslut = $this->_socket();
+				$result = $this->_socket();
 				break;
 			default:
-				$reslut = $this->_mail();
+				$result = $this->_mail();
 		}
 		
-		$reslut['time'] = date('Y-m-d H:i:s').' ('.gmdate('e Y-m-d H:i:s P').')';
-		$this->_debug[] = $reslut;
+		$result['time'] = date('Y-m-d H:i:s').' ('.gmdate('e Y-m-d H:i:s P').')';
+		$this->_debug[] = $result;
 		
 		mb_language($save_lang);
 		mb_internal_encoding($save_char);
+		
+		return $result['io'];
 	}
 	
 	private function _mta()
