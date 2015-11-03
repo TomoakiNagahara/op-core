@@ -96,7 +96,7 @@ class Env extends OnePiece5
 	//	self::_init_cli();
 		self::_init_admin();
 		self::_init_session();
-	//	self::_init_cookie();
+		self::_init_op_uniq_id();
 		self::_init_locale();
 		self::_init_mark_label();
 	}
@@ -177,12 +177,18 @@ class Env extends OnePiece5
 		}
 	}
 	
-	private static function _init_cookie()
+	private static function _init_op_uniq_id()
 	{
+		//	Checking op-uniq-id.
+		if( $uniq_id = OnePiece5::GetCookie(OnePiece5::_KEY_COOKIE_UNIQ_ID_) ){
+			// Already exists.
+			return;
+		}
+		
+		//	Generating op-uniq-id and save.
 		$uniq_id = md5(microtime() + $_SERVER['REMOTE_ADDR']);
 		$expire  = 60*60*24*365*10;
 		OnePiece5::SetCookie(OnePiece5::_KEY_COOKIE_UNIQ_ID_, $uniq_id, $expire);
-		return $uniq_id;
 	}
 	
 	private static function _init_mark_label()
@@ -192,7 +198,7 @@ class Env extends OnePiece5
 			$mark_label = $_GET['mark_label'];
 			$mark_value = $_GET['mark_label_value'];
 			Developer::SaveMarkLabelValue($mark_label,$mark_value);
-			list($uri) = explode('?',$_SERVER['REQUEST_URI'].'?');
+		//	list($uri) = explode('?',$_SERVER['REQUEST_URI'].'?');
 		//	header("Location: $uri");
 		//	exit;
 		}
