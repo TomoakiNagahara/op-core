@@ -1,8 +1,14 @@
 <?php
 /**
+ * DML5.class.php
  * 
  * @author Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- *
+ */
+
+/**
+ * DML5
+ * 
+ * @author Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  */
 class DML5 extends OnePiece5
 {
@@ -634,18 +640,6 @@ class DML5 extends OnePiece5
 					$var = $this->pdo->quote($var);
 					break;
 					
-			//	case 'INCREMENT(1)':
-			//	case 'DECREMENT(1)':
-				/*
-				case strncmp( $var, 'INCREMENT(', 10) === 0 ? true: false;
-				case strncmp( $var, 'DECREMENT(', 10) === 0 ? true: false;
-					if( preg_match('/^(IN|DE)CREMENT\((-?[0-9]+)\)$/i',$var,$match) ){
-						$num = $match[2];
-						$var = "$key + $num";
-					}						
-					break;
-				*/
-
 				case 'NULL':
 				case 'NOW()':
 					break;
@@ -653,20 +647,18 @@ class DML5 extends OnePiece5
 				case '++':
 					$var = "$key + 1";
 					break;
-						
-				/*
+					
 				case '--':
 					$var = "$key - 1";
 					break;
-				*/
-				
+					
 				case $var{0} === '+' ? true: false;
 				case $var{0} === '-' ? true: false;
 					if( preg_match('/^([-\+])([0-9]+)$/i',$var,$match) ){
-						$var = "$key + {$match[1]}{$match[2]}";
+						$var = "$key {$match[1]}{$match[2]}";
 					}else{
 						$var = $this->pdo->quote($var);
-					}	
+					}
 					break;
 					
 				default:
