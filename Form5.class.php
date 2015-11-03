@@ -1336,6 +1336,13 @@ class Form5 extends OnePiece5
 				}
 			}
 		}
+		
+		//	Validation -> validate
+		if( isset($input->validation) ){
+			$this->StackError('\validation\ is wrong attribute name. Please change to \validate\.'." \($form_name, {$input->name})\ ",'en');
+			if(!isset($input->validate)){
+				$input->validate = $input->validation;
+			}
 		}
 		
 		//  added permit
