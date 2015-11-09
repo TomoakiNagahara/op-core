@@ -12,7 +12,7 @@
 <?php $v = empty($version) ? 1: $version; ?>
 <!-- jQuery -->
 <?php if( isset($_SERVER[Env::_NAME_SPACE_]['INIT']) and Toolbox::isLocalhost() ): ?>
-	<script type="text/javascript" src="//localhost/jquery/jquery-<?= $v ?>.js" async defer></script>
+	<script type="text/javascript" src="//localhost/jquery/jquery-<?= $v ?>.js"></script>
 <?php else: ?>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/<?= $v ?>/jquery.min.js" async defer></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/<?= $v ?>/jquery.min.js"></script>
 <?php endif; ?>
