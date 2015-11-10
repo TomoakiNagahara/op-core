@@ -104,7 +104,7 @@ class Developer extends OnePiece5
 			}
 		}
 		
-		print '<!-- '.__FILE__.' - '.__LINE__.' -->';
+		print '<!-- '.__FILE__.' - '.__LINE__.' -->'.PHP_EOL;
 		if( $join ){
 			print '<div style="font-size:small;">[ '.join(' | ', $join).' ]</div>';
 		}
