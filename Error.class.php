@@ -301,10 +301,10 @@ class Error
 		/* @see http://www.php.net/manual/ja/errorfunc.constants.php */
 		switch( $number ){
 			case E_ERROR:	// 1
-				$type = 'E_FATAL';
+				$type = 'E_ERROR';
 				break;
 					
-			case E_WARNING: // 2
+			case E_WARNING:	// 2
 				$type = 'E_WARNING';
 				break;
 					
@@ -312,16 +312,20 @@ class Error
 				$type = 'E_PARSE';
 				break;
 					
-			case E_NOTICE:  // 8
+			case E_NOTICE:	// 8
 				$type = 'E_NOTICE';
 				break;
-					
-			case E_STRICT:  // 2048
-				$type = 'E_STRICT';
+				
+			case E_COMPILE_ERROR:	// 64
+				$type = 'E_COMPILE_ERROR';
 				break;
-					
-			case E_USER_NOTICE: // 1024
+				
+			case E_USER_NOTICE:	// 1024
 				$type = 'E_USER_NOTICE';
+				break;
+				
+			case E_STRICT:	// 2048
+				$type = 'E_STRICT';
 				break;
 					
 			default:
