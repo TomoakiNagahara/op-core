@@ -283,6 +283,13 @@ abstract class NewWorld5 extends OnePiece5
 		header("Access-Control-Max-Age: 1728000");
 		*/
 		
+		/**
+		 * Does not compress (to image).
+		 * @see http://www.ahref.org/tech/server/apacche/396.html
+		 * 
+		 * header("Content-Encoding: none");
+		 */
+		
 		header("X-Frame-Options: SAMEORIGIN");
 		header("X-XSS-Protection: 1; mode=block");
 		header("X-Permitted-Cross-Domain-Policies: master-only");
