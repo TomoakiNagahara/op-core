@@ -115,8 +115,10 @@ class Error
 			
 			//	Translation.
 			if( isset($backtraces['translation']) ){
+				$temp = explode("\n",$message."\n");
 				$from = $backtraces['translation'];
-				$message = self::_i18n($message, $from);
+				$message = self::_i18n($temp[0], $from);
+				$message.= $temp[1];
 			}
 			
 			return $message;
