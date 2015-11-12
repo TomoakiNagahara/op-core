@@ -10,6 +10,11 @@
  * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
  */
 
+//	Added float format request time.
+if( empty($_SERVER['REQUEST_TIME_FLOAT']) ){
+	$_SERVER['REQUEST_TIME_FLOAT'] = microtime(true);
+}
+
 //	Deactivates the circular reference collector.
 if( $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ){
 	gc_disable();
