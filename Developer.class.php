@@ -69,6 +69,7 @@ class Developer extends OnePiece5
 	{
 		// Only admin
 		if(!OnePiece5::admin()){
+			$this->StackError("Why is this? Developer is only loading for developer.");
 			return;
 		}
 		
