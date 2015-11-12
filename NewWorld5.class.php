@@ -2,9 +2,10 @@
 /**
  * NewWorld5.class.php
  * 
+ * @creation  2009 on Kozhikode.
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2010 (C) Tomoaki Nagahara All right reserved.
+ * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
  */
 
 /**
@@ -15,9 +16,10 @@
  * NewWorld's job is only to dispatch the index.php.
  * After dispatch to index.php, your freedom.
  * 
+ * @creation  2009 on Kozhikode.
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2010 (C) Tomoaki Nagahara All right reserved.
+ * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
  */
 abstract class NewWorld5 extends OnePiece5
 {

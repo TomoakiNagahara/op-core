@@ -91,7 +91,7 @@ class Error
 			return;
 		}
 		
-		//	Check admin and mime.
+		//	Check admin.
 		if( OnePiece5::Admin() ){
 			$io = self::_toDisplay();
 		}else{
