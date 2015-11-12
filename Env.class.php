@@ -34,6 +34,11 @@ class Env extends OnePiece5
 	
 	const _KEY_LOCALE_ = 'locale';
 	
+	//	Just ready.
+	static $_is_localhost;
+	static $_is_admin;
+	static $_is_cli;
+	
 	static private function _Convert( $key, $var=null )
 	{
 		$key = strtoupper($key);
@@ -91,10 +96,10 @@ class Env extends OnePiece5
 	{
 		self::Set('mime','text/html');
 		self::Set('charset','utf-8');
-		
+
+		self::_init_admin();
 		self::_init_error();
 	//	self::_init_cli();
-		self::_init_admin();
 		self::_init_session();
 		self::_init_op_uniq_id();
 		self::_init_locale();
