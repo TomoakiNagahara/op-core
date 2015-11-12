@@ -177,4 +177,32 @@ class Validator extends OnePiece5
 	{
 		OnePiece5::Mark();
 	}
+	
+	static function isHost($host)
+	{
+		//	Does not check by localhost
+		switch($_SERVER['REMOTE_ADDR']){
+			case '::1':
+			case '127.0.0.1':
+				OnePiece5::mark("![.gray[Skipped remote IP address check. ({$_SERVER['REMOTE_ADDR']})]]",'debug');
+				return true;
+			default:
+		}
+		
+		// Checking host name.
+		return checkdnsrr($host,'MX');
+	}
+	
+	static function isEmail($mail)
+	{
+		//	check part of address
+		$patt = '/^[a-z0-9][-_a-z0-9\.\+]+@[\.-_a-z0-9]+\.[a-z][a-z]+/i';
+		if(!preg_match( $patt, $mail, $match ) ){
+			return false;
+		}
+		
+		//	Host name checking.
+		list($addr, $host) = explode('@',$mail);
+		return Validator::isHost($host);
+	}
 }
