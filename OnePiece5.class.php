@@ -373,7 +373,7 @@ class OnePiece5
 		$_value = serialize($value);
 		
 		if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
-			//	httponly=true is Only http accsess. javascript cannot access.
+			//	httponly=true is Only http accsess. Can not access from JavaScript.
 			//	However, it is dependent on a browser.
 			$io = setcookie( $_key, $_value, $expire, $path, $domain, $secure, $httponly );
 		}else{
