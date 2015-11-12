@@ -610,18 +610,10 @@ class Doctor extends OnePiece5
 				$io = count(array_diff($arr1, $arr2)) === 0 ? true: false;
 			}else{
 				if( $key === 'length' or $key === 'default' ){
-					$io = (int)$struct[$key] === $var ? true: false;
+					$io = (int)$struct[$key] === (int)$var ? true: false;
 				}else{
 					$io = $struct[$key] === $var ? true: false;
 				}
-				
-				/*
-				if(!$io){
-					$this->mark($key);
-					$this->mark($var);
-					$this->d($struct);
-				}
-				*/
 			}
 			
 			//	Diagnosis
