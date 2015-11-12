@@ -316,18 +316,42 @@ class Error
 				$type = 'E_NOTICE';
 				break;
 				
-			case E_COMPILE_ERROR:	// 64
+			case E_COMPILE_ERROR:		// 64
 				$type = 'E_COMPILE_ERROR';
 				break;
 				
-			case E_USER_NOTICE:	// 1024
+			case E_COMPILE_WARNING:		// 128
+				$type = 'E_COMPILE_WARNING';
+				break;
+				
+			case E_USER_ERROR:			// 256
+				$type = 'E_USER_ERROR';
+				break;
+				
+			case E_USER_WARNING:		// 512
+				$type = 'E_USER_WARNING';
+				break;
+				
+			case E_USER_NOTICE:			// 1024
 				$type = 'E_USER_NOTICE';
 				break;
 				
-			case E_STRICT:	// 2048
+			case E_STRICT:				// 2048
 				$type = 'E_STRICT';
 				break;
-					
+				
+			case E_RECOVERABLE_ERROR:	// 4096
+				$type = 'E_RECOVERABLE_ERROR';
+				break;
+				
+			case E_DEPRECATED:			// 8192
+				$type = 'E_DEPRECATED';
+				break;
+				
+			case E_USER_DEPRECATED:		// 16384
+				$type = 'E_USER_DEPRECATED';
+				break;
+				
 			default:
 				$type = $number;
 		}
