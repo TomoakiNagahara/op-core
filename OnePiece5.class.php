@@ -1223,6 +1223,10 @@ class OnePiece5
 	 * Returns a singleton of the model.
 	 * 
 	 * <pre>
+	 * Ex 1:
+	 * $model = $this->Model('Login');
+	 * 
+	 * Ex 2:
 	 * $this->Model('Login')->GetLoginId();
 	 * </pre>
 	 * 
