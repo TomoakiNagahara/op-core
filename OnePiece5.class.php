@@ -1177,10 +1177,19 @@ class OnePiece5
 			OnePiece5::StackError("\domain\ option is obsolete. Please use \Toolbox::GetDomain\ method.",'en');
 		}
 		return Toolbox::ConvertURL($meta);
+	/**
+	 * Wrap of ConvertPath method.
+	 * 
+	 * @param  string $path
+	 * @return string
+	 */
+	static function toPath($meta)
+	{
+		return self::ConvertPath($meta);
 	}
 	
 	/**
-	 * Convert server-side full-path from meta-path.
+	 * Convert to server-side full-path from meta-path.
 	 * 
 	 * @param  string $path
 	 * @return string
