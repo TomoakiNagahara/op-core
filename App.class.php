@@ -531,4 +531,24 @@ class App extends NewWorld5
 	{
 		return Toolbox::ConvertURL(Env::Get('favicon'));
 	}
+	
+	/**
+	 * Get Model by unit name.
+	 * 
+	 * @param string $name
+	 */
+	function Unit($name)
+	{
+		$dir = $this->ConvertPath("app:/_".lcfirst($name));
+		
+		if( file_exists($dir) ){
+			include("$dir/{$name}.model.php");
+			$model = $this->Model($name);
+		}else{
+			$this->StackError("This directory does not exists. \($dir)\ ",'en');
+			$model = new OnePiece5();
+		}
+		
+		return $model;
+	}
 }
