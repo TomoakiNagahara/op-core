@@ -1162,6 +1162,18 @@ class OnePiece5
 		
 		return $io ? '': false;
 	}
+
+	/**
+	 * Wrap of ConvertURL method.
+	 * 
+	 * @param  string  $path
+	 * @param  boolean $domain
+	 * @return string
+	 */
+	static function toURL($meta, $domain=false)
+	{
+		return self::ConvertURL($meta, $domain);
+	}
 	
 	/**
 	 * Convert to browser url from meta-path. (base is document root.)
