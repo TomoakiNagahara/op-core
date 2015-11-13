@@ -1179,16 +1179,24 @@ class OnePiece5
 	 * Convert to browser url from meta-path. (base is document root.)
 	 * 
 	 * @param  string  $path
-	 * @param  boolean $domain is Deprecated.
+	 * @param  boolean $domain
 	 * @return string
 	 */
 	static function ConvertURL( $meta, $domain=false )
 	{
 		if( $domain ){
-			//	Added about 2014-Q4.
-			OnePiece5::StackError("\domain\ option is obsolete. Please use \Toolbox::GetDomain\ method.",'en');
+			$domain = Toolbox::GetDomain(array('scheme'=>true));
 		}
-		return Toolbox::ConvertURL($meta);
+		
+		if( $meta === './' ){
+			$url = OnePiece5::Escape($_SERVER['REQUEST_URI']);
+		}else{
+			$url = Toolbox::ConvertURL($meta);
+		}
+		
+		return $domain.$url;
+	}
+	
 	/**
 	 * Wrap of ConvertPath method.
 	 * 
