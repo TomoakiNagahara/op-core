@@ -171,7 +171,7 @@ class Env extends OnePiece5
 		if( self::isCLI() ){
 			return;
 		}
-		
+	
 		if( session_id() ){
 			//	Checking php.ini
 			if( ini_get('session.auto_start') ){
@@ -181,7 +181,7 @@ class Env extends OnePiece5
 				 */
 				OnePiece5::StackError("php.ini: session.auto_start = 1;");
 			}
-			
+				
 			//	Checking header sent.
 			if( headers_sent($file,$line) ){
 				OnePiece5::StackError("Header has already been sent. File: {$file}, Line number #{$line}.");
