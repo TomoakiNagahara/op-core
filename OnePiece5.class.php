@@ -22,7 +22,7 @@ if( $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ){
 
 //	Check mbstring installed.
 if(!function_exists('mb_language') ){
-	print "<p>Does not install php-mbstring. (ex: sudo yum install php-mbstring)</p>".PHP_EOL;
+	print "<p>Does not install php-mbstring. (ex: sudo yum install php-mbstring; sudo service httpd restart;)</p>".PHP_EOL;
 	print __FILE__.' ('.__LINE__.')<br/>'.PHP_EOL;
 	exit;
 }
