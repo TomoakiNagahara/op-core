@@ -252,29 +252,21 @@ class PDO5 extends OnePiece5
 		$this->StackError($message." \n".$this->qu,'en');
 	}
 	
-	function ConvertCharset( $charset=null )
+	function ConvertCharset($charset)
 	{
-		if( empty($charset) ){
-			$charset = $this->GetEnv('charset');
-		} 
-		
 		switch( $charset ){
-			case 'utf8':
-				break;
-				
-			case 'utf-8':
-				$charset = 'utf8';
-				break;
-		
 			case 'sjis':
 			case 'shift-jis':
 			case 'shift_jis':
 				$charset = PHP_OS === 'WINNT' ? 'sjis-win': 'sjis';
 				break;
-					
+				
 			case 'euc-jp':
 				$charset = PHP_OS === 'WINNT' ? 'eucjpms': 'ujis';
 				break;
+				
+			default:
+				$charset = str_replace('-', '', $charset);
 		}
 
 		return $charset;
@@ -335,13 +327,16 @@ class PDO5 extends OnePiece5
 		$password       = isset($args['password']) ? $args['password'] : null;
 		$name           = isset($args['name'])     ? $args['name']     : null;
 		$this->database = isset($args['database']) ? $args['database'] : $name;
-		$this->charset  = isset($args['charset'])  ? $args['charset']  : strtolower($this->GetEnv('charset'));
+		$charset        = isset($args['charset'])  ? $args['charset']  : null;
 		$options        = array();
 		
-		//	convert
-		if( $this->charset === 'utf-8' ){
-			$this->charset = 'utf8';
+		//	Checking charset.
+		if(!$charset){
+			$this->StackError("\charset\ has not been set. \ex: \$config->charset = 'utf8'\\",'en');
 		}
+		
+		//	utf-8 -> utf8
+		$this->charset = $this->ConvertCharset($charset);
 		
 		//	check
 		foreach( array('driver','host','user') as $key ){
