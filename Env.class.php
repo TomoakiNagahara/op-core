@@ -172,11 +172,32 @@ class Env extends OnePiece5
 			return;
 		}
 		
-		//  start to session.
-		if(!session_id()){
+		if( session_id() ){
+			//	Checking php.ini
+			if( ini_get('session.auto_start') ){
+				/**
+				 * php.ini
+				 * session.auto_start = 1;
+				 */
+				OnePiece5::StackError("php.ini: session.auto_start = 1;");
+			}
+			
+			//	Checking header sent.
 			if( headers_sent($file,$line) ){
 				OnePiece5::StackError("Header has already been sent. File: {$file}, Line number #{$line}.");
 			}else{
+				header('Cache-Control: private, max-age=0, pre-check=0');
+			}
+		}else{
+			if( headers_sent($file,$line) ){
+				OnePiece5::StackError("Header has already been sent. File: {$file}, Line number #{$line}.");
+			}else{
+				/**
+				 * @see http://d.hatena.ne.jp/shinyanakao/20080313/1205396128
+				 * @see http://qiita.com/mugng/items/ae3c4c07f920a5e6e2ed
+				 */
+				session_cache_expire(0);
+				session_cache_limiter('private_no_expire');
 				session_start();
 			}
 		}
