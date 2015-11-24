@@ -211,6 +211,9 @@ class Error
 		return true;
 	}
 	
+	/**
+	 * Display of "StckError.js" to HTML.
+	 */
 	static private function _stackErrorJs()
 	{
 		print "<script>".PHP_EOL;
@@ -218,16 +221,38 @@ class Error
 		print "</script>".PHP_EOL;
 	}
 	
+	/**
+	 * Send error mail to admin.
+	 */
 	static private function _toMail()
 	{
+		//	Get mail subject.
+		$subject = '[Error] '.self::_getMailSubject();
+		
+		//	Cache's key.
+		$ckey = md5($subject);
+		
+		//	Would not send same mail.
+		if( OnePiece5::GetSession($ckey) ){
+			return true;
+		}else if( OnePiece5::Cache()->Get($ckey) ){
+			return true;
+		}else{
+			OnePiece5::SetSession($ckey, $subject);
+		}
+		
+		//	From
 		$from_addr = EMail::GetLocalAddress();
 		$from_name = 'op-core/Error';
 		
+		//	To
 		$to_addr = Env::GetAdminMailAddress();
 		$to_name = $_SERVER['HTTP_HOST'];
-		$subject = '[Error] '.self::_getMailSubject();
+		
+		//	HTML
 		$html = self::_getMailMessage();
 		
+		//	Execute EMail.
 		$mail = new EMail();
 		$mail->From($from_addr, $from_name);
 		$mail->To($to_addr, $to_name);
