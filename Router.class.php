@@ -2,8 +2,7 @@
 /**
  * Router.class.php
  * 
- * creation: 2015-02-27
- * 
+ * @creation  2015-02-27 (Moved from NewWorld5.)
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright 2015 (C) Tomoaki Nagahara All right reserved.
@@ -11,8 +10,7 @@
 /**
  * Router
  * 
- * creation: 2015-01-30
- * 
+ * @creation  2015-01-30
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright 2015 (C) Tomoaki Nagahara All right reserved.
@@ -55,7 +53,7 @@ class Router extends OnePiece5
 		if(!$request_uri){
 			$request_uri = $_SERVER['REQUEST_URI'];
 		}
-
+		
 		//	Sanitize.
 		$request_uri = self::Escape($request_uri);
 		

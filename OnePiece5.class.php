@@ -1404,10 +1404,7 @@ class OnePiece5
 	}
 	
 	/**
-	 * So-called, factory of singleton.
-	 * 
-	 * I recently learned that this is called a singleton in general.
-	 * Anyone come up with this, It's not special technique.
+	 * Generate single instance. Does not create new instance.
 	 * 
 	 * @param  string $name
 	 * @return OnePiece5
@@ -1430,7 +1427,7 @@ class OnePiece5
 	 * 
 	 * @return Form5
 	 */
-	function Form()
+	static function Form()
 	{
 		return self::Singleton('Form5');
 	}
@@ -1450,9 +1447,9 @@ class OnePiece5
 	 *
 	 * @return Cache
 	 */
-	function Cache()
+	static function Cache()
 	{
-		return $this->Singleton('Cache');
+		return self::Singleton('Cache');
 	}
 	
 	/**
