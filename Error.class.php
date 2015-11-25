@@ -239,6 +239,7 @@ class Error
 			return true;
 		}else{
 			OnePiece5::SetSession($ckey, $subject);
+			OnePiece5::Cache()->Set($ckey, $subject);
 		}
 		
 		//	From
