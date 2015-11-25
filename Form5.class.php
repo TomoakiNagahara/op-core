@@ -18,7 +18,6 @@ class Form5 extends OnePiece5
 {
 	private	$status;
 	private $config;
-	private	$session;
 	private $_log	 = null;
 	private $_token	 = null;
 	

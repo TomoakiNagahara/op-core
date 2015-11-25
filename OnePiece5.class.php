@@ -87,7 +87,6 @@ class OnePiece5
 {
 	const  KEY_COOKIE_UNIQ_ID	 = 'op-uniq-id';
 	const _KEY_COOKIE_UNIQ_ID_	 = self::KEY_COOKIE_UNIQ_ID;
-	const _KEY_SESSION_NAME_SPACE_ = '_ONE_PIECE_';
 	
 	private $errors  = array();
 	private $session = array();
@@ -96,9 +95,6 @@ class OnePiece5
 	
 	function __construct()
 	{
-		//  For all
-		$this->_InitSession();
-		
 		//	Do Initialized in the init-method.(for extends class)
 		if( method_exists($this, 'Init') ){
 			//  op-root has set the first.
@@ -286,49 +282,49 @@ class OnePiece5
 	}
 	
 	/**
-	 * Initialized the session reference to private property.
-	 */
-	private function _InitSession()
-	{
-		/**
-		 * @see http://www.glamenv-septzen.net/view/29
-		 */
-		session_cache_limiter('private_no_expire');
-		
-		//  separate session.
-		$this->session = &$_SESSION[self::_KEY_SESSION_NAME_SPACE_][get_class($this)];
-	}
-	
-	/**
 	 * Set session value.
+	 * 
+	 * <pre>
+	 * $this->SetSession('count', $count+1);
+	 * </pre>
 	 * 
 	 * @param string $key
 	 * @param string|array $var
 	 */
-	function SetSession( $key, $var )
+	function SetSession($key, $var)
 	{
-		if( is_null($var)){
-			unset($this->session[$key]);
-		}else{
-			$this->session[$key] = $var;
+		if( $key === null ){
+			$_SESSION['_ONEPIECE_'][__CLASS__] = $var;
 		}
-		return $var;
+		
+		if( $var === null ){
+			unset($_SESSION['_ONEPIECE_'][__CLASS__][$key]);
+			return;
+		}
+		
+		$_SESSION['_ONEPIECE_'][__CLASS__][$key] = $var;
 	}
 
 	/**
 	 * Get session value.
 	 * 
+	 * <pre>
+	 * $this->GetSession('count');
+	 * </pre>
+	 * 
 	 * @param string $key
 	 */
-	function GetSession( $key=null )
+	function GetSession($key)
 	{
-		if( is_null($key)){
-			return $this->session;
-		}else if( isset( $this->session[$key] ) ){
-			return $this->session[$key];
-		}else{
-			return null;
+		if( $key === null ){
+			return $_SESSION['_ONEPIECE_'][__CLASS__];
 		}
+		
+		if( isset( $_SESSION['_ONEPIECE_'][__CLASS__][$key]) ){
+			return $_SESSION['_ONEPIECE_'][__CLASS__][$key];
+		}
+		
+		return null;
 	}
 	
 	/**
