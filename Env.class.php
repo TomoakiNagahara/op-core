@@ -400,6 +400,16 @@ class Env extends OnePiece5
 		return $uniq_id;
 	}
 	
+	/**
+	 * Get environment value.
+	 * 
+	 * <pre>
+	 * Env::Get('admin-ip');
+	 * </pre>
+	 * 
+	 * @param  string $key
+	 * @return integer|string|null
+	 */
 	static function Get( $key )
 	{
 		//	Convert
@@ -423,6 +433,16 @@ class Env extends OnePiece5
 		return $var;
 	}
 	
+	/**
+	 * Set environment value.
+	 * 
+	 * <pre>
+	 * Env::Set('admin-ip','192.168.1.1');
+	 * </pre>
+	 * 
+	 * @param string $key
+	 * @param string $var
+	 */
 	static function Set( $key, $var )
 	{
 		//	Convert
@@ -480,12 +500,20 @@ class Env extends OnePiece5
 			}
 		}
 		
-		//	Output shutdown label
+		//	Get mime.
 		list($main, $sub) = explode('/',Toolbox::GetMIME());
+		
+		//	In case of not text. (maybe, application or image or sound or movie)
+		if( $main !== 'text' ){
+			return;
+		}
+		
+		//	Generate shutdown label by each mime.
 		switch($sub){
-			case 'json':
-				//	json
-				$label = null;
+			case 'css':
+			case 'javascript':
+			case 'csv':
+				$label = ' /* OnePiece is shutdown */ ';
 				break;
 				
 			case 'plain':
@@ -497,14 +525,8 @@ class Env extends OnePiece5
 				}
 				break;
 				
-			case 'css':
-			case 'javascript':
-			case 'csv':
-				$label = ' /* OnePiece is shutdown */ ';
-				break;
 				
 			case 'html':
-			default:
 				$label = "<OnePiece />";
 				
 				//	Developer
@@ -512,7 +534,15 @@ class Env extends OnePiece5
 					Developer::PrintGetFlagList();
 				}
 				break;
+
+			case 'json':
+			default:
+				$label = null;
 		}
-		print PHP_EOL.$label.PHP_EOL;
+		
+		//	Output of shutdown label. (if exist)
+		if( $label ){
+			print PHP_EOL.$label.PHP_EOL;
+		}
 	}
 }

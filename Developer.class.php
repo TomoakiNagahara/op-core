@@ -67,19 +67,14 @@ class Developer extends OnePiece5
 	
 	static function PrintGetFlagList()
 	{
-		// Only admin
+		//	Only admin.
 		if(!OnePiece5::admin()){
 			$this->StackError("Why is this? Developer is only loading for developer.");
 			return;
 		}
 		
-		//	If CLI case
-		if( OnePiece5::GetEnv('cli') ){
-			return;
-		}
-		
-		//	Check MIME
-		if( Toolbox::GetMIME() !== 'text/html' ){
+		//	Only html
+		if(!Toolbox::isHtml()){
 			return;
 		}
 		
