@@ -1091,44 +1091,44 @@ class OnePiece5
 	}
 	
 	/**
-	 * Get template
+	 * Get template file content.
 	 * 
 	 * @param  string $file file name or path.(current-dir or template-dir)
 	 * @param  array|Config $args  
 	 * @return string
 	 */
-	function GetTemplate( $file, $args=null )
+	static function GetTemplate( $file, $args=null )
 	{
 		// ob_start is stackable
 		if( ob_start() ){
 			
 			try{
-				$this->template( $file, $args );
+				self::Template( $file, $args );
 			}catch(Exception $e){
-				//	
+				//	Catch
 			}
 			
 			if( isset($e) ){
 				if( method_exists($e,"isSelftest") ){
 					if( $e->isSelftest() ){
-						$this->StackError($e);
+						self::SystemError($e);
 					}
 				}else{
-					$this->StackError($e);
+					self::SystemError($e);
 				}
 			}
 			
 			$temp = ob_get_contents();
 			$io   = ob_end_clean();
 		}else{
-			$this->StackError("\ob_start\ is failed.",'en');
+			self::SystemError("\ob_start\ is failed.",'en');
 		}
-				
+		
 		return $temp;
 	}
 	
 	/**
-	 * Pirnt tempalte
+	 * Pirnt of tempalte file.
 	 * 
 	 * @param  string $file file name or path.(current-dir or template-dir)
 	 * @param  array|Config $args
@@ -1137,21 +1137,21 @@ class OnePiece5
 	function Template( $file_path, $data=null )
 	{
 		if(!is_string($file_path)){
-			$this->StackError("Passed arguments is not string. \(".gettype($file_path).")\\",'en');
+			self::StackError("Passed arguments is not string. \(".gettype($file_path).")\\",'en');
 			return false;
 		}
 		
 		//	Convert meta modifier.
-		$file = $this->ConvertPath($file_path);
+		$file = self::ConvertPath($file_path);
 		
 		//  for developper's debug
-		$this->mark($file,'template');
+		self::Mark($file,'template');
 		
 		//  access is deny, above current directory
-		if( $this->GetEnv('allowDoubleDot') ){
+		if( Env::GetEnv('allowDoubleDot') ){
 			//  OK
 		}else if( preg_match('|\.\./|',$file) ){ 
-			$this->StackError("Does not allow parent directory. \($file)\\",'en');
+			self::SystemError("Does not allow parent directory. \($file)\\",'en');
 			return false;
 		}
 		
@@ -1161,12 +1161,12 @@ class OnePiece5
 			$path = $file;
 		}else if( $dir = Env::Get('template-dir') ){
 			// the path is converted.
-			$dir  = $this->ConvertPath($dir);
+			$dir  = self::ConvertPath($dir);
 			$path = rtrim($dir,'/').'/'.$file_path;
 			
 			// 2nd check
 			if(!file_exists($path)){
-				$this->StackError("Template file does not exist.\n file=$file, dir=$dir",'en');
+				self::SystemError("Template file does not exist.\n file=$file, dir=$dir",'en');
 				return false;
 			}
 		}
@@ -1174,7 +1174,7 @@ class OnePiece5
 		// extract array
 		if( is_array($data) and count($data) ){
 			if(isset($data[0])){
-				$this->StackError('\$data\ is array. (not assoc array)'."\n".'Ex. $this->Template("index.phtml", array("test"=>"success")','en');
+				self::SystemError('\$data\ is array. (not assoc array)'."\n".'Ex. $this->Template("index.phtml", array("test"=>"success")','en');
 			}else{
 				extract($data);
 			}
@@ -1187,7 +1187,7 @@ class OnePiece5
 		
 		return $io ? '': false;
 	}
-
+	
 	/**
 	 * Wrap of ConvertURL method.
 	 * 
