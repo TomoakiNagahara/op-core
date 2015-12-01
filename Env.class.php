@@ -195,6 +195,7 @@ class Env extends OnePiece5
 				/**
 				 * @see http://d.hatena.ne.jp/shinyanakao/20080313/1205396128
 				 * @see http://qiita.com/mugng/items/ae3c4c07f920a5e6e2ed
+				 * @see http://www.glamenv-septzen.net/view/29
 				 */
 				session_cache_expire(0);
 				session_cache_limiter('private_no_expire');

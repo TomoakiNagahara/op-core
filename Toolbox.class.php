@@ -385,6 +385,18 @@ class Toolbox
 	/**
 	 * Generate URL
 	 * 
+	 * <pre>
+	 * //	This is default setting.
+	 * $conf = array();
+	 * $conf['scheme'] = true;
+	 * $conf['domain'] = true;
+	 * $conf['host']   = false;
+	 * $conf['port']   = false;
+	 * $conf['path']   = true;
+	 * $conf['query']  = false;
+	 * $url = Toolbox::GetDomain($conf);
+	 * </pre>
+	 * 
 	 * @param  array $conf
 	 * @return string
 	 */
@@ -452,10 +464,9 @@ class Toolbox
 	/**
 	 * Get Domain name
 	 * 
-	 * <pre>
-	 * $conf = array( 'scheme' => true, 'port' => true, 'path' => true );
-	 * </pre>
+	 * This method retrieves only domain.
 	 * 
+	 * @see    self::GetURL
 	 * @param  array $conf
 	 * @return string
 	 */
