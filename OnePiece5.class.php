@@ -229,9 +229,10 @@ class OnePiece5
 	/**
 	 * Stack of error.
 	 * 
-	 * The language code will be able to join the country code.
+	 * This method will abolished.
+	 * Please use SystemError method.
 	 * 
-	 * Example:
+	 * Language code example:
 	 * 	ja, ja-JP, en, en-US, en-UK, zh-CN, zh-TW, zh-HK
 	 * 
 	 * @param string $message is message.
@@ -240,6 +241,21 @@ class OnePiece5
 	static function StackError( $args, $locale=null )
 	{
 		Error::Set( $args, $locale );
+	}
+	
+	/**
+	 * System error method will inform to administrator by mail.
+	 * Display of error at html in case of administrator.
+	 * 
+	 * Language code example:
+	 * 	ja, ja-JP, en, en-US, en-UK, zh-CN, zh-TW, zh-HK
+	 * 
+	 * @param string $message is message.
+	 * @param string $translation is source language code.
+	 */
+	static function SystemError( $args, $lang='en' )
+	{
+		Error::Set($args, $lang);
 	}
 	
 	/**
