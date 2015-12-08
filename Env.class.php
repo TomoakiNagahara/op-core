@@ -361,6 +361,14 @@ class Env extends OnePiece5
 		
 		return array( $codes, $timezone );
 	}
+
+	static function isLocalhost()
+	{
+		if( self::$_is_localhost === null ){
+			self::_init_localhost();
+		}
+		return self::$_is_localhost;
+	}
 	
 	static function isAdmin()
 	{
