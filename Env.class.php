@@ -361,7 +361,15 @@ class Env extends OnePiece5
 		
 		return array( $codes, $timezone );
 	}
-
+	
+	static function isShell()
+	{
+		if( self::$_is_shell === null ){
+			self::_init_shell();
+		}
+		return self::$_is_shell;
+	}
+	
 	static function isLocalhost()
 	{
 		if( self::$_is_localhost === null ){
