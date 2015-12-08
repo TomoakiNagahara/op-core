@@ -112,8 +112,16 @@ class Env extends OnePiece5
 		error_reporting( E_ALL );
 		ini_set('display_errors',1);
 		
+		//	Checking admin
+		$io = self::isAdmin();
+		
+		//	Error check.
+		if( is_null($io) ){
+			OnePiece5::StackError("\_init_admin\ has not been called.",'en');
+		}
+		
 		//	If not an administrator.
-		if(!self::isAdmin()){
+		if(!$io){
 			//  recovery (display_errors)
 			ini_set('display_errors',0);
 			//  recovery (error_reporting)
@@ -121,33 +129,16 @@ class Env extends OnePiece5
 		}
 	}
 	
-	
 	private static function _init_admin()
 	{
-		if( Env::Get('cli') ){
-			return;
-		}
-		
-		//	Check if localhost.
-		$remote_addr = $_SERVER['REMOTE_ADDR'];
-		if( $remote_addr === '127.0.0.1' or $remote_addr === '::1'){
-			$is_localhost = true;
-		}else{
-			$is_localhost = false;
-		}
-		
 		//	Check if admin
-		if( $is_localhost ){
-			$is_admin = true;
+		if( self::isLocalhost() ){
+			self::$_is_admin = true;
 		}else if( isset($_SERVER[self::_ADMIN_IP_ADDR_]) ){
-			$is_admin = $_SERVER[self::_ADMIN_IP_ADDR_] === $remote_addr ? true: false;
+			self::$_is_admin = $_SERVER[self::_ADMIN_IP_ADDR_] === $remote_addr ? true: false;
 		}else{
-			$is_admin = false;
+			self::$_is_admin = false;
 		}
-		
-		//	Set to $_SERVER
-		$_SERVER[self::_SERVER_IS_LOCALHOST_]	 = $is_localhost;
-		$_SERVER[self::_SERVER_IS_ADMIN_]		 = $is_admin;
 	}
 	
 	private static function _init_session()
@@ -385,9 +376,12 @@ class Env extends OnePiece5
 	
 	static function isAdmin()
 	{
-		return isset($_SERVER[self::_SERVER_IS_ADMIN_]) ? $_SERVER[self::_SERVER_IS_ADMIN_]: null;
+		if( self::$_is_admin === null ){
+			self::_init_admin();
+		}
+		return self::$_is_admin;
 	}
-
+	
 	static function SetAdminIpAddress($var)
 	{
 		$_SERVER[self::_NAME_SPACE_][self::_ADMIN_IP_ADDR_] = $var;
