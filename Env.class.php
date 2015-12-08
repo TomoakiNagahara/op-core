@@ -385,13 +385,11 @@ class Env extends OnePiece5
 	static function SetAdminIpAddress($var)
 	{
 		$_SERVER[self::_NAME_SPACE_][self::_ADMIN_IP_ADDR_] = $var;
-		if( $_SERVER[self::_SERVER_IS_LOCALHOST_] ){
-			$io = true;
+		if( self::isLocalhost() ){
+			self::$_is_admin = true;
 		}else{
-			$io = $_SERVER['REMOTE_ADDR'] === $var ? true: false;
+			self::$_is_admin = $_SERVER['REMOTE_ADDR'] === $var ? true: false;
 		}
-		$_SERVER[self::_SERVER_IS_ADMIN_] = $io;
-		
 		self::_init_error();
 		self::_init_mark_label();
 	}
