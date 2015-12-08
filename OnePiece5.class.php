@@ -1510,4 +1510,31 @@ class OnePiece5
 	{
 		return $this->Singleton('EMail');
 	}
+	
+	/**
+	 * Get Model by unit name.
+	 *
+	 * @param string $name
+	 */
+	function Unit($name)
+	{
+		//	Get unit root directory.
+		if(!$root = Env::Get('unit-root')){
+			$root = $_SERVER['DOCUMENT_ROOT'];
+		}
+		
+		//	Generate unit directory.
+		$dir = rtrim($root,'/')."/_".lcfirst($name);
+		
+		//	Instanciate
+		if( file_exists($dir) ){
+			include("$dir/{$name}.model.php");
+			$model = $this->Model($name);
+		}else{
+			$this->StackError("This directory does not exists. \($dir)\ ",'en');
+			$model = new OnePiece5();
+		}
+		
+		return $model;
+	}
 }
