@@ -188,6 +188,16 @@ class Env extends OnePiece5
 		}
 	}
 	
+	private static function _init_localhost()
+	{
+		$remote_addr = $_SERVER['REMOTE_ADDR'];
+		if( $remote_addr === '127.0.0.1' or $remote_addr === '::1'){
+			self::$_is_localhost = true;
+		}else{
+			self::$_is_localhost = false;
+		}
+	}
+	
 	private static function _init_shell()
 	{
 		//	Check if shell.
