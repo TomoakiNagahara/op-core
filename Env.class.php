@@ -362,6 +362,11 @@ class Env extends OnePiece5
 		return array( $codes, $timezone );
 	}
 	
+	static function isCli()
+	{
+		return self::isShell();
+	}
+	
 	static function isShell()
 	{
 		if( self::$_is_shell === null ){
@@ -383,11 +388,6 @@ class Env extends OnePiece5
 		return isset($_SERVER[self::_SERVER_IS_ADMIN_]) ? $_SERVER[self::_SERVER_IS_ADMIN_]: null;
 	}
 
-	static function isCLI()
-	{
-		return false;
-	}
-	
 	static function SetAdminIpAddress($var)
 	{
 		$_SERVER[self::_NAME_SPACE_][self::_ADMIN_IP_ADDR_] = $var;
