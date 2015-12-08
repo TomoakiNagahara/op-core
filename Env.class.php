@@ -37,7 +37,6 @@ class Env extends OnePiece5
 	//	Just ready.
 	static $_is_localhost;
 	static $_is_admin;
-	static $_is_cli;
 	
 	static private function _Convert( $key, $var=null )
 	{
@@ -99,7 +98,6 @@ class Env extends OnePiece5
 
 		self::_init_admin();
 		self::_init_error();
-	//	self::_init_cli();
 		self::_init_session();
 		self::_init_op_uniq_id();
 		self::_init_locale();
@@ -122,21 +120,6 @@ class Env extends OnePiece5
 		}
 	}
 	
-	/*
-	private static function _init_cli()
-	{
-		//	Check if CLI.
-		if( isset($_SERVER['SHELL']) ){
-			Env::Set('cli',true);
-			Env::Set('mime','text/plain');
-		}
-		
-		//	Check if admin.
-		if( isset($_SERVER['PS1']) ){
-			$_SERVER[self::_SERVER_IS_ADMIN_] = true;
-		}
-	}
-	*/
 	
 	private static function _init_admin()
 	{
