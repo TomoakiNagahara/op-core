@@ -1215,6 +1215,10 @@ class OnePiece5
 		
 		if( $meta === './' ){
 			$url = OnePiece5::Escape($_SERVER['REQUEST_URI']);
+		}else if($meta{0} === '/'){ // Linux, BSD, Mac
+			$url = preg_replace("-".preg_quote(Env::Get('app-root'),'/')."-", '/', $meta);
+		}else if((PHP_OS === "WIN32" || PHP_OS === "WINNT") and $meta{1} === ':' ){ // Windows
+			$url = preg_replace("-".preg_quote(Env::Get('app-root'),'/')."-", '/', $meta);
 		}else{
 			$url = Toolbox::ConvertURL($meta);
 		}
