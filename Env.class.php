@@ -37,6 +37,7 @@ class Env extends OnePiece5
 	//	Just ready.
 	static $_is_localhost;
 	static $_is_admin;
+	static $_is_shell;
 	
 	static private function _Convert( $key, $var=null )
 	{
@@ -184,6 +185,22 @@ class Env extends OnePiece5
 				session_cache_limiter('private_no_expire');
 				session_start();
 			}
+		}
+	}
+	
+	private static function _init_shell()
+	{
+		//	Check if shell.
+		if( isset($_SERVER['SHELL']) ){
+			self::Set('shell',true);
+			self::Set('cli',  true);
+			self::Set('mime','text/plain');
+			self::$_is_shell = true;
+		}
+	
+		//	Check if admin.
+		if( isset($_SERVER['PS1']) ){
+			self::$_is_admin = true;
 		}
 	}
 	
