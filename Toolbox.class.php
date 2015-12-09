@@ -773,10 +773,19 @@ class Toolbox
 			return $url;
 		}
 		
+		/*
 		//	Current directory relation path.
 		if( $url{0} === '.' and $url{1} === '/' ){
 			return $url;
 		}
+		*/
+		
+		/*
+		//	Current directory.
+		if( $url{0} === './' ){
+			return null;
+		}
+		*/
 		
 		//	Parent directory
 		if( $url{0} === '.' and $url{1} === '.' ){
