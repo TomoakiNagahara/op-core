@@ -633,7 +633,8 @@ class Toolbox
 				$debug_backtrace = null;
 				break;
 				
-			case 'ctrl':
+			case 'end':  // End-Point.
+			case 'ctrl': // Controller file's dirname.
 				$route = Env::Get('route');
 				$real  = dirname($route['real_path']);
 				break;
