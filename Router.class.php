@@ -183,8 +183,8 @@ class Router extends OnePiece5
 		$route['alias']		 = $is_alias;
 		$route['rewrite_base'] = $rewrite_base; // TODO: Toolbox::GetRewriteBase();
 		$route['app_root']	 = $app_root;
-		$route['meta_path']	 = $_SERVER['DOCUMENT_ROOT'].$request_uri;
-		$route['real_path']	 = $real_path;
+		$route['meta_path']	 = $_SERVER['DOCUMENT_ROOT'].$request_uri; // Is this used?
+		$route['real_path']	 = $real_path; // This is not real path. This is End-Point search path.
 		$route['file_name']	 = $file_name;
 		$route['extension']	 = $extension;
 		$route['arguments']	 = $arguments;
