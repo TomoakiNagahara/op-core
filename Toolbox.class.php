@@ -635,9 +635,9 @@ class Toolbox
 				
 			case 'ctrl':
 				$route = Env::Get('route');
-				$real = rtrim($_SERVER['APP_ROOT'],'/').$route['path'];
+				$real  = dirname($route['real_path']);
 				break;
-				 
+				
 			case 'layout':
 				$real = Env::Get('layout-root');
 				break;
