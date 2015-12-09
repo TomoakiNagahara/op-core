@@ -813,7 +813,7 @@ class Toolbox
 		
 		//	Remove document root part.
 		$patt = preg_quote($match[1],'|');
-		$url  = preg_replace("|^$patt|",'',$path);
+		$url  = preg_replace("|^$patt|",'/',$path);
 		
 		//	Added base directory from document root path.
 		$url = $_SERVER['REWRITE_BASE'] . $url;
