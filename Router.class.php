@@ -173,18 +173,17 @@ class Router extends OnePiece5
 		//	Build real path
 		if(!$is_alias ){
 			//	not alias
-			$real_path = $real_app_dir . $rewrite_base . $smart_url;
+			$meta_path = $real_app_dir . $rewrite_base . $smart_url;
 		}else{
 			//	alias
-			$real_path = $real_app_dir .'/'. $smart_url;
+			$meta_path = $real_app_dir .'/'. $smart_url;
 		}
 		
 		//	Build base route table
 		$route['alias']		 = $is_alias;
 		$route['rewrite_base'] = $rewrite_base; // TODO: Toolbox::GetRewriteBase();
 		$route['app_root']	 = $app_root;
-		$route['meta_path']	 = $_SERVER['DOCUMENT_ROOT'].$request_uri; // Is this used?
-		$route['real_path']	 = $real_path; // This is not real path. This is End-Point search path.
+		$route['meta_path']	 = $meta_path; // This is End-Point search path.
 		$route['file_name']	 = $file_name;
 		$route['extension']	 = $extension;
 		$route['arguments']	 = $arguments;
@@ -211,7 +210,7 @@ class Router extends OnePiece5
 		}
 		
 		//	init
-		$arr = explode('/',$route['real_path']);
+		$arr = explode('/',$route['meta_path']);
 		$dirs = array();
 		$args = array();
 		
