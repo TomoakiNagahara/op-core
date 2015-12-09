@@ -605,7 +605,7 @@ class Toolbox
 		}
 		
 		//	Which are modifier.
-		switch( $modifier = $match[1] ){
+		switch( $modifier = strtolower($match[1]) ){
 			case 'op':
 			case 'app':
 			case 'doc':
@@ -649,7 +649,7 @@ class Toolbox
 		
 		//	Generate full path.
 		$modifier = preg_quote($modifier,'|');
-		$path = preg_replace("|^$modifier:/|", $real, $meta);
+		$path = preg_replace("|^$modifier:/|i", $real, $meta);
 		
 		return $path;
 	}
