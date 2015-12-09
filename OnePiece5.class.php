@@ -1207,21 +1207,13 @@ class OnePiece5
 	 * @param  boolean $domain
 	 * @return string
 	 */
-	static function ConvertURL( $meta, $domain=false )
+	static function ConvertURL( $meta, $domain=null )
 	{
 		if( $domain ){
 			$domain = Toolbox::GetDomain(array('scheme'=>true));
 		}
 		
-		if( $meta === './' ){
-			$url = OnePiece5::Escape($_SERVER['REQUEST_URI']);
-		}else if($meta{0} === '/'){ // Linux, BSD, Mac
-			$url = preg_replace("-".preg_quote(Env::Get('app-root'),'/')."-", '/', $meta);
-		}else if((PHP_OS === "WIN32" || PHP_OS === "WINNT") and $meta{1} === ':' ){ // Windows
-			$url = preg_replace("-".preg_quote(Env::Get('app-root'),'/')."-", '/', $meta);
-		}else{
-			$url = Toolbox::ConvertURL($meta);
-		}
+		$url = Toolbox::ConvertURL($meta);
 		
 		return $domain.$url;
 	}
