@@ -755,7 +755,7 @@ class Toolbox
 		
 		//	OP Root
 		if( preg_match('|^op:/|i',$url) ){
-			OnePiece5::StackError("Can not convert to URL at OP-Root.");
+			OnePiece5::StackError("The op-root can not convert to URL.");
 			return null;
 		}
 		
@@ -773,7 +773,7 @@ class Toolbox
 			return $url;
 		}
 		
-		//	Current directory
+		//	Current directory relation path.
 		if( $url{0} === '.' and $url{1} === '/' ){
 			return $url;
 		}
@@ -788,7 +788,7 @@ class Toolbox
 			return $url;
 		}
 		
-		//	Convert
+		//	Convert real path from url with meta word.
 		$path = self::ConvertPath($url);
 		
 		//	Ganarate app-root preg pattern.
