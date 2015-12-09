@@ -760,9 +760,13 @@ class Toolbox
 		}
 		
 		//	Document root
+		/*
 		if( $url{0} === '/' ){
 			return $url;
+		}else if((PHP_OS === "WIN32" || PHP_OS === "WINNT") and $url{1} === ':'){
+			return $url;
 		}
+		*/
 		
 		//	Scheme less
 		if( $url{0} === '/' and $url{1} === '/' ){
