@@ -36,10 +36,6 @@ class OnePiece5
 	{
 		//	Do Initialized in the init-method.(for extends class)
 		if( method_exists($this, 'Init') ){
-			//  op-root has set the first.
-			if(!$this->GetEnv('op-root')){
-				$this->SetEnv('op-root',dirname(__FILE__));
-			}
 			$this->Init();
 		}
 		
