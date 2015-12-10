@@ -38,8 +38,6 @@ class OnePiece5
 		if( method_exists($this, 'Init') ){
 			$this->Init();
 		}
-		
-		$_SERVER[Env::_NAME_SPACE_]['INIT'] = true;
 	}
 	
 	/**
