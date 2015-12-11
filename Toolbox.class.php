@@ -823,7 +823,22 @@ class Toolbox
 		$url  = preg_replace("|^$patt|",'/',$path);
 		
 		//	Added base directory from document root path.
-		$url = $_SERVER['REWRITE_BASE'] . $url;
+		$rewrite_base = null;
+		if( isset( $_SERVER['REWRITE_BASE'] ) ){
+			OnePiece5::AdminNotice('This index key will be abolished.');
+			$rewrite_base = $_SERVER['REWRITE_BASE'];
+		}else if( $route = Env::Get('route') ){
+			if( isset($route[Router::_REWRITE_BASE_]) ){
+				$rewrite_base = $route[Router::_REWRITE_BASE_];
+			}else{
+				OnePiece5::AdminNotice('Rewrite base does not set to route table.');
+			}
+		}else{
+			OnePiece5::AdminNotice('Route table is not set.');
+		}
+		
+		//	/rewrite_base/ + /url -> /rewrite_base/url
+		$url = rtrim($rewrite_base,'/').'/'.ltrim($url,'/');
 		
 		return $url;
 	}
