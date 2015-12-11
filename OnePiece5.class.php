@@ -28,10 +28,8 @@ class OnePiece5
 	const  KEY_COOKIE_UNIQ_ID	 = 'op-uniq-id';
 	const _KEY_COOKIE_UNIQ_ID_	 = self::KEY_COOKIE_UNIQ_ID;
 	
-	private $errors  = array();
 	private $session = array();
 	private $_is_init  = null;
-	private $_env;
 	
 	function __construct()
 	{
@@ -191,7 +189,7 @@ class OnePiece5
 	{
 		Error::Set( $args, $locale );
 	}
-
+	
 	/**
 	 * Fetch stack error.
 	 * 
