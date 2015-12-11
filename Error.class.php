@@ -493,7 +493,7 @@ class Error
 		$type = self::ConvertStringFromErrorNumber($type);
 		
 		//	Get route table.
-		$route = Env::Get(Env::_KEY_ROUTE_TABLE_);
+		$route = Env::Get('route');
 		
 		//	Generate error format.
 		$base = '%s [%s] %s: %s';

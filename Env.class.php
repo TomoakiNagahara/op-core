@@ -25,13 +25,6 @@ class Env extends OnePiece5
 	const _ADMIN_IP_ADDR_	 = 'ADMIN_IP';
 	const _ADMIN_EMAIL_ADDR_ = 'ADMIN_MAIL';
 	
-	const _ROOT_OP_		 = 'OP_ROOT';
-	const _ROOT_APP_	 = 'APP_ROOT';
-	const _ROOT_DOC_	 = 'DOCUMENT_ROOT';
-	
-	const _SERVER_IS_LOCALHOST_	 = 'OP_IS_LOCALHOST';
-	const _SERVER_IS_ADMIN_		 = 'OP_IS_ADMIN';
-	
 	const _KEY_LOCALE_ = 'locale';
 	
 	//	Just ready.
