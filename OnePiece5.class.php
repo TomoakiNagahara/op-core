@@ -1031,7 +1031,7 @@ class OnePiece5
 	 * @param  array|Config $args  
 	 * @return string
 	 */
-	static function GetTemplate( $file, $args=null )
+	function GetTemplate( $file, $args=null )
 	{
 		// ob_start is stackable
 		if( ob_start() ){
