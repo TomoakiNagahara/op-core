@@ -635,8 +635,15 @@ class Toolbox
 				
 			case 'end':  // End-Point.
 			case 'ctrl': // Controller file's dirname.
-				$route = Env::Get('route');
-				$real  = dirname($route['real_path']);
+				if(!$route = Env::Get('route')){
+					OnePiece5::AdminNotice("Route table was empty. Can not find end-point. (end-point is controller file.)");
+					return false;
+				}
+				if(!isset($route[Router::_END_POINT_])){
+					OnePiece5::AdminNotice("Route table was wrong.)");
+					return false;
+				}
+				$real  = dirname($route[Router::_END_POINT_]).'/';
 				break;
 				
 			case 'layout':
