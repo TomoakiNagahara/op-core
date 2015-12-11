@@ -191,22 +191,7 @@ class OnePiece5
 	{
 		Error::Set( $args, $locale );
 	}
-	
-	/**
-	 * System error method will inform to administrator by mail.
-	 * Display of error at html in case of administrator.
-	 * 
-	 * Language code example:
-	 * 	ja, ja-JP, en, en-US, en-UK, zh-CN, zh-TW, zh-HK
-	 * 
-	 * @param string $message is message.
-	 * @param string $translation is source language code.
-	 */
-	static function SystemError( $args, $lang='en' )
-	{
-		Error::Set($args, $lang);
-	}
-	
+
 	/**
 	 * Fetch stack error.
 	 * 
