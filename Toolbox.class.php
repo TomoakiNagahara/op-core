@@ -809,11 +809,11 @@ class Toolbox
 		
 		//	Ganarate app-root preg pattern.
 		$app_root = $_SERVER['APP_ROOT'];
-		$app_root = preg_quote($app_root,'/');
-		$pattern  = "/^($app_root)/";
+		$app_root = preg_quote($app_root,'-');
+		$pattern  = "-^($app_root)-i";
 		
 		//	Check root
-		if(!preg_match($pattern,$path,$match)){
+		if(!preg_match($pattern, $path, $match)){
 			//	unmatch metaphor.
 			return $url;
 		}
