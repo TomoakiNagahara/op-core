@@ -18,6 +18,12 @@
 class Router extends OnePiece5
 {
 	/**
+	 * Use route table's key name.
+	 */
+	const _END_POINT_	 = 'end-point';
+	const _REWRITE_BASE_ = 'rewrite-base';
+	
+	/**
 	 * Set route table.
 	 * 
 	 * @param array $route
@@ -90,7 +96,7 @@ class Router extends OnePiece5
 		
 		//	Admin Notification
 		if( self::admin() ){
-			self::_CheckFileExists($route['real_path']);
+			self::_CheckFileExists($route[self::_END_POINT_]);
 		}
 		
 		return $route;
@@ -141,7 +147,7 @@ class Router extends OnePiece5
 		$route['request_uri'] = $request_uri;
 		$route['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER']: null;
 		
-		$app_root = dirname($_SERVER['SCRIPT_FILENAME']);
+		$app_root = $_SERVER['APP_ROOT'];
 		$doc_root = rtrim($_SERVER['DOCUMENT_ROOT'],'/');
 		
 		//	Check extension.
@@ -181,17 +187,24 @@ class Router extends OnePiece5
 		
 		//	Build base route table
 		$route['alias']		 = $is_alias;
-		$route['rewrite_base'] = $rewrite_base; // TODO: Toolbox::GetRewriteBase();
+		$route[self::_REWRITE_BASE_] = $rewrite_base; // TODO: Toolbox::GetRewriteBase();
+		/*
+		//	Abolished
 		$route['app_root']	 = $app_root;
+		*/
 		$route['meta_path']	 = $meta_path; // This is End-Point search path.
+		$route[self::_END_POINT_] = $meta_path;
 		$route['file_name']	 = $file_name;
 		$route['extension']	 = $extension;
 		$route['arguments']	 = $arguments;
 		$route['smart_url']	 = $smart_url;
 		$route['mime']		 = self::CalcMime($extension);
 		
+		/*
+		//	Abolished
 		//	SET REWRITE_BASE
 		$_SERVER['REWRITE_BASE'] = rtrim($rewrite_base,'/').'/';
+		*/
 		
 		return $route;
 	}
@@ -246,13 +259,13 @@ class Router extends OnePiece5
 		}
 		
 		//	full path
-		$real_path = rtrim($route['app_root'],'/') . $path . $controller;
+		$end_point = $_SERVER['APP_ROOT'] . $path . $controller;
 		
 		//	build route table.
 		$route['path'] = $path;
 		$route['file'] = $controller;
 		$route['args'] = array_reverse($args);
-		$route['real_path'] = $real_path;
+		$route[self::_END_POINT_] = $end_point;
 		
 		return $route;
 	}
@@ -267,14 +280,14 @@ class Router extends OnePiece5
 	/**
 	 * Do check of file exists.
 	 * 
-	 * @param string $real_path
+	 * @param string $end_point
 	 */
-	static function _CheckFileExists($real_path)
+	static function _CheckFileExists($end_point)
 	{
 		//	If there is extension
-		if( preg_match('|\.[a-z0-9]{2,4}$|i', $real_path, $match ) ){
-			if(!file_exists($real_path)){
-				$_SESSION[self::_KEY_FILE_DOES_NOT_EXISTS_] = $real_path;
+		if( preg_match('|\.[a-z0-9]{2,4}$|i', $end_point, $match ) ){
+			if(!file_exists($end_point)){
+				$_SESSION[self::_KEY_FILE_DOES_NOT_EXISTS_] = $end_point;
 			}
 		}
 	}

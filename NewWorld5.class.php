@@ -203,23 +203,25 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Execute($route)
 	{
+		$end_point = $route[Router::_END_POINT_];
+		
 		//	Check file exists.
-		if(!file_exists($route['real_path'])){
+		if(!file_exists($end_point)){
 			$this->NotFound();
 			return;
 		}
 		
 		//	Get execute file.
-		$file_path = $route['real_path'];
+		$file_path = $end_point;
 		
 		//	Get end-point root.
 		$ctrl_root = dirname($file_path);
 		
 		//	Change current directory.
-		chdir( dirname($route['real_path']) );
+		chdir( dirname($end_point) );
 		
 		//  Execute.
-		$this->Template($route['real_path']);
+		$this->Template($end_point);
 	}
 	
 	/**
