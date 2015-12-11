@@ -247,16 +247,18 @@ class i18n extends OnePiece5
 	}
 	
 	/**
-	 * Get support language list
+	 * Get support language list.
 	 * 
-	 * @param  string|null $lang
+	 * @param  string|null $lang This language code to translate language label.
 	 * @return array
 	 */
 	function GetLanguageList($lang=null)
 	{
 		//	translate language
-		if(!$lang){
+		if( $lang === null ){
 			$lang = $this->GetEnv('lang');
+		}else if ( $lang === false ){
+			$lang = 'en';
 		}
 		
 		//	URL
