@@ -673,6 +673,8 @@ class Toolbox
 		if(!$app){
 			$app = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 		}
+		
+		// Required plus? -> app:/url -> /var/www/htdocs//url -> /url
 		return preg_replace('|^app:/+|', $app, $path);
 	}
 	
