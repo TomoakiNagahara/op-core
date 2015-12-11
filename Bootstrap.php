@@ -56,10 +56,10 @@ register_shutdown_function('Env::Shutdown');
 
 //	Set error heandler
 $level = Toolbox::isLocalhost() ? E_ALL | E_STRICT: error_reporting();
-set_error_handler('Error::Handler',$level);
+set_error_handler('OPError::Handler',$level);
 
 //	Set exception handler
-set_exception_handler('Error::ExceptionHandler');
+set_exception_handler('OPError::ExceptionHandler');
 
 //	Checking error reporting administrator's E-Mail address.
 if(!$admin_mail = Env::Get('admin-mail') ){

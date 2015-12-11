@@ -170,7 +170,7 @@ class OnePiece5
 	 */
 	static function AdminNotice($message, $lang='en')
 	{
-		return Error::Set($message, $lang);
+		return OPError::Set($message, $lang);
 	}
 
 	/**
