@@ -35,13 +35,10 @@ $_SERVER['PHP_SELF_XSS'] = htmlentities($_SERVER['PHP_SELF'], ENT_QUOTES);
 $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 
 //	OP_ROOT
-$op_root = $_SERVER['OP_ROOT'] = dirname(__FILE__).'/';
+$op_root = $_SERVER['OP_ROOT'] = __DIR__.'/';
 
 //	APP_ROOT
 $app_root = $_SERVER['APP_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']).'/';
-
-//	DOC_ROOT
-$doc_root = $_SERVER['DOC_ROOT'] = $_SERVER['DOCUMENT_ROOT'].'/';
 
 //	Register autoloader.
 include('Autoloader.class.php');
@@ -70,6 +67,8 @@ if(!$admin_mail = Env::Get('admin-mail') ){
 }else{
 	Validator::isEmail($admin_mail);
 }
+
+return true;
 
 function php_mbstring(){
 	

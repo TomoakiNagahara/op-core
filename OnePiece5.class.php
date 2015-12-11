@@ -10,7 +10,8 @@
  * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
  */
 
-include('Bootstrap.php');
+//	Bootstrap
+include(__DIR__.'/Bootstrap.php');
 
 /**
  * OnePiece5
