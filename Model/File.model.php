@@ -18,6 +18,17 @@
  */
 class Model_File extends Model_Model
 {
+	/**
+	 * Get file list by path.
+	 * 
+	 * <pre>
+	 * $temp = $this->Model('File')->Get('./');
+	 * $this->D($temp);
+	 * </pre>
+	 * 
+	 * @param  string $path
+	 * @return array
+	 */
 	function Get( $path=null )
 	{
 		if(!$path){
