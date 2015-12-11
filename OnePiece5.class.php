@@ -1463,9 +1463,16 @@ class OnePiece5
 	 */
 	function Unit($name)
 	{
-		//	Get unit root directory.
+		/**
+		 * Order to search for unit-root.
+		 * 1. unit-root
+		 * 2. app-root
+		 * 3. document-root
+		 */
 		if(!$root = Env::Get('unit-root')){
-			$root = $_SERVER['DOCUMENT_ROOT'];
+			if(!$root = Env::Get('app-root')){
+				$root = $_SERVER['DOCUMENT_ROOT'];
+			}
 		}
 		
 		//	Generate unit directory.
