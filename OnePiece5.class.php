@@ -1060,17 +1060,17 @@ class OnePiece5
 			if( isset($e) ){
 				if( method_exists($e,"isSelftest") ){
 					if( $e->isSelftest() ){
-						self::SystemError($e);
+						self::AdminNotice($e);
 					}
 				}else{
-					self::SystemError($e);
+					self::AdminNotice($e);
 				}
 			}
 			
 			$temp = ob_get_contents();
 			$io   = ob_end_clean();
 		}else{
-			self::SystemError("\ob_start\ is failed.",'en');
+			self::AdminNotice("\ob_start\ is failed.",'en');
 		}
 		
 		return $temp;
@@ -1086,7 +1086,7 @@ class OnePiece5
 	function Template( $file_path, $data=null )
 	{
 		if(!is_string($file_path)){
-			self::StackError("Passed arguments is not string. \(".gettype($file_path).")\\",'en');
+			self::AdminNotice("Passed arguments is not string. \(".gettype($file_path).")\\",'en');
 			return false;
 		}
 		
@@ -1100,7 +1100,7 @@ class OnePiece5
 		if( Env::GetEnv('allowDoubleDot') ){
 			//  OK
 		}else if( preg_match('|\.\./|',$file) ){ 
-			self::SystemError("Does not allow parent directory. \($file)\\",'en');
+			self::AdminNotice("Does not allow parent directory. \($file)\\",'en');
 			return false;
 		}
 		
@@ -1115,7 +1115,7 @@ class OnePiece5
 			
 			// 2nd check
 			if(!file_exists($path)){
-				self::SystemError("Template file does not exist.\n file=$file, dir=$dir",'en');
+				self::AdminNotice("Template file does not exist.\n file=$file, dir=$dir",'en');
 				return false;
 			}
 		}
@@ -1123,7 +1123,7 @@ class OnePiece5
 		// extract array
 		if( is_array($data) and count($data) ){
 			if(isset($data[0])){
-				self::SystemError('\$data\ is array. (not assoc array)'."\n".'Ex. $this->Template("index.phtml", array("test"=>"success")','en');
+				self::AdminNotice('Passed arguments is not an assoc array.'."\n".'Ex. $this->Template("index.phtml", array("key"=>"value")','en');
 			}else{
 				extract($data);
 			}
