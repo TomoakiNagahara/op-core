@@ -778,7 +778,7 @@ class Toolbox
 		*/
 		
 		//	Scheme less
-		if( $url{0} === '/' and $url{1} === '/' ){
+		if( $url{0} === '/' and isset($url{1}) and $url{1} === '/' ){
 			return $url;
 		}
 		
