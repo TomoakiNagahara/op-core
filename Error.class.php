@@ -492,17 +492,28 @@ class Error
 	{
 		$type = self::ConvertStringFromErrorNumber($type);
 		
-		//  Output error message.
-		$format = '%s [%s] %s: %s';
-		if(empty($env['cgi'])){
-			$format = '<div>'.$format.'</div>';
+		//	Get route table.
+		$route = Env::Get(Env::_KEY_ROUTE_TABLE_);
+		
+		//	Generate error format.
+		$base = '%s [%s] %s: %s';
+		switch( strtolower($route['mime'])){
+			case 'text/html':
+				$format = "<div>$base</div>";
+				break;
+			case 'text/css':
+			case 'text/javascript':
+				$format = "/* $base */";
+				break;
+			default:
+				$format = $base;
 		}
 		
 		//  check ini setting
 		if( ini_get( 'display_errors') ){
-			printf( $format.PHP_EOL, $file, $line, $type, $str );
+			printf( $format."\n", $file, $line, $type, $str );
 		}
-	
+		
 		return true;
 	}
 	
