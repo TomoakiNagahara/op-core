@@ -1082,7 +1082,7 @@ class OnePiece5
 		self::Mark($file,'template');
 		
 		//  access is deny, above current directory
-		if( Env::GetEnv('allowDoubleDot') ){
+		if( Env::Get('allowDoubleDot') ){
 			//  OK
 		}else if( preg_match('|\.\./|',$file) ){ 
 			self::AdminNotice("Does not allow parent directory. \($file)\\",'en');
