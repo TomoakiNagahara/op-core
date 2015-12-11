@@ -22,6 +22,11 @@
  */
 class Error
 {
+	/**
+	 * Session's name space.
+	 * 
+	 * @var string
+	 */
 	const _NAME_SPACE_ = '_STACK_ERROR_';
 	
 	static private function _Set( $name, $message, $backtrace=null, $translation=false )
@@ -493,11 +498,20 @@ class Error
 		$type = self::ConvertStringFromErrorNumber($type);
 		
 		//	Get route table.
-		$route = Env::Get('route');
+		if(!$route = Env::Get('route')){
+			$route['mime'] = 'text/plain';
+			OnePiece5::AdminNotice("Route table has not been set.");
+		}
+		
+		//	Get mime
+		if( empty($route['mime']) ){
+			$route['mime'] = 'text/plain';
+			OnePiece5::AdminNotice("MIME has not been set in the Route table.");
+		}
 		
 		//	Generate error format.
 		$base = '%s [%s] %s: %s';
-		switch( strtolower($route['mime'])){
+		switch( $mime = strtolower($route['mime']) ){
 			case 'text/html':
 				$format = "<div>$base</div>";
 				break;
