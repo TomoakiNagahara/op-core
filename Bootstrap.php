@@ -74,7 +74,7 @@ function php_mbstring(){
 	
 	print '<h1>Does not install php-mbstring module.</h1>';
 	print '<p>Please install php-mbstring module.</p>';
-	print '<pre><code>';
+	print '<pre style="margin:0 1em; padding:0.5em; background-color:#ccc;"><code>';
 	
 	switch (true) {
 		case stristr(PHP_OS, 'DAR'):
@@ -98,8 +98,8 @@ function php_mbstring(){
 
 function php_mbstring_osx(){
 	print <<< "EOL"
-	sudo port install php-mbstring
-	sudo /opt/local/apache2/bin/apachectl restart
+sudo port install php-mbstring
+sudo /opt/local/apache2/bin/apachectl restart
 EOL;
 }
 
@@ -109,8 +109,8 @@ function php_mbstring_win(){
 
 function php_mbstring_linux(){
 	print <<< "EOL"
-	sudo yum install php-mbstring
-	sudo service httpd restart
+sudo yum install php-mbstring
+sudo service httpd restart
 EOL;
 }
 
