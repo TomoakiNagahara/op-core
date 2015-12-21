@@ -1154,13 +1154,13 @@ class PDO5 extends OnePiece5
 		
 		//  Check
 		if(!$this->pdo){
-			$this->StackError("Does not instanced PDO object.",'en');
+			$this->StackError("Not instantiation to PDO object.",'en');
 			return false;
 		}
 		
 		//	empty config
 		if( empty($args) ){
-			$this->StackError("Does not set argument. (empty)",'en');
+			$this->StackError("Argument is not set. (empty)",'en');
 			return false;
 		}
 		
