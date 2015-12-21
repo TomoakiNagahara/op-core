@@ -258,8 +258,11 @@ class Router extends OnePiece5
 			$path = '/';
 		}
 		
-		//	full path
-		$end_point = $_SERVER['APP_ROOT'] . $path . $controller;
+		//	/var/www/htdocs// -> /var/www/htdocs/ 
+		$end_point = rtrim($_SERVER['APP_ROOT'].$path, '/').'/';
+		
+		//	/var/www/htdocs/ -> /var/www/htdocs/index.php
+		$end_point.= $controller;
 		
 		//	build route table.
 		$route['path'] = $path;
