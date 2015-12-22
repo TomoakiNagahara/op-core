@@ -428,11 +428,6 @@ abstract class NewWorld5 extends OnePiece5
 		return $args;
 	}
 	
-	function GetRequest( $keys=null, $method=null )
-	{
-		return Toolbox::GetRequest( $keys, $method );
-	}
-	
 	function NotFound()
 	{
 		if( $page = $this->GetEnv(self::_NOT_FOUND_PAGE_) ){

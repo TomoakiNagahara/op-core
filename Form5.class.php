@@ -60,7 +60,7 @@ class Form5 extends OnePiece5
 		}
 	}
 	
-	private function GetRequest( $input_name, $form_name )
+	private function _GetSubmit( $input_name, $form_name )
 	{
 		//  Get form config.
 		if(!$form = $this->GetConfig( $form_name )){
@@ -602,7 +602,7 @@ class Form5 extends OnePiece5
 		
 		//  If button
 		if( $input->type === 'submit' or $input->type === 'button' or $input->type === 'img' ){
-			$value = $this->GetRequest($input_name, $form_name);	
+			$value = $this->_GetSubmit($input_name, $form_name);
 		}else{
 			//  GetSaveValue is search session
 			$value = $this->GetSaveValue( $input_name, $form_name );
@@ -738,7 +738,7 @@ class Form5 extends OnePiece5
 		$session = $this->GetSession('form');
 		
 		// Submitted value.
-		$request = $this->GetRequest( null, $form_name);
+		$request = $this->_GetSubmit( null, $form_name);
 		
 		// 
 		$form = $this->GetConfig($form_name);
@@ -861,7 +861,7 @@ class Form5 extends OnePiece5
 	{
 		$input_name = $input->name;
 		$save_value = $this->GetInputValueRaw($input->name, $form_name);
-		$post_value = $this->GetRequest($input->name, $form_name);
+		$post_value = $this->_GetSubmit($input->name, $form_name);
 		
 		//	$save_value is document_root path. (always?)
 		if( $save_value ){
@@ -921,7 +921,7 @@ class Form5 extends OnePiece5
 			$temp = explode('.',$name);
 			$ext  = array_pop($temp);
 		}else{
-			$value = $this->GetRequest($input_name, $form_name);
+			$value = $this->_GetSubmit($input_name, $form_name);
 			
 			if( is_string($value) ){
 				return $value;
@@ -1664,7 +1664,7 @@ class Form5 extends OnePiece5
 		$attr = join(' ',$join);
 
 		// request
-		$_request = $this->GetRequest( null, $form_name );
+		$_request = $this->_GetSubmit( null, $form_name );
 		
 		// Value
 		if( $type === 'password' ){
@@ -2253,7 +2253,7 @@ class Form5 extends OnePiece5
 		
 		if(!$value){
 			// Submitted value.
-			$value = $this->GetRequest( $input->name, $form_name );
+			$value = $this->_GetSubmit( $input->name, $form_name );
 		}
 		
 		//  This is file upload remover checkbox.
@@ -2426,7 +2426,7 @@ class Form5 extends OnePiece5
 	{
 		$this->mark(__METHOD__."( \$input, $form_name, $value )", 'form_flow');
 		
-		$compare_value = $this->GetRequest($input->validate->compare, $form_name);
+		$compare_value = $this->_GetSubmit($input->validate->compare, $form_name);
 		
 		if( $value === $compare_value ){
 			$this->SetStatus($form_name, "OK: Validate-Compare. ($input->name, $value)");

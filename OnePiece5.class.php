@@ -1472,4 +1472,17 @@ class OnePiece5
 		
 		return $model;
 	}
+	
+	/**
+	 * Get submitted value. from form and url query.
+	 * 
+	 * @param  string $key
+	 * @param  string $method
+	 * @param  string $default
+	 * @return string
+	 */
+	function GetRequest($key, $method=null, $default=null)
+	{
+		return Toolbox::GetRequest($key, $method, $default);
+	}
 }
