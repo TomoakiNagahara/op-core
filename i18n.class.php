@@ -19,13 +19,13 @@
 class i18n extends OnePiece5
 {
 	/**
-	 * @return Config_i18n
+	 * @return i18n_Config
 	 */
 	function Config()
 	{
 		static $config;
 		if(!$config){
-			$config = new Config_i18n();
+			$config = new i18n_Config();
 		}
 		return $config;
 	}
@@ -46,6 +46,8 @@ class i18n extends OnePiece5
 	
 	function init()
 	{
+		$this->AdminNotice("This class will abolition. Please use Model_i18n.");
+		
 		parent::init();
 		if( $config = $this->GetEnv('memcache') ){
 			if( isset($memcache->use) ){
@@ -532,7 +534,7 @@ class i18n extends OnePiece5
 		$record = $pdo->Select($select);
 		
 		//	if exists
-		$text = isset($record[Config_i18n::_COLUMN_TEXT_TO_]) ? $record[Config_i18n::_COLUMN_TEXT_TO_]: null;
+		$text = isset($record[i18n_Config::_COLUMN_TEXT_TO_]) ? $record[Config_i18n::_COLUMN_TEXT_TO_]: null;
 		
 		return $text;
 	}
@@ -554,7 +556,7 @@ class i18n extends OnePiece5
 	}
 }
 
-class Config_i18n extends OnePiece5
+class i18n_Config extends OnePiece5
 {
 	private $_database;
 	

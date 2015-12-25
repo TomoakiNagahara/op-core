@@ -1383,11 +1383,11 @@ class OnePiece5
 	/**
 	 * i18n is translate object.
 	 * 
-	 * @return i18n
+	 * @return Model_i18n
 	 */
 	static function i18n()
 	{
-		return self::Singleton('i18n');
+		return self::Model('i18n');
 	}
 	
 	/**
