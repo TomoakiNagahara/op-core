@@ -398,120 +398,12 @@ class App extends NewWorld5
 			$route['mime']		 = Router::CalcMime('phtml');
 			$route['debug'][] = 'App have created a route table.';
 			$route['debug'][] = __FILE__.', '.__METHOD__.', '.__LINE__;
-		}else
-		
-		//	In case of Admin.
-		if( $this->Admin() ){
-			$ext  = Router::CalcExtension($_SERVER['REQUEST_URI']);
-			$mime = Router::CalcMime($ext);
-			
-			if( $mime === 'text/html' ){
-				//	Get current uri.
-				list($uri) = explode('?',$_SERVER['REQUEST_URI'].'?');
-				$uri = rtrim($this->ConvertURL('app:/'.self::_UNIT_URL_SELFTEST_), '/');
-				
-				//	Compare of URI.
-				if( preg_match("|^$uri|",$_SERVER['REQUEST_URI']) ){
-					//	Does not diagnosis.
-				}else{
-					//	Do diagnosis.
-					$this->InitSelftest();
-					if(!$this->Doctor()->Diagnose()){
-						//	Set call of Content method flag.
-						Env::Set(self::_IS_CONTENT_, true);
-						
-						//	Transfer self-test page.
-						$this->Location($uri); 
-					}
-				}
-			}
 		}
 		
 		//	Execute page controller.(End-poind)
 		parent::Dispatch($route);
 	}
-	
-	/**
-	 * Set self-test model name.
-	 * 
-	 * <pre>
-	 * Example:
-	 * 
-	 * 1. String.
-	 * $app->SetSelftestModelName('User');
-	 * $app->SetSelftestModelName('Role');
-	 * 
-	 * 2. String, comma separate.
-	 * $app->SetSelftestModelName('User, Role');
-	 * 
-	 * 3. Array.
-	 * $app->SetSelftestModelName(array('User','Role'));
-	 * </pre>
-	 * 
-	 * @param array $model_name
-	 */
-	function SetSelftestModelName($model_name)
-	{
-		$args = $this->GetSelftestModelName();
-		
-		if(!$args){
-			$args = array();
-		}
-		
-		if( is_string($model_name)){
-			if( strpos($model_name,',') ){
-				$args = array_merge($args,explode(',', str_replace(' ','',$model_name)));
-			}else{
-				$args[] = $model_name;
-			}
-		}else{
-			$args = $model_name;
-		}
-		$this->SetEnv('selftest-model-name',$args);
-	}
-	
-	/**
-	 * Get self-test model name.
-	 * 
-	 * @return array
-	 */
-	function GetSelftestModelName()
-	{
-		$list = $this->GetEnv('selftest-model-name');
-		return $list ? $list: array();
-	}
-	
-	/**
-	 * Init Self-test config.
-	 */
-	function InitSelftest()
-	{
-		foreach( $this->GetSelftestModelName() as $model_name ){
-			$model = $this->Model($model_name);
-			
-			$class_name = get_class($model);
-			if( $class_name === 'OnePiece5'){
-				$this->StackError("Failed instance. ($model_name)",'en');
-				continue;
-			}
-			
-			if(!method_exists($model,'Config') ){
-				$this->StackError("Does not have Config method. ($model_name)",'en');
-				continue;
-			}
-			
-			$config = $model->Config();
-			if(!method_exists($config,'selftest') ){
-				$class_name = get_class($config);
-				$this->StackError("Does not have selftest method. ($class_name)",'en');
-				continue;
-			}
-			
-			$data = $config->selftest();
-			$this->Doctor()->Registration( $model_name, $data );
-		}
-	}
-	
+
 	/**
 	 * Set Favicon URL
 	 * 
