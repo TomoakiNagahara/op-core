@@ -20,6 +20,8 @@
  */
 class Model_Curl extends Model_Model
 {
+	private $_debug;
+	
 	function Json($url, $post=null)
 	{
 		return json_decode(
@@ -29,6 +31,8 @@ class Model_Curl extends Model_Model
 	
 	function Get($url, $post=null)
 	{
+		$this->_debug['url'][] = $url;
+		
 		if( function_exists('curl_init') ){
 			$content = $this->Curl($url, $post);
 		}else{
@@ -83,6 +87,15 @@ class Model_Curl extends Model_Model
 		ini_set('display_errors',true);
 		
 		return $body;
+	}
+	
+	/**
+	 * For developer
+	 */
+	function Debug()
+	{
+		$this->P("Debug: Model-Curl");
+		$this->d($this->_debug);
 	}
 }
 
