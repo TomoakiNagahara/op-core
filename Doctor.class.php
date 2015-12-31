@@ -19,6 +19,14 @@
  */
 class Doctor extends OnePiece5
 {
+	
+	/**
+	 * for developer
+	 * 
+	 * @var array
+	 */
+	private $_debug;
+	
 	/**
 	 * OnePiece's PDO5 object
 	 * 
@@ -1128,6 +1136,15 @@ class Doctor extends OnePiece5
 			print $this->p("![li .small .{$class}[{$message} \n $query]]");
 		}
 		print '</ol>';
+	}
+	
+	/**
+	 * For developer
+	 */
+	function Debug()
+	{
+		$this->p("Doctor:");
+		$this->d($this->_debug);
 	}
 }
 
