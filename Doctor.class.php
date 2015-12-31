@@ -118,6 +118,24 @@ class Doctor extends OnePiece5
 	 */
 	function InitDiagnosis()
 	{
+		//	Get reservation class name.
+		if( $reservation = $this->GetSession('reservation') ){
+			foreach($reservation as $class_name => $file_path){
+				
+				//	Instantiate
+				include_once($file_path);
+				$object = new $class_name();
+				
+				//	Check
+				if(!method_exists($object, 'selftest')){
+					$this->_debug[__FUNCTION__][][$class_name] = 'This class does not have self-test method.';
+					continue;
+				}
+				
+				//	Registration self-test Config.
+				$this->Registration($class_name, $object->selftest());
+			}
+		}
 		$this->_is_diagnosis = true;
 		
 		$this->_log = array();
@@ -178,6 +196,26 @@ class Doctor extends OnePiece5
 		}
 	}
 	
+
+	/**
+	 * Reservation from class name and file path.
+	 * 
+	 * @param string $class_name
+	 * @param string $file_path
+	 */
+	public function Reservation($class_name, $file_path)
+	{
+		//	Save for debug information.
+		if( $this->Admin() ){
+			$debug[$class_name] = $file_path;
+			$this->_debug[__FUNCTION__][] = $debug;
+		}
+		
+		$reservation = $this->GetSession('reservation');
+		$reservation[$class_name] = $file_path;
+		$this->SetSession('reservation', $reservation);
+	}
+
 	/**
 	 * Registaration class name.
 	 * 
