@@ -99,20 +99,7 @@ class Doctor extends OnePiece5
 	{
 		return $this->Singleton('DoctorX');
 	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see OnePiece5::Init()
-	 */
-	function Init()
-	{
-		parent::Init();
-		if(!$this->Admin()){
-			$this->StackError("You are not an administrator.",'en');
-		}
-		$this->LoadConfig();
-	}
-	
+
 	/**
 	 * Init diagnosis Config.
 	 */
@@ -173,16 +160,19 @@ class Doctor extends OnePiece5
 	 * @param string $class  class name
 	 * @param Config $config
 	 */
+	/*
 	function SaveConfig($class, Config $config)
 	{
 		$session = $this->GetSession('config');
 		$session[$class] = $config;
 		$this->SetSession('config', $session);
 	}
+	*/
 	
 	/**
 	 * Load from session.
 	 */
+	/*
 	function LoadConfig()
 	{
 		$session = $this->GetSession('config');
@@ -191,11 +181,11 @@ class Doctor extends OnePiece5
 			return;
 		}
 		
-		foreach($session as $label => $config){ 
+		foreach($session as $label => $config){
 			$this->Registration($label, $config);
 		}
 	}
-	
+	*/
 
 	/**
 	 * Reservation from class name and file path.
