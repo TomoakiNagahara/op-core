@@ -21,11 +21,20 @@
 abstract class Model_Model extends OnePiece5
 {
 	/**
-	 * Wrapper PDO5 of OnePiece5
-	 * 
-	 * @return PDO5
+	 * Old method name.
 	 */
 	function pdo()
+	{
+		return $this->DB();
+	}
+	
+	/**
+	 * Database
+	 * 
+	 * @throws OpException
+	 * @return PDO5
+	 */
+	function DB()
 	{
 		$pdo = parent::PDO();	
 		if(!$pdo->isConnect()){
@@ -43,13 +52,9 @@ abstract class Model_Model extends OnePiece5
 			
 			//	Do database connection
 			if(!$io = $pdo->Connect($database)){
-				//	Reservation of self-test.
 				$this->ReservationToDiagnosis();
-				
-				//	Exception.
-				$e = new OpException("Connection was failed.",'en');
-				$e->isSelftest(true);
-				throw $e;
+				$this->AdminNotice("Connection was failed.");
+				$this->Location("app:/_self-test/");
 			}
 		}
 		return $pdo;
