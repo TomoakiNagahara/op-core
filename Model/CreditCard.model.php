@@ -85,7 +85,7 @@ class Model_CreditCard extends Model_Base
 	function Payment($price, $label=null)
 	{
 		if(!$price){
-			$this->StackError('empty price');
+			$this->AdminNotice('empty price');
 			return false;
 		}
 		
@@ -104,7 +104,7 @@ class Model_CreditCard extends Model_Base
 		
 		//	error check
 		if(isset($json['error'])){
-			$this->StackError($json['error']);
+			$this->AdminNotice($json['error']);
 			return false;
 		}
 		
@@ -130,7 +130,7 @@ class Config_CreditCard extends Config_Base
 	function Set( $key, $var )
 	{
 		if(!isset($this->$key)){
-			$this->StackError("Does not define this property. ($key)");
+			$this->AdminNotice("Does not define this property. ($key)");
 			return false;
 		}
 		

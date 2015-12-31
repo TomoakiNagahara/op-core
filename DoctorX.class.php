@@ -53,10 +53,6 @@ class DoctorX extends OnePiece5
 	function Init()
 	{
 		parent::Init();
-		if(!$this->Admin()){
-			$this->StackError("Not admin call.");
-		}
-		
 		$this->_log = array();
 		$this->_error = array();
 	}

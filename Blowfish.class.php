@@ -98,7 +98,7 @@ class Blowfish extends OnePiece5
 	{
 		// Check the hexadecimal
 		if(!ctype_xdigit($hex) ){
-			$this->StackError("Is this hex string? ($hex). Use ConvertHex($hex) method.");
+			$this->AdminNotice("Is this hex string? ($hex). Use ConvertHex($hex) method.");
 			return false;
 		}
 		$this->_key = pack('H*', $hex);

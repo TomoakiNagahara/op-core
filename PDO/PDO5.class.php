@@ -175,7 +175,7 @@ class PDO5 extends OnePiece5
 		
 		//  Check PDO object
 		if(!$this->pdo instanceof PDO ){
-			$this->StackError("PDO is not instanced.");
+			$this->AdminNotice("PDO is not instanced.");
 			return false;
 		}
 		
@@ -238,7 +238,7 @@ class PDO5 extends OnePiece5
 				if( include($path) ){
 					$_error = new ErrorMySQL();
 				}else{
-					$this->StackError("Failed to the include of ErrorMySQL. ($path)");
+					$this->AdminNotice("Failed to the include of ErrorMySQL. ($path)");
 				}
 			}
 			$message = $_error->Get($this->pdo);
@@ -249,7 +249,7 @@ class PDO5 extends OnePiece5
 			$message  = $temp[2];
 		}
 		
-		$this->StackError($message." \n".$this->qu,'en');
+		$this->AdminNotice($message." \n".$this->qu);
 	}
 	
 	function ConvertCharset($charset)
@@ -306,7 +306,7 @@ class PDO5 extends OnePiece5
 				include($mixed);
 				$args = Toolbox::toArray($database);
 			}else{
-				$this->StackError("Does not file exists. ($mixed)");
+				$this->AdminNotice("Does not file exists. ($mixed)");
 				return false;
 			}
 		}else if( is_object($mixed) ){
@@ -315,7 +315,7 @@ class PDO5 extends OnePiece5
 			$args = $mixed;
 		}else{
 			$type = gettype($mixed);
-			$this->StackError("This arguments type is not supported. ($type)");
+			$this->AdminNotice("This arguments type is not supported. ($type)");
 			return false;
 		}
 		
@@ -332,7 +332,7 @@ class PDO5 extends OnePiece5
 		
 		//	Checking charset.
 		if(!$charset){
-			$this->StackError("\charset\ has not been set. \ex: \$config->charset = 'utf8'\\",'en');
+			$this->AdminNotice("\charset\ has not been set.\nEx: \$database->charset = 'utf8'");
 		}
 		
 		//	utf-8 -> utf8
@@ -341,7 +341,7 @@ class PDO5 extends OnePiece5
 		//	check
 		foreach( array('driver','host','user') as $key ){
 			if( empty($this->$key) ){
-				$this->StackError("\\$key\ is empty.",'en');
+				$this->AdminNotice("\\$key\ is empty.");
 				return false;
 			}
 		}
@@ -361,7 +361,7 @@ class PDO5 extends OnePiece5
 			
 			//	Instance PDO
 			if(!$this->pdo = new PDO( $this->_dsn, $this->user, $password, $options )){
-				$this->StackError("Can not connect database. \( {$this->_dsn}, {$this->user} )\ ",'en');
+				$this->AdminNotice("Can not connect database. \( {$this->_dsn}, {$this->user} )\ ");
 				return false;
 			}
 		}catch( PDOException $e){
@@ -388,7 +388,7 @@ class PDO5 extends OnePiece5
 				default:
 				$this->mark($code);
 			}
-			$this->StackError("$text",'en');
+			$this->AdminNotice("$text");
 			return false;
 		}
 		
@@ -412,7 +412,7 @@ class PDO5 extends OnePiece5
 		
 		if(!is_string($db_name)){
 			$type = gettype($db_name);
-			$this->StackError('Database name is not string. ($type)');
+			$this->AdminNotice('Database name is not string. ($type)');
 			return false;
 		}
 		
@@ -421,7 +421,7 @@ class PDO5 extends OnePiece5
 		
 		//	Execute
 		if( $this->query("USE $db_name",'use') === false){
-			$this->StackError('Database select is failed.','en');
+			$this->AdminNotice('Database select is failed.');
 			return false;
 		}
 		
@@ -536,7 +536,7 @@ class PDO5 extends OnePiece5
 	{
 		//  Check table name
 		if( !$table_name ){
-			$this->StackError("Empty table name.");
+			$this->AdminNotice("Empty table name.");
 			return false;
 		}
 		
@@ -766,7 +766,7 @@ class PDO5 extends OnePiece5
 			$ope   = $match[2] === '=' ? null: $match[2].' ';
 			$value = $match[3];
 		}else{
-			$this->StackError("Format error. ($string)");
+			$this->AdminNotice("Format error. ($string)");
 			return false;
 		}
 		
@@ -1000,7 +1000,7 @@ class PDO5 extends OnePiece5
 				$conf['add']['column'] = $conf['column'];
 				unset($conf['column']);
 			}else{
-				$this->StackError('Does not set column.');
+				$this->AdminNotice('Does not set column.');
 				return false;
 			}
 		}
@@ -1035,7 +1035,7 @@ class PDO5 extends OnePiece5
 				$conf['change']['column'] = $conf['column'];
 				unset($conf['column']);
 			}else{
-				$this->StackError('Does not set column.');
+				$this->AdminNotice('Does not set column.');
 				return false;
 			}
 		}
@@ -1095,7 +1095,7 @@ class PDO5 extends OnePiece5
 	function Count( $config )
 	{
 		if(!$this->isConnect){
-			$this->StackError("Does not isConnect.");
+			$this->AdminNotice("Does not isConnect.");
 			return false;
 		}
 		
@@ -1148,19 +1148,19 @@ class PDO5 extends OnePiece5
 	function Select( $args )
 	{
 		if(!$this->isConnect){
-			$this->StackError("Not connected. (isConnect is false)",'en');
+			$this->AdminNotice("Not connected. (isConnect is false)");
 			return false;
 		}
 		
 		//  Check
 		if(!$this->pdo){
-			$this->StackError("Not instantiation to PDO object.",'en');
+			$this->AdminNotice("Not instantiation to PDO object.");
 			return false;
 		}
 		
 		//	empty config
 		if( empty($args) ){
-			$this->StackError("Argument is not set. (empty)",'en');
+			$this->AdminNotice("Argument is not set. (empty)");
 			return false;
 		}
 		
@@ -1251,7 +1251,7 @@ class PDO5 extends OnePiece5
 	{
 		//  Check
 		if(!$this->pdo){
-			$this->StackError("Does not instanced PDO object.");
+			$this->AdminNotice("Does not instanced PDO object.");
 			return false;
 		}
 		
@@ -1291,7 +1291,7 @@ class PDO5 extends OnePiece5
 	{
 		//  Check
 		if(!$this->pdo){
-			$this->StackError("Does not instanced PDO object.");
+			$this->AdminNotice("Does not instanced PDO object.");
 			return false;
 		}
 		
@@ -1320,7 +1320,7 @@ class PDO5 extends OnePiece5
 	{
 		//  Check
 		if(!$this->pdo){
-			$this->StackError("Does not instanced PDO object.");
+			$this->AdminNotice("Does not instanced PDO object.");
 			return false;
 		}
 		
@@ -1350,12 +1350,12 @@ class PDO5 extends OnePiece5
 	function Transaction()
 	{
 		if( $this->_is_transaction ){
-			$this->StackError("TRANSACTION has already started.");
+			$this->AdminNotice("TRANSACTION has already started.");
 			return false;
 		}
 		
 		if(!$this->pdo->beginTransaction() ){
-			$this->StackError("TRANSACTION can not be started.");
+			$this->AdminNotice("TRANSACTION can not be started.");
 			return false;
 		}
 
@@ -1368,12 +1368,12 @@ class PDO5 extends OnePiece5
 	function Rollback()
 	{
 		if(!$this->_is_transaction ){
-			$this->StackError("TRANSACTION is not started.");
+			$this->AdminNotice("TRANSACTION is not started.");
 			return false;
 		}
 		
 		if(!$this->pdo->rollBack() ){
-			$this->StackError("Could not be ROLLBACK.");
+			$this->AdminNotice("Could not be ROLLBACK.");
 			return false;
 		}
 		
@@ -1386,12 +1386,12 @@ class PDO5 extends OnePiece5
 	function Commit()
 	{
 		if(!$this->_is_transaction ){
-			$this->StackError("TRANSACTION is not started.");
+			$this->AdminNotice("TRANSACTION is not started.");
 			return false;
 		}
 		
 		if(!$this->pdo->commit() ){
-			$this->StackError("Could not be COMMIT.");
+			$this->AdminNotice("Could not be COMMIT.");
 			return false;
 		}
 		

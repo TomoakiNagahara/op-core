@@ -35,7 +35,7 @@ class Wiki2Engine extends OnePiece5
 			return $string;
 		}else if(!is_string($string)){
 			OnePiece5::mark( 'Does not string - '.self::GetCallerLine(1) );
-			OnePiece5::StackError("Does not string.",'en');
+			OnePiece5::AdminNotice("Does not string.");
 			return;
 		}
 		

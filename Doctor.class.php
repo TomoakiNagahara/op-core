@@ -240,7 +240,7 @@ class Doctor extends OnePiece5
 		//	Database name.
 		if( empty($config->database->name) ){
 			if( empty($config->database->database) ){
-				$this->StackError("Empty database name.");
+				$this->AdminNotice("Empty database name.");
 				return;
 			}
 			$config->database->name = $config->database->database;
@@ -251,7 +251,7 @@ class Doctor extends OnePiece5
 			//	Check config object.
 			if(!$table instanceof Config){
 				unset($config->table->$table_name);
-				$this->StackError("This table configuration is not a \config\ object. \($table_name)\\",'en');
+				$this->AdminNotice("This table configuration is not a \config\ object. \($table_name)\\");
 				continue;
 			}
 			
@@ -260,7 +260,7 @@ class Doctor extends OnePiece5
 				//	Check config object.
 				if(!$column instanceof Config){
 					unset($table->column->$column_name);
-					$this->StackError("This column configuration is not a \config\ object. \({$table_name}.{$column_name})\\",'en');
+					$this->AdminNotice("This column configuration is not a \config\ object. \({$table_name}.{$column_name})\\");
 					continue;
 				}
 				
@@ -641,7 +641,7 @@ class Doctor extends OnePiece5
 		if( !empty($column->pkey) or !empty($column->ai) ){
 			if( $column->type === 'varchar' ){
 				if( $column->length > 255 ){
-					$this->StackError("Primary key's length was too long. Limit 767 bytes. UTF-8 is use 3 byte at 1 character.",'en');
+					$this->AdminNotice("Primary key's length was too long. Limit 767 bytes. UTF-8 is use 3 byte at 1 character.");
 				}
 			}
 		}
@@ -914,7 +914,7 @@ class Doctor extends OnePiece5
 				}
 				if( $count > 1 ){
 					$columns = '\\'.join('\ AND \\',$column_names).'\\';
-					$this->StackError("Auto increment of $columns is duplicated. \(Database: $db_name, Table: $table_name)\\",'en');
+					$this->AdminNotice("Auto increment of $columns is duplicated. \(Database: $db_name, Table: $table_name)\\");
 				}
 				
 				foreach( $column as $column_name => $column ){
@@ -1098,7 +1098,7 @@ class Doctor extends OnePiece5
 	function WritePKEY($db_name, $table_name, $column_names, $modifier)
 	{
 		if(!$modifier){
-			$this->StackError("\$modifier is empty. (add or drop)");
+			$this->AdminNotice("\$modifier is empty. (add or drop)");
 			return;
 		}
 		

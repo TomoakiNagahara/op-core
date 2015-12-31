@@ -101,14 +101,14 @@ abstract class NewWorld5 extends OnePiece5
 		//	Checking call of content.
 		if(!Env::Get(self::_IS_CONTENT_)){
 			$url = $_SERVER["REQUEST_URI"];
-			$this->StackError("Did not call \Content\ method. \($url)\ ",'en');
+			$this->AdminNotice("Did not call \Content\ method. \($url)\ ");
 		}
 		
 		//  Checking of Dispatched.
 		if(!$this->_isDispatch and strlen($this->_content)){
 			$class_name = get_class($this);
 			$message = "\\$class_name\ does not call the \Dispatch\ method.";
-			$this->StackError($message,'en');
+			$this->AdminNotice($message);
 		}
 		
 		//	Output bufferring content. and finish.
@@ -141,7 +141,7 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		// Deny many times dispatch.
 		if( $this->_isDispatch ){
-			$this->StackError("Dispatched two times. (Dispatched only one time.)");
+			$this->AdminNotice("Dispatched two times. (Dispatched only one time.)");
 			return false;
 		}else{
 			$this->_isDispatch = true;
@@ -184,7 +184,7 @@ abstract class NewWorld5 extends OnePiece5
 				$this->Content();
 			}
 		}catch( Exception $e ){
-			$this->StackError($e);
+			$this->AdminNotice($e->getMessage());
 		}
 		
 		//	Change mime.
@@ -336,7 +336,7 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function GetContent()
 	{
-		$this->StackError("This method will abolished.",'en');
+		$this->AdminNotice("This method will abolished.");
 		return $this->_content;
 	}
 	
@@ -360,7 +360,7 @@ abstract class NewWorld5 extends OnePiece5
 				$this->ContentIsApplication($sub);
 				break;
 			default:
-				$this->StackError("Does not support this mime. ({$main}/{$sub})");
+				$this->AdminNotice("Does not support this mime. ({$main}/{$sub})");
 		}
 		
 		//	Output content to stdout.
@@ -403,7 +403,7 @@ abstract class NewWorld5 extends OnePiece5
 				break;
 
 			default:
-				$this->StackError("Does not support this mime. (text/{$sub})");
+				$this->AdminNotice("Does not support this mime. (text/{$sub})");
 		}
 	}
 	
@@ -414,7 +414,7 @@ abstract class NewWorld5 extends OnePiece5
 				$this->_doJson();
 				break;
 			default:
-				$this->StackError("Does not support this mime. (application/{$sub})");
+				$this->AdminNotice("Does not support this mime. (application/{$sub})");
 		}
 	}
 	
@@ -422,7 +422,7 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		$route = $this->GetEnv('route');
 		if(!$route){
-			$this->StackError("Route table is not initialized.",'en');
+			$this->AdminNotice("Route table is not initialized.");
 		}
 		$args  = $route['args'];
 		return $args;
@@ -457,7 +457,7 @@ abstract class NewWorld5 extends OnePiece5
 			}else{
 				$example = '$this->SetEnv(NewWrold5::_NOT_FOUND_PAGE_,"filepath")';
 			}
-			$this->StackError("NotFound-page has not been set. Please call this method: \\$example\.",'en');
+			$this->AdminNotice("NotFound-page has not been set. Please call this method: \\$example\.");
 		}
 	}
 	
@@ -577,7 +577,7 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function GetRoute($request_uri=null)
 	{
-		$this->StackError("This method will abolished. Please use \Router::GetRoute();\.",'en');
+		$this->AdminNotice("This method will abolished. Please use \Router::GetRoute();\.");
 		return Router::GetRoute($request_uri);
 	}
 }

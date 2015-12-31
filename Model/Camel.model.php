@@ -23,7 +23,7 @@ class Model_Camel
 	{
 		$str = trim($str);
 		if( preg_match('/[^-_a-z0-9@\s]/i',$str) ){
-			OnePiece5::StackError('Illigal character code.');
+			OnePiece5::AdminNotice('Illigal character code.');
 			return $str;
 		}
 		//	Abc DEf-G -> abc DEf-G

@@ -70,7 +70,7 @@ class Form5 extends OnePiece5
 		//  Check input config.
 		if(!is_null($input_name) ){
 			if(!isset($form->input->$input_name) ){
-				$this->StackError("Does not exists input config. ($form_name, $input_name)");
+				$this->AdminNotice("Does not exists input config. ($form_name, $input_name)");
 				return false;
 			}else{
 				$input = $form->input->$input_name;
@@ -163,12 +163,12 @@ class Form5 extends OnePiece5
 		}
 		
 		if(!isset($this->config)){
-			$this->StackError("Form config has not been initialized yet.");
+			$this->AdminNotice("Form config has not been initialized yet.");
 			return false;
 		}
 		
 		if(!isset($this->config->$form_name)){
-			$this->StackError("Form '$form_name' has not been initialized yet.");
+			$this->AdminNotice("Form '$form_name' has not been initialized yet.");
 			return false;
 		}
 		
@@ -421,18 +421,18 @@ class Form5 extends OnePiece5
 		}
 		
 		if(is_null($form_name)){
-			$this->StackError("form_name is null. (Form has started?)");
+			$this->AdminNotice("form_name is null. (Form has started?)");
 			return false;
 		}
 		
 		if(!is_string($form_name)){
 			$type = gettype($form_name);
-			$this->StackError("form_name is not string. ($type)");
+			$this->AdminNotice("form_name is not string. ($type)");
 			return false;
 		}
 		
 		if(!isset($this->config->$form_name)){
-			$this->StackError("![.red[Does not exists this form_name. ({$form_name}) ]]");
+			$this->AdminNotice("![.red[Does not exists this form_name. ({$form_name}) ]]");
 			return false;
 		}
 		
@@ -445,7 +445,7 @@ class Form5 extends OnePiece5
 				//	Is token key.
 				return false;
 			}
-			$this->StackError("This input-name doesn't exist in form-config. \(form: {$form_name}, input: {$input_name})\ ",'en');
+			$this->AdminNotice("This input-name doesn't exist in form-config. \(form: {$form_name}, input: {$input_name})\ ");
 			return false;
 		}
 		
@@ -544,7 +544,7 @@ class Form5 extends OnePiece5
 	{
 		//  more fast
 		if(!$input = $this->GetConfig( $form_name, $input_name )){
-			$this->StackError("Does not exists config.(form: $form_name, input: $input_name)");
+			$this->AdminNotice("Does not exists config.(form: $form_name, input: $input_name)");
 			return false;
 		}
 		
@@ -562,7 +562,7 @@ class Form5 extends OnePiece5
 					$value = $this->ConvertURL($dir.$value);
 					if(!file_exists($path)){
 						$value = null;
-						$this->StackError("Does not exists this file. ($path)",'en');
+						$this->AdminNotice("Does not exists this file. ($path)");
 					}
 				}
 				return $value;
@@ -771,7 +771,7 @@ class Form5 extends OnePiece5
 			}
 			
 			if(!isset($form->input->$input_name)){
-				$this->StackError("Does not set input config.($form_name, $input_name)");
+				$this->AdminNotice("Does not set input config.($form_name, $input_name)");
 				continue;
 			}
 			
@@ -876,14 +876,14 @@ class Form5 extends OnePiece5
 								
 				//	Check file exists 
 				if(!file_exists($path)){
-					$this->StackError("Does not exists file. ($path)");
+					$this->AdminNotice("Does not exists file. ($path)");
 					return false;
 				}
 				
 				//  challenge to delete the upload file.
 				if(!unlink($path)){
 					//  delete is failed.
-					$this->StackError("Can not delete the file. ($save_value)");
+					$this->AdminNotice("Can not delete the file. ($save_value)");
 					
 					//  recovery post value TODO: Is this correct????
 					$value = $this->ConvertURL($save_value);
@@ -972,14 +972,14 @@ class Form5 extends OnePiece5
                 if(!file_exists( $dirname = dirname($path) )){
                 	$this->mark("Does not exists directory. ($dirname)");
                     if(!$io = mkdir( $dirname, 0766, true ) ){            	
-                    	$this->StackError("Failed make directory. (".dirname($path).")");
+                    	$this->AdminNotice("Failed make directory. (".dirname($path).")");
                     	return false;
                     }
                 }
 				
 				//  file is copy
                 if(!copy($tmp, $path)){
-                	$this->StackError("Did not copy upload file. ($tmp, $path)");
+                	$this->AdminNotice("Did not copy upload file. ($tmp, $path)");
                 	return false;
                 }
                 
@@ -1035,7 +1035,7 @@ class Form5 extends OnePiece5
 	private function GenerateConfig( $args )
 	{
 		if( is_null($args) ){
-			$this->StackError('$args is null.');
+			$this->AdminNotice('$args is null.');
 			return;
 		}
 		
@@ -1053,7 +1053,7 @@ class Form5 extends OnePiece5
 				break;
 				
 			default:
-				$this->stackError('Undefined args type.');				
+				$this->AdminNotice('Undefined args type.');				
 		}
 		
 		return $config;
@@ -1071,13 +1071,13 @@ class Form5 extends OnePiece5
 		
 		//  Check
 		if(!file_exists($path)){
-			$this->StackError("File does not exists. ($path)");
+			$this->AdminNotice("File does not exists. ($path)");
 			return false;
 		}
 		
 		//  Include
 		if(!$io = include($path)){
-			$this->StackError("File include is failed. ($path)");
+			$this->AdminNotice("File include is failed. ($path)");
 			return false;
 		}
 		
@@ -1099,7 +1099,7 @@ class Form5 extends OnePiece5
 		}else if(isset($config)){
 			// OK
 		}else{
-			$this->StackError('Does not find form config.');
+			$this->AdminNotice('Does not find form config.');
 			return false;
 		}
 		
@@ -1125,7 +1125,7 @@ class Form5 extends OnePiece5
 			if( file_exists($path) ){
 				include($path);
 			}else{
-				$this->StackError("Does not find config file path. ($path)");
+				$this->AdminNotice("Does not find config file path. ($path)");
 				return false;
 			}
 		}
@@ -1139,7 +1139,7 @@ class Form5 extends OnePiece5
 		
 		//	
 		if( empty($config) ){
-			$this->StackError("Does not find config variable. ($path)");
+			$this->AdminNotice("Does not find config variable. ($path)");
 			return false;
 		}
 		
@@ -1183,7 +1183,7 @@ class Form5 extends OnePiece5
 	public function AddForm( $config )
 	{
 		if( empty($config) ){
-			$this->StackError('Argument has not been set.','en');
+			$this->AdminNotice('Argument has not been set.');
 			return false;
 		}
 		
@@ -1200,7 +1200,7 @@ class Form5 extends OnePiece5
 		
 		//  check form name
 		if(!isset($config->name)){
-			$this->StackError('Form name is empty. Please check \$config->name\.','en');
+			$this->AdminNotice('Form name is empty. Please check \$config->name\.');
 			return false;
 		}else{
 			$form_name = $config->name;
@@ -1208,7 +1208,7 @@ class Form5 extends OnePiece5
 				
 		//  check exists config
 		if(isset($this->config->$form_name)){
-			$this->StackError("This form_name is already exists. ($form_name)");
+			$this->AdminNotice("This form_name is already exists. ($form_name)");
 			return false;
 		}
 		
@@ -1271,17 +1271,17 @@ class Form5 extends OnePiece5
 	public function AddInput( $input, $form_name )
 	{
 		if( empty($form_name) ){
-			$this->StackError("Empty form_name or input_name. ($form_name, {$input->name})");
+			$this->AdminNotice("Empty form_name or input_name. ($form_name, {$input->name})");
 			return false;
 		}
 		
 		if(!isset($input->name)){
-			$this->StackError("Does not set input name.(".serialize($input).")");
+			$this->AdminNotice("Does not set input name.(".serialize($input).")");
 			return false;
 		}
 		
 		if( isset($this->config->$form_name->input->{$input->name}) ){
-			$this->StackError("Already exists this input. ($form_name, {$input->name})");
+			$this->AdminNotice("Already exists this input. ($form_name, {$input->name})");
 			return false;
 		}
 		
@@ -1321,7 +1321,7 @@ class Form5 extends OnePiece5
 			//	Check value. (Why necessary is this? <- Checkboxe was used empty options setting.)
 			if( !isset($input->options) and !isset($input->value) and $type !== 'group' and !strlen($input->value) ){
 				$ex = "![.ex p[Ex: \$form->input->{$input_name}->value = 1;]]";
-				$this->StackError("Empty options of $type. ($form_name, $input_name) \n $ex");
+				$this->AdminNotice("Empty options of $type. ($form_name, $input_name) \n $ex");
 			}
 			
 			//	Options
@@ -1338,7 +1338,7 @@ class Form5 extends OnePiece5
 		
 		//	Validation -> validate
 		if( isset($input->validation) ){
-			$this->StackError('\validation\ is wrong attribute name. Please change to \validate\.'." \($form_name, {$input->name})\ ",'en');
+			$this->AdminNotice('\validation\ is wrong attribute name. Please change to \validate\.'." \($form_name, {$input->name})\ ");
 			if(!isset($input->validate)){
 				$input->validate = $input->validation;
 			}
@@ -1420,7 +1420,7 @@ class Form5 extends OnePiece5
 	{
 		//  Check
 		if(!$form_name){
-			$this->StackError('form_name is empty. please set form_name.');
+			$this->AdminNotice('form_name is empty. please set form_name.');
 			return false;
 		}
 
@@ -1431,14 +1431,14 @@ class Form5 extends OnePiece5
 		
 		//  Check
 		if( $temp_name = $this->GetCurrentFormName() ){
-			$this->StackError("Form is not finishing. (Open form is $temp_name)");
+			$this->AdminNotice("Form is not finishing. (Open form is $temp_name)");
 			return sprintf('<fail class="%s, %s, %s, %s"  />', 'OnePiece', get_class($this), __FUNCTION__, __LINE__);
 		}
 
 		//  Check
 		if( !is_null($action) and !is_string($action) ){
 			$type = gettype($action);
-			$this->StackError("\$action is not string. ($type)");
+			$this->AdminNotice("\$action is not string. ($type)");
 			$action = null;
 		}
 		
@@ -1496,17 +1496,17 @@ class Form5 extends OnePiece5
 	public function Finish( $form_name=null )
 	{
 		if(!$form_name){
-			$this->StackError('form_name is empty. please set form_name.');
+			$this->AdminNotice('form_name is empty. please set form_name.');
 			return false;
 		}
 		
 		if(!$form_current = $this->GetCurrentFormName() ){
-			$this->StackError("Form is not started.");
+			$this->AdminNotice("Form is not started.");
 			return false;
 		}
 		
 		if( $form_current !== $form_name ){
-			$this->StackError("Close form name is not match. (open=$form_current, close=$form_name)");
+			$this->AdminNotice("Close form name is not match. (open=$form_current, close=$form_name)");
 			return false;
 		}
 		
@@ -1547,7 +1547,7 @@ class Form5 extends OnePiece5
 		//	Location
 		if( $location ){
 			if(!header("Location: {$_SERVER['REQUEST_URI']}")){
-				$this->StackError('Location is failed.');
+				$this->AdminNotice('Location is failed.');
 			}
 		}
 		
@@ -1757,7 +1757,7 @@ class Form5 extends OnePiece5
 				if( $value ){
 					$path  = $_SERVER['DOCUMENT_ROOT'].$value;
 					if(!$exists = file_exists($path)){
-						$this->StackError("Does not exists this file. ($path)",'en');
+						$this->AdminNotice("Does not exists this file. ($path)");
 					}
 				}else{
 					$exists = null;
@@ -1803,7 +1803,7 @@ class Form5 extends OnePiece5
 						
 						//	Notice value
 						if( !isset($option->value) and $type!=='group' ){
-							$this->StackError("This option was not set value attribute. ({$input->name})");
+							$this->AdminNotice("This option was not set value attribute. ({$input->name})");
 						}
 						
 						//	Supplement label
@@ -2121,7 +2121,7 @@ class Form5 extends OnePiece5
 	function SetInputError( $input_name, $form_name, $key, $value='' )
 	{
 		if( !$input_name or !$form_name or !$key /* or !$value or !strlen($value) */ ){
-			$this->StackError("One or more empty. form_name=$form_name, input_name=$input_name, key=$key, value=$value");
+			$this->AdminNotice("One or more empty. form_name=$form_name, input_name=$input_name, key=$key, value=$value");
 			return false;
 		}
 		$this->status->$form_name->error->$input_name->$key = $value;
@@ -2146,7 +2146,7 @@ class Form5 extends OnePiece5
 			$type = $input->type;
 			$string = serialize($value);
 			$ex = "![.ex p[name = $name\n type = $type\n value = $string]]";
-			$this->StackError("Argument value is only string, yet.\n $ex");
+			$this->AdminNotice("Argument value is only string, yet.\n $ex");
 			return false;
 		}
 		*/
@@ -2607,7 +2607,7 @@ class Form5 extends OnePiece5
                 	$this->d($key);
                 	$key = 'undefined';
                 }
-				$this->StackError("undefined permit key. ($input->name, $key)");
+				$this->AdminNotice("undefined permit key. ($input->name, $key)");
 		}
 		
 		if( $io ){

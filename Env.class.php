@@ -110,7 +110,7 @@ class Env extends OnePiece5
 		
 		//	Error check.
 		if( is_null($io) ){
-			OnePiece5::StackError("\_init_admin\ has not been called.",'en');
+			OnePiece5::AdminNotice("\_init_admin\ has not been called.");
 		}
 		
 		//	If not an administrator.
@@ -147,18 +147,18 @@ class Env extends OnePiece5
 				 * php.ini
 				 * session.auto_start = 1;
 				 */
-				OnePiece5::StackError("php.ini: session.auto_start = 1;");
+				OnePiece5::AdminNotice("php.ini: session.auto_start = 1;");
 			}
 				
 			//	Checking header sent.
 			if( headers_sent($file,$line) ){
-				OnePiece5::StackError("Header has already been sent. File: {$file}, Line number #{$line}.");
+				OnePiece5::AdminNotice("Header has already been sent. File: {$file}, Line number #{$line}.");
 			}else{
 				header('Cache-Control: private, max-age=0, pre-check=0');
 			}
 		}else{
 			if( headers_sent($file,$line) ){
-				OnePiece5::StackError("Header has already been sent. File: {$file}, Line number #{$line}.");
+				OnePiece5::AdminNotice("Header has already been sent. File: {$file}, Line number #{$line}.");
 			}else{
 				/**
 				 * @see http://d.hatena.ne.jp/shinyanakao/20080313/1205396128
@@ -269,7 +269,7 @@ class Env extends OnePiece5
 			$area = strtoupper($match[2]);
 			$code = strtoupper($match[3]);
 		}else{
-			OnePiece5::StackError("Did not match locale format. ($locale, Ex. ja_JP.utf-8) ");
+			OnePiece5::AdminNotice("Did not match locale format. ($locale, Ex. ja_JP.utf-8) ");
 		}
 		
 		// Windows is unsupport utf-8
@@ -279,7 +279,7 @@ class Env extends OnePiece5
 			setlocale( LC_ALL, 'Japanese_Japan.932');
 		}else if(!setlocale( LC_ALL, $locale )){
 			// @see http://jp.php.net/manual/ja/function.setlocale.php
-			OnePiece5::StackError("Illigal locale: $locale");
+			OnePiece5::AdminNotice("Illigal locale: $locale");
 			return false;
 		}
 		*/
@@ -324,7 +324,7 @@ class Env extends OnePiece5
 				$codes[] = 'JIS';
 				break;
 			default:
-			$this->StackError("Does not define this language code. ($lang)",'en');
+			$this->AdminNotice("Does not define this language code. ($lang)");
 		}
 		
 		/**
@@ -340,7 +340,7 @@ class Env extends OnePiece5
 				$timezone = 'Asia/Tokyo';
 				break;
 			default:
-			$this->StackError("Does not define this country code. ($lang)",'en');
+			$this->AdminNotice("Does not define this country code. ($lang)");
 		}
 		
 		return array( $codes, $timezone );

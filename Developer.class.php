@@ -12,7 +12,7 @@
 
 //	Developer is not read from not admin.
 if(!OnePiece5::Admin()){
-	OnePiece5::StackError("!!ATTENSION!!");
+	OnePiece5::AdminNotice("!!ATTENSION!!");
 }
 
 /**
@@ -69,7 +69,7 @@ class Developer extends OnePiece5
 	{
 		//	Only admin.
 		if(!OnePiece5::admin()){
-			$this->StackError("Why is this? Developer is only loading for developer.");
+			$this->AdminNotice("Why is this? Developer is only loading for developer.");
 			return;
 		}
 		

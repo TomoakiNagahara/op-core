@@ -38,7 +38,7 @@ class DCL5 extends OnePiece5
 		
 		foreach(array('host','database','table','user') as $key){
 			if(!${$key}){
-				$this->StackError("Empty {$key} name.");
+				$this->AdminNotice("Empty {$key} name.");
 				return false;
 			}
 		}
@@ -79,22 +79,22 @@ class DCL5 extends OnePiece5
 		$user		 = isset($args['user'])        ? $args['user']        : null;
 		
 		if(!$host){
-			$this->StackError("Empty host name.");
+			$this->AdminNotice("Empty host name.");
 			return false;
 		}
 		
 		if(!$database){
-			$this->StackError("Empty database name.");
+			$this->AdminNotice("Empty database name.");
 			return false;
 		}
 		
 		if(!$table){
-			$this->StackError("Empty table name.");
+			$this->AdminNotice("Empty table name.");
 			return false;
 		}
 		
 		if(!$user){
-			$this->StackError("Empty user name.");
+			$this->AdminNotice("Empty user name.");
 			return false;
 		}
 		
@@ -137,7 +137,7 @@ class DCL5 extends OnePiece5
 			foreach( explode(',',$args['privilege']) as $priv ){
 				
 				if(!in_array( strtoupper(trim($priv)), $valid_privilege) ){
-					$this->StackError("Does not permit value. ($priv)");
+					$this->AdminNotice("Does not permit value. ($priv)");
 					continue;
 				}
 				
@@ -153,7 +153,7 @@ class DCL5 extends OnePiece5
 			foreach( $args['privilege'] as $priv => $spec_column ){
 		
 				if(!in_array( strtoupper($priv), $valid_privilege) ){
-					$this->StackError("Does not permit value. ($priv)");
+					$this->AdminNotice("Does not permit value. ($priv)");
 					continue;
 				}
 		

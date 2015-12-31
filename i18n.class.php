@@ -214,11 +214,11 @@ class i18n extends OnePiece5
 				switch($stat[1]){
 					case 404:
 						// 404 Not found
-						$this->StackError("404 Not found.");
+						$this->AdminNotice("404 Not found.");
 						break;
 					case 500:
 						// 500 Internal Server Error
-						$this->StackError("500 Internal Server Error.");
+						$this->AdminNotice("500 Internal Server Error.");
 						break;
 					default:
 						break;
@@ -269,7 +269,7 @@ class i18n extends OnePiece5
 		
 		//	Check
 		if( $error = $json['error'] ){
-			$this->StackError("Can not get language list. ($error)");
+			$this->AdminNotice("Can not get language list. ($error)");
 		}
 		
 		return isset($json['language']) ? $json['language']: array('en'=>'English');
@@ -300,7 +300,7 @@ class i18n extends OnePiece5
 				$_is_connect = false;
 				$lang    = $e->GetLang();
 				$message = $e->GetError();
-				$this->StackError("$message",$lang);
+				$this->AdminNotice("$message",$lang);
 			}
 			
 			//	Connection was failed.

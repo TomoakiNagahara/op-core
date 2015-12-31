@@ -163,11 +163,11 @@ class Wizard extends OnePiece5
 	{
 		//	Check class name.
 		if( empty($class_name) ){
-			$this->StackError('Does not passed class name. ($class_name is empty.)');
+			$this->AdminNotice('Does not passed class name. ($class_name is empty.)');
 			return false;
 		}else if(!is_string($class_name) ){
 			$type = gettype($class_name);
-			$this->StackError("Passed class name type is not string. (Passed variable type is $type.)");
+			$this->AdminNotice("Passed class name type is not string. (Passed variable type is $type.)");
 			return false;
 		}
 		
@@ -230,7 +230,7 @@ class Wizard extends OnePiece5
 		if( $selftest ){
 			foreach( $selftest as $key => $var ){
 				if( $var['finger_print'] === $finger_print ){
-					$this->StackError("This config was already registration. (Duplicate finger print. ($key))",'selftest');
+					$this->AdminNotice("This config was already registration. (Duplicate finger print. ($key))",'selftest');
 					return false;
 				}
 			}
@@ -380,7 +380,7 @@ class Wizard extends OnePiece5
 			
 			//	If display, only html.
 			if( $to_wizard and !Toolbox::isHTML() ){
-				$this->StackError("Wizard is occurred.");
+				$this->AdminNotice("Wizard is occurred.");
 			}else
 			
 			//	Execute the Wizard
@@ -666,7 +666,7 @@ class Wizard extends OnePiece5
 			}else if( $config->table->$table_name->column === false){
 				return true;
 			}else{
-				$this->StackError("Illigal error.");
+				$this->AdminNotice("Illigal error.");
 				continue;
 			}
 			
@@ -1059,7 +1059,7 @@ class Wizard extends OnePiece5
 				if( $value === true ){
 					continue;
 				}else if( $value === false ){
-					$this->StackError("Does not execute wizard. ($column_name)");
+					$this->AdminNotice("Does not execute wizard. ($column_name)");
 					continue;
 				}
 				
@@ -1095,7 +1095,7 @@ class Wizard extends OnePiece5
 						break;
 						
 					default:
-						$this->StackError("ACD is not set.");
+						$this->AdminNotice("ACD is not set.");
 				}
 				
 				//	
@@ -1211,7 +1211,7 @@ class Wizard extends OnePiece5
 							$type = 'UNIQUE';
 							break;
 						default:
-							$this->StackError("Does not define this definition. ($type)");
+							$this->AdminNotice("Does not define this definition. ($type)");
 							return false;
 					}
 					$io = $this->pdo()->AddIndex($table_name, $column_name, $type);

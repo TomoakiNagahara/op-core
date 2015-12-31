@@ -61,7 +61,7 @@ class DML5 extends OnePiece5
 		if(isset($conf['table'])){
 			$table = $this->ConvertTable($conf);
 		}else{
-			$this->StackError('Empty table. Please set table name.');
+			$this->AdminNotice('Empty table. Please set table name.');
 			return false;
 		}
 		
@@ -254,7 +254,7 @@ class DML5 extends OnePiece5
 		if(isset($conf['table'])){
 			$table = $this->ConvertTable($conf);
 		}else{
-			$this->StackError('Empty table. Please set table name.');
+			$this->AdminNotice('Empty table. Please set table name.');
 			return false;
 		}
 		
@@ -307,7 +307,7 @@ class DML5 extends OnePiece5
 				return false;
 			}
 		}else{
-			$this->StackError('Empty table. Please set table name.');
+			$this->AdminNotice('Empty table. Please set table name.');
 			return false;
 		}
 		
@@ -315,7 +315,7 @@ class DML5 extends OnePiece5
 		if(isset($conf['set'])){
 			$set = $this->ConvertSet($conf);
 		}else{
-			$this->StackError('Empty set.');
+			$this->AdminNotice('Empty set.');
 			return false;
 		}
 		
@@ -328,7 +328,7 @@ class DML5 extends OnePiece5
 		if(!empty($conf['wheres'])){
 			$where = 'WHERE ' . $this->ConvertWheres($conf['wheres']);
 		}else{
-			$this->StackError('Empty where. (ex. $conf[where][id]=1)');
+			$this->AdminNotice('Empty where. (ex. $conf[where][id]=1)');
 			return false;
 		}
 		
@@ -350,7 +350,7 @@ class DML5 extends OnePiece5
 				$limit = $this->ConvertLimit($conf);
 			}
 		}else{
-			$this->StackError('Empty limit. Update is required limit. (If want to change all, limit is -1.)');
+			$this->AdminNotice('Empty limit. Update is required limit. (If want to change all, limit is -1.)');
 			return false;
 		}
 
@@ -379,7 +379,7 @@ class DML5 extends OnePiece5
 		if(isset($conf['table'])){
 			$table = $this->ConvertTable($conf);
 		}else{
-			$this->StackError('Empty table. Please set table name.');
+			$this->AdminNotice('Empty table. Please set table name.');
 			return false;
 		}
 		
@@ -392,7 +392,7 @@ class DML5 extends OnePiece5
 		if(!empty($conf['wheres'])){
 			$where = 'WHERE ' . $this->ConvertWheres($conf['wheres']);
 		}else{
-			$this->StackError('Empty where. (ex. $conf[where][id]=1)');
+			$this->AdminNotice('Empty where. (ex. $conf[where][id]=1)');
 			return false;
 		}
 		
@@ -418,7 +418,7 @@ class DML5 extends OnePiece5
 				$limit = $this->ConvertLimit($conf);
 			}
 		}else{
-			$this->StackError('Empty limit. Delete is required limit. (If want to change all, limit is -1.)');
+			$this->AdminNotice('Empty limit. Delete is required limit. (If want to change all, limit is -1.)');
 			return false;
 		}
 		
@@ -428,7 +428,7 @@ class DML5 extends OnePiece5
 	
 	protected function EscapeColumn( $column )
 	{
-	//	$this->StackError("This method is deprecated.");
+	//	$this->AdminNotice("This method is deprecated.");
 		return $this->_QuoteColumn($column);
 	}
 	
@@ -441,7 +441,7 @@ class DML5 extends OnePiece5
 		}else{
 			if(!empty($conf['join'])){
 				//	Please tell us about the condition this is necessary. (leave comment.)
-				$this->StackError('Faild column name. (if table join, table_name.column_name)');
+				$this->AdminNotice('Faild column name. (if table join, table_name.column_name)');
 			}
 			$column = $this->_quote($column);
 		}
@@ -456,13 +456,13 @@ class DML5 extends OnePiece5
 	protected function ConvertTable( $conf )
 	{
 		if(!isset($conf['table'])){
-			$this->StackError('Empty table. Please set table name.');
+			$this->AdminNotice('Empty table. Please set table name.');
 			return false;
 		}
 		
 		if(!is_string($conf['table']) ){
 			$type = gettype($conf['table']);
-			$this->StackError("Does not implement this type at table yet. (type=$type)");
+			$this->AdminNotice("Does not implement this type at table yet. (type=$type)");
 			return false;
 		}
 		
@@ -624,7 +624,7 @@ class DML5 extends OnePiece5
 			//	Case of not support value.
 			if( is_array($var) or is_object($var) ){
 				$type = gettype($var);
-				$this->StackError("Does not supports this type. (key=$key, type=$type)");
+				$this->AdminNotice("Does not supports this type. (key=$key, type=$type)");
 				continue;
 			}
 			
@@ -719,7 +719,7 @@ class DML5 extends OnePiece5
 			}
 			$values = join(', ',$join);
 		}else{
-			$this->StackError("Does not set value from in values.");
+			$this->AdminNotice("Does not set value from in values.");
 			return false;
 		}
 		
@@ -751,7 +751,7 @@ class DML5 extends OnePiece5
 				 */
 				$cols_temp = explode(',',$conf['column']);
 			}else{
-				$this->StackError('column is not array or string.');
+				$this->AdminNotice('column is not array or string.');
 				return false;
 			}
 			
@@ -952,7 +952,7 @@ class DML5 extends OnePiece5
 			$to   = $this->pdo->quote(trim($match[4]));
 			$var = "$from AND $to";
 		}else{
-			$this->StackError("Does not match between's value is this '$var'. (ex.: \$var = 'FROM 1 TO 10')");
+			$this->AdminNotice("Does not match between's value is this '$var'. (ex.: \$var = 'FROM 1 TO 10')");
 			$var = null;
 		}
 		return $var;
@@ -1027,7 +1027,7 @@ class DML5 extends OnePiece5
 			$join_or  = null;
 			foreach( $condition as $key => $csv ){
 				if(is_null($csv)){ continue; }
-				if(is_array($csv)){ $this->StackError("Specified at array was abolished."); continue; }
+				if(is_array($csv)){ $this->AdminNotice("Specified at array was abolished."); continue; }
 				$modifier = $this->_getWhereModifier($key);
 				foreach(str_getcsv(str_replace('&quot;','"',$csv)) as $var){
 					switch($modifier){
@@ -1081,7 +1081,7 @@ class DML5 extends OnePiece5
 		
 		//  check
 		if(!is_array($where) ){
-			$this->StackError('$where is not array.');
+			$this->AdminNotice('$where is not array.');
 			return false;
 		}
 		
@@ -1112,7 +1112,7 @@ class DML5 extends OnePiece5
 								$grat   = (int)$match[3];
 							}else{
 								//	NG
-								$this->StackError("Does not match between format. ($value)");
+								$this->AdminNotice("Does not match between format. ($value)");
 							}
 							$join[] = "$column BETWEEN $less AND $grat";
 						}
@@ -1124,7 +1124,7 @@ class DML5 extends OnePiece5
 							
 							//	Check format (missing column name)
 							if( is_numeric($column) ){
-								$this->StackError('Missing column name into "IN" ');
+								$this->AdminNotice('Missing column name into "IN" ');
 								break;
 							}
 							
@@ -1240,7 +1240,7 @@ class DML5 extends OnePiece5
 	protected function ConvertOffset( $conf )
 	{
 		if( empty($conf['limit']) ){
-			$this->StackError('If uses offset case, required limit.');
+			$this->AdminNotice('If uses offset case, required limit.');
 			return false;
 		}
 		return "OFFSET ".(int)$conf['offset'];

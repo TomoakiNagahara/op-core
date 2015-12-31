@@ -45,7 +45,7 @@ abstract class Model_Base extends OnePiece5
 			//	implement check
 			$obj = $this->config();
 			if(!method_exists($obj, 'database')){
-				$this->StackError('Does not exists database method at '.get_class($obj));
+				$this->AdminNotice('Does not exists database method at '.get_class($obj));
 				return parent::PDO();
 			}
 			
@@ -89,7 +89,7 @@ abstract class Config_Base extends OnePiece5
 			$temp = explode('_',get_class($this));
 			$args['user'] = 'op_mdl_'.strtolower($temp[1]);
 		}else if($args['driver']==='mysql' and strlen($args['user']) > 16){
-			$this->StackError("user name is over 16 character.");
+			$this->AdminNotice("user name is over 16 character.");
 		}
 				
 		//	password

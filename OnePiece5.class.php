@@ -47,7 +47,7 @@ class OnePiece5
 		//  Called Init?
 		if(!$this->_is_init){
 			$class = get_class($this);
-			$this->StackError("\\$class\ has not call \parent::init()\.",'en');
+			$this->AdminNotice("\\$class\ has not call \parent::init()\.");
 		}
 	}
 	
@@ -165,8 +165,8 @@ class OnePiece5
 	 * Language code example:
 	 * 	ja, ja-JP, en, en-US, en-UK, zh-CN, zh-TW, zh-HK
 	 *
-	 * @param string $message is message.
-	 * @param string $translation is source language code.
+	 * @param string $message  Message of notice to admin.
+	 * @param string $language Language code of message.
 	 */
 	static function AdminNotice($message, $lang='en')
 	{
@@ -182,11 +182,12 @@ class OnePiece5
 	 * Language code example:
 	 * 	ja, ja-JP, en, en-US, en-UK, zh-CN, zh-TW, zh-HK
 	 * 
-	 * @param string $message is message.
-	 * @param string $translation is source language code. 
+	 * @param string $message  Message of notice to admin.
+	 * @param string $language Language code of message. 
 	 */
 	static function StackError( $args, $locale=null )
 	{
+		$this->Mark("This method will abolished. Use AdminNotice().");
 		Error::Set( $args, $locale );
 	}
 	
@@ -296,11 +297,11 @@ class OnePiece5
 		$value = OnePiece5::Escape($value);
 		
 		if( is_null($expire) ){
-			OnePiece5::StackError("\expire\ value does not set. (ex. 0 is 365days, -1 is out of valid expire.)",'en');
+			OnePiece5::AdminNotice("\expire\ value does not set. (ex. 0 is 365days, -1 is out of valid expire.)");
 		}
 		
 		if( headers_sent($file,$line) ){
-			OnePiece5::StackError("Header has already been sent. \File: {$file}\, Line number \#$line\.");
+			OnePiece5::AdminNotice("Header has already been sent. \File: {$file}\, Line number \#$line\.");
 			return false;
 		}
 		
@@ -330,7 +331,7 @@ class OnePiece5
 			$_COOKIE[$_key] = $_value;
 		}else{
 			OnePiece5::mark('SetCookie is failed.');
-			OnePiece5::StackError("SetCookie is fail: \{$key}={$value}\\",'en');
+			OnePiece5::AdminNotice("SetCookie is fail: \{$key}={$value}\\");
 		}
 		
 		return $io;
@@ -932,7 +933,7 @@ class OnePiece5
 	function SetHeader( $str, $replace=null, $code=null )
 	{
 		//	2015-04-06
-		self::StackError("Will abolished.",'en');
+		self::AdminNotice("This method will abolished.");
 		
 		$cgi = $this->GetEnv('cgi'); // FastCGI
 		
@@ -948,10 +949,10 @@ class OnePiece5
 				
 				break;
 		}
-	
+		
 		if(headers_sent()){
 			$io = false;
-			$this->StackError("Already header sent.",'en');
+			$this->AdminNotice("Already header sent.");
 		}else{
 			$io = true;
 			$str = str_replace( array("\n","\r"), '', $str );
@@ -973,7 +974,7 @@ class OnePiece5
 	{
 		if( headers_sent() ){
 			$io = false;
-			$this->StackError("Already header sent.",'en');
+			$this->AdminNotice("Already header sent.");
 		}else{
 			$io = true;
 			$str = str_replace( array("\n","\r"), '', $str );
@@ -1053,7 +1054,7 @@ class OnePiece5
 			$temp = ob_get_contents();
 			$io   = ob_end_clean();
 		}else{
-			self::AdminNotice("\ob_start\ is failed.",'en');
+			self::AdminNotice("\ob_start\ is failed.");
 		}
 		
 		return $temp;
@@ -1069,7 +1070,7 @@ class OnePiece5
 	function Template( $file_path, $data=null )
 	{
 		if(!is_string($file_path)){
-			self::AdminNotice("Passed arguments is not string. \(".gettype($file_path).")\\",'en');
+			self::AdminNotice("Passed arguments is not string. \(".gettype($file_path).")\\");
 			return false;
 		}
 		
@@ -1083,7 +1084,7 @@ class OnePiece5
 		if( Env::Get('allowDoubleDot') ){
 			//  OK
 		}else if( preg_match('|\.\./|',$file) ){ 
-			self::AdminNotice("Does not allow parent directory. \($file)\\",'en');
+			self::AdminNotice("Does not allow parent directory. \($file)\\");
 			return false;
 		}
 		
@@ -1098,7 +1099,7 @@ class OnePiece5
 			
 			// 2nd check
 			if(!file_exists($path)){
-				self::AdminNotice("Template file does not exist.\n file=$file, dir=$dir",'en');
+				self::AdminNotice("Template file does not exist.\n file=$file, dir=$dir");
 				return false;
 			}
 		}
@@ -1106,7 +1107,7 @@ class OnePiece5
 		// extract array
 		if( is_array($data) and count($data) ){
 			if(isset($data[0])){
-				self::AdminNotice('Passed arguments is not an assoc array.'."\n".'Ex. $this->Template("index.phtml", array("key"=>"value")','en');
+				self::AdminNotice('Passed arguments is not an assoc array.'."\n".'Ex. $this->Template("index.phtml", array("key"=>"value")');
 			}else{
 				extract($data);
 			}
@@ -1228,7 +1229,7 @@ class OnePiece5
 			$file = $e->getFile();
 			$line = $e->getLine();
 			$text = $e->getMessage();
-			self::StackError("$text\n ![.gray[$file, $line]]",'en');
+			self::AdminNotice("$text\n ![.gray[$file, $line]]");
 			return new OnePiece5();
 		}
 		
@@ -1239,7 +1240,7 @@ class OnePiece5
 	{
 		//  Notice
 		if( strpos( $name, '_') !== false ){
-			$this->StackError("Underscore(_) is reserved. For the feature functions. (maybe, namespace)",'en');
+			OnePiece5::AdminNotice("Underscore(_) is reserved. For the feature functions. (maybe, namespace)");
 		}
 	}
 	
@@ -1307,12 +1308,12 @@ class OnePiece5
 			$path = $op_root.'PDO/PDO5.class.php';
 			
 			if(!file_exists($path)){
-				$this->StackError("Does not exists file. \($path)\\",'en');
+				$this->AdminNotice("Does not exists file. \($path)\\");
 				return false;
 			}
 			
 			if(!include_once($path) ){
-				$this->StackError("Does not include file. \($path)\\",'en');
+				$this->AdminNotice("Does not include file. \($path)\\");
 				return false;
 			}
 			
@@ -1466,7 +1467,7 @@ class OnePiece5
 			include("$dir/{$name}.model.php");
 			$model = $this->Model($name);
 		}else{
-			$this->StackError("This directory does not exists. \($dir)\ ",'en');
+			$this->AdminNotice("This directory does not exists. \($dir)\ ");
 			$model = new OnePiece5();
 		}
 		

@@ -142,7 +142,7 @@ class Error
 		
 		$file	 = OnePiece5::CompressPath($file);
 		
-		if( $name === $func or $func === '__get' or $func === 'StackError' ){
+		if( $name === $func or $func === '__get' or $func === 'AdminNotice' ){
 			$find = true;
 			$style = 'bg-yellow bold';
 		}else if( $find ){
@@ -210,7 +210,7 @@ class Error
 	{
 		if( Toolbox::isHtml() ){
 			print self::_getBacktrace();
-			self::_stackErrorJs();
+			self::_AdminNoticeJs();
 			Dump::PrintAttach();
 		}
 		return true;
@@ -219,10 +219,10 @@ class Error
 	/**
 	 * Display of "StckError.js" to HTML.
 	 */
-	static private function _stackErrorJs()
+	static private function _AdminNoticeJs()
 	{
 		print "<script>".PHP_EOL;
-		print file_get_contents(Toolbox::ConvertPath('op:/Template/js/StackError.js')).PHP_EOL;
+		print file_get_contents(Toolbox::ConvertPath('op:/Template/js/AdminNotice.js')).PHP_EOL;
 		print "</script>".PHP_EOL;
 	}
 	
@@ -461,14 +461,14 @@ class Error
 	{
 		$bulk = self::_i18n("\\{$class}::{$name}\ can not be accessible.","en");
 		$message = "$bulk ({$call}, value={$args})";
-		OnePiece5::StackError($message);
+		OnePiece5::AdminNotice($message);
 	}
 	
 	static function MagicMethodGet( $class, $name, $call )
 	{
 		$bulk = self::_i18n("\\{$class}::{$name}\ can not be accessible.","en");
 		$message = "$bulk ({$call})";
-		OnePiece5::StackError($message);
+		OnePiece5::AdminNotice($message);
 	}
 	
 	static function LastError( $e )
@@ -480,7 +480,7 @@ class Error
 		
 		$type = self::ConvertStringFromErrorNumber($type);
 		
-		OnePiece5::StackError("$file [$line] $type: $message");
+		OnePiece5::AdminNotice("$file [$line] $type: $message");
 	}
 	
 	/**
@@ -556,7 +556,7 @@ class Error
 		
 		//	join
 		$error = "$class: $file [$line] $message";
-		OnePiece5::StackError($error,$lang);
+		OnePiece5::AdminNotice($error,$lang);
 	}
 	
 	static private function _i18n($text, $from='en')

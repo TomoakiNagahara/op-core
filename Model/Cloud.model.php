@@ -56,7 +56,7 @@ class Model_Cloud extends OnePiece5
 		
 		//	Check error is one time only.
 		if( isset($json['error']) ){
-			$this->StackError($json['error']);
+			$this->AdminNotice($json['error']);
 		}
 		
 		return $json;

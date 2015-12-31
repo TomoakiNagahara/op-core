@@ -63,7 +63,7 @@ set_exception_handler('Error::ExceptionHandler');
 
 //	Checking error reporting administrator's E-Mail address.
 if(!$admin_mail = Env::Get('admin-mail') ){
-	OnePiece5::StackError("SERVER_ADMIN is empty.");
+	OnePiece5::AdminNotice("SERVER_ADMIN is empty.");
 }else{
 	Validator::isEmail($admin_mail);
 }

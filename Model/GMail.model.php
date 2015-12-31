@@ -51,7 +51,7 @@ class Model_GMail extends Model_Model
 		
 		//	Checking of Installed of IMAP module.
 		if(!function_exists('imap_open') ){
-			$this->StackError("Does not install PHP IMAP functions.");
+			$this->AdminNotice("Does not install PHP IMAP functions.");
 			return false;
 		}
 		
@@ -111,7 +111,7 @@ class Model_GMail extends Model_Model
 		}
 		
 		if(!$this->_imap = imap_open($this->_SERVER."INBOX", $account, $password)){
-			$this->StackError("Does not open mailbox.");
+			$this->AdminNotice("Does not open mailbox.");
 			$io = false;
 		}else{
 			$io = true;
@@ -129,7 +129,7 @@ class Model_GMail extends Model_Model
 			
 			//	Close of IMAP stream.
 			if(!imap_close($this->_imap)){
-				$this->StackError("Could not close IMAP.");
+				$this->AdminNotice("Could not close IMAP.");
 			}
 			
 			//	Init.
@@ -163,7 +163,7 @@ class Model_GMail extends Model_Model
 			if( $value = imap_header($this->GetImap(), $no) ){
 				$this->Cache()->Set($key, $value, $this->_expire);
 			}else{
-				$this->StackError("Bad message number. ($no)");
+				$this->AdminNotice("Bad message number. ($no)");
 			}
 		}
 		return $value;
@@ -358,7 +358,7 @@ class Model_GMail extends Model_Model
 		foreach($parameters as $i => $parameter){
 			$key = strtolower($parameter->attribute);
 			if( isset($result[$key]) ){
-				$this->StackError("$key is already exists.");
+				$this->AdminNotice("$key is already exists.");
 				$result[$i][$key] = $parameter->value;
 			}
 			$result[$key] = $parameter->value;
@@ -442,7 +442,7 @@ class Model_GMail extends Model_Model
 			case TYPEMODEL:		// 7
 			case TYPEOTHER:		// 8
 			default:
-				$this->StackError("Does not support MIME type. ({$structure['type']})");
+				$this->AdminNotice("Does not support MIME type. ({$structure['type']})");
 		}
 		
 		return $body;
@@ -509,7 +509,7 @@ class Model_GMail extends Model_Model
 			case ENCBINARY:	// 2
 			case ENCOTHER:	// 5
 			default:
-				$this->StackError("Does not define encoding type. ($encoding_type)");
+				$this->AdminNotice("Does not define encoding type. ($encoding_type)");
 				break;
 		}
 
@@ -563,7 +563,7 @@ class Model_GMail extends Model_Model
 	{
 		$this->_deleted = true;
 		if(!imap_delete($this->GetImap(), $no)){
-			$this->StackError("Delete of message was failed.");
+			$this->AdminNotice("Delete of message was failed.");
 		}
 	}
 }

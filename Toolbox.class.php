@@ -157,7 +157,7 @@ class Toolbox
 				break;
 				
 			default:
-				OnePiece5::StackError("An unexpected error: empty method type. \($method)\\",'en');
+				OnePiece5::AdminNotice("An unexpected error: empty method type. \($method)\\");
 				return false;
 		}
 		
@@ -228,7 +228,7 @@ class Toolbox
 				break;
 				
 			default:
-				OnePiece5::StackError('An unexpected error: empty method type.');
+				OnePiece5::AdminNotice('An unexpected error: empty method type.');
 				return false;
 		}
 		
@@ -244,7 +244,7 @@ class Toolbox
 		if( file_exists($path) ){
 			include_once($path);
 		}else{
-			OnePiece5::StackError("does not file exists. ($name.module.php)");
+			OnePiece5::AdminNotice("does not file exists. ($name.module.php)");
 			return null;
 		}
 		
@@ -256,7 +256,7 @@ class Toolbox
 	
 	static function Copy($object)
 	{
-	//	OnePiece5::StackError("Used checking. Is this use?"); // Use Form5
+	//	OnePiece5::AdminNotice("Used checking. Is this use?"); // Use Form5
 		
 		if( !$object ){
 			return new OnePiece5();
@@ -305,7 +305,7 @@ class Toolbox
 	/*
 	static function CIDR( $ip1, $ip2, $prefix )
 	{
-		OnePiece5::StackError("Used checking. Is this use?");
+		OnePiece5::AdminNotice("Used checking. Is this use?");
 		
 		$mask = 32 - $prefix;
 		$ip1 = ip2long($ip1) >> $mask << $mask;
@@ -324,7 +324,7 @@ class Toolbox
 	/*
 	static function ConvertConfigToArray( $args )
 	{
-		OnePiece5::StackError("Used checking. Is this use?");
+		OnePiece5::AdminNotice("Used checking. Is this use?");
 		
 		$type = gettype($args);
 		
@@ -334,7 +334,7 @@ class Toolbox
 				if( file_exists($path) ){
 					include($path);
 				}else{
-					OnePiece5::StackError("File does not exist. ($path)");
+					OnePiece5::AdminNotice("File does not exist. ($path)");
 					return false;
 				}
 				if(isset($_config)){
@@ -362,7 +362,7 @@ class Toolbox
 	/*
 	static function GetFileListFromDir($path='./')
 	{
-		OnePiece5::StackError("Used checking. Is this use?");
+		OnePiece5::AdminNotice("Used checking. Is this use?");
 		
 		$list = array();
 		
@@ -565,7 +565,7 @@ class Toolbox
 	
 	static function Curl( $url, $args=null, $method='get')
 	{
-		OnePiece5::StackError("This method is deprecated.");
+		OnePiece5::AdminNotice("This method is deprecated.");
 		
 		if( $args ){
 			foreach( $args as $key => $var ){
@@ -652,7 +652,7 @@ class Toolbox
 			
 			default:
 				$real = './';
-				OnePiece5::StackError("Does not define this modifier. ($modifier)");
+				OnePiece5::AdminNotice("Does not define this modifier. ($modifier)");
 		}
 		
 		//	Generate full path.
@@ -764,7 +764,7 @@ class Toolbox
 		
 		//	OP Root
 		if( preg_match('|^op:/|i',$url) ){
-			OnePiece5::StackError("The op-root can not convert to URL.");
+			OnePiece5::AdminNotice("The op-root can not convert to URL.");
 			return null;
 		}
 		
@@ -881,7 +881,7 @@ class Toolbox
 	static function Dec2Bin($int, $bit=null)
 	{
 		//	2015-04-20
-		OnePiece5::StackError("Abolish this method.");
+		OnePiece5::AdminNotice("Abolish this method.");
 		return toBinary($int, $bit);
 	}
 	

@@ -140,7 +140,7 @@ class Cache extends OnePiece5
 		
 		//	Add server pool.
 		if(!$io = $this->AddServer( $host, $port, $weight )){
-			$this->StackError('AddServer method is failed.');
+			$this->AdminNotice('AddServer method is failed.');
 		}
 	}
 	
@@ -196,7 +196,7 @@ class Cache extends OnePiece5
 				break;
 		
 			default:
-				$this->StackError("undefine $name.");
+				$this->AdminNotice("undefine $name.");
 		}
 		return $io;
 	}
@@ -217,14 +217,14 @@ class Cache extends OnePiece5
 		
 		//	check value
 		if( is_resource($value) ){
-			$this->StackError("This key's value is resource. ($key)");
+			$this->AdminNotice("This key's value is resource. ($key)");
 			return false;
 		}
 		
 		//	key
 		if(!is_string($key)){
 			$type = gettype($key);
-			$this->StackError("key is not string. (type=$type)");
+			$this->AdminNotice("key is not string. (type=$type)");
 			return false;
 		}
 		
@@ -261,7 +261,7 @@ class Cache extends OnePiece5
 				break;
 				
 			default:
-				$this->StackError("undefine $name.");
+				$this->AdminNotice("undefine $name.");
 		}
 		
 		return $io;
@@ -285,7 +285,7 @@ class Cache extends OnePiece5
 		//	Check key
 		if(!is_string($key)){
 			$type = gettype($key);
-			$this->StackError("key is not string. (type=$type)");
+			$this->AdminNotice("key is not string. (type=$type)");
 			return false;
 		}
 		
@@ -302,7 +302,7 @@ class Cache extends OnePiece5
 				return $this->_cache->Get( $md5 );
 				
 			default:
-				$this->StackError("undefined {$this->_cache_type}.");
+				$this->AdminNotice("undefined {$this->_cache_type}.");
 		}
 	}
 	
@@ -373,7 +373,7 @@ class Cache extends OnePiece5
 		if(!is_string($key)){
 			//	$key = serialize($key);
 			$type = gettype($key);
-			$this->StackError("key is not string. (type=$type)");
+			$this->AdminNotice("key is not string. (type=$type)");
 			return false;
 		}
 		

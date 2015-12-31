@@ -82,7 +82,7 @@ class Model_Login extends Model_Model
 	{
 		//	Check
 		if(!$id){
-			$this->StackError('Arguments $id is empty. If logout, use $this->Logout()');
+			$this->AdminNotice('Arguments \$id\ is empty. If logout, use \$this->Logout()\.');
 			return false;
 		}
 		

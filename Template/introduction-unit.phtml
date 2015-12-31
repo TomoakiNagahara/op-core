@@ -3,7 +3,7 @@
 
 //	Init unit name
 if( empty($unit_name) ){
-	$this->StackError("Unit name is empty.\n Ex: array('unit_name'=>'each-unit-name') ",'en');
+	$this->AdminNotice("Unit name is empty.\n Ex: array('unit_name'=>'each-unit-name') ");
 	return;
 }
 
@@ -21,7 +21,7 @@ switch( $unit_name ){
 		break;
 		
 	default:
-	$this->StackError("Does not define this unit name. \($unit_name)\\",'en');
+	$this->AdminNotice("Does not define this unit name. \($unit_name)\\");
 }
 
 ?>

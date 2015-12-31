@@ -107,17 +107,17 @@ abstract class Config_Model extends OnePiece5
 	function __password($database)
 	{
 		if( empty($database) ){
-			$this->StackError('Arguments was empty.','en');
+			$this->AdminNotice('Arguments was empty.');
 			return md5(__METHOD__);
 		}
 		
 		if( empty($database->name) ){
-			$this->StackError('Database name was empty.','en');
+			$this->AdminNotice('Database name was empty.');
 			return md5(__METHOD__);
 		}
 		
 		if( empty($database->user) ){
-			$this->StackError('User name was empty.','en');
+			$this->AdminNotice('User name was empty.');
 			return md5(__METHOD__);
 		}
 		

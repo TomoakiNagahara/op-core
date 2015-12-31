@@ -34,7 +34,7 @@ class DDL5 extends OnePiece5
 	{
 		foreach(array('host','user','password') as $key){
 			if(empty($args[$key])){
-				$this->StackError("\\$key\ is empty.",'en');
+				$this->AdminNotice("\\$key\ is empty.");
 				return false;
 			}
 		}
@@ -60,7 +60,7 @@ class DDL5 extends OnePiece5
 		//  Check database name
 		if( empty($args['database']) ){
 			if( empty($args['name']) ){
-				$this->StackError("Database name is empty.");
+				$this->AdminNotice("Database name is empty.");
 				return false;
 			}else{
 				$args['database'] = $args['name'];
@@ -123,17 +123,17 @@ class DDL5 extends OnePiece5
 		$table = isset($args['table']) ? $args['table']: $table;
 		$table = ConfigSQL::Quote( $table, $this->driver );
 		if(!$table ){
-			$this->StackError("Table name has not been set.",'en');
+			$this->AdminNotice("Table name has not been set.");
 			return false;
 		}
 		if(!strlen($table) > 64){
-			$this->StackError("Table names are limited to 64 bytes.",'en');
+			$this->AdminNotice("Table names are limited to 64 bytes.");
 			return false;
 		}
 		
 		//  Column
 		if( empty($args['column']) ){
-			$this->StackError("\$table\ table is not set value of column.",'en');
+			$this->AdminNotice("\$table\ table is not set value of column.");
 			return false;
 		}else if( $column = $this->ConvertColumn($args['column']) ){
 			$column = '('.$column.')';
@@ -198,7 +198,7 @@ class DDL5 extends OnePiece5
 		if( isset($args['table']) ){
 			$table = ConfigSQL::Quote($args['table'], $this->driver);
 		}else{
-			$this->StackError("Does not set database name.");
+			$this->AdminNotice("Does not set database name.");
 			return;
 		}
 		
@@ -259,12 +259,12 @@ class DDL5 extends OnePiece5
 		}
 		
 		if( empty($table) ){
-			$this->StackError("Table name has not been set.",'en');
+			$this->AdminNotice("Table name has not been set.");
 			return;
 		}
 		
 		if( empty($to_table) ){
-			$this->StackError("\rename\ has not been set.",'en');
+			$this->AdminNotice("\rename\ has not been set.");
 			return;
 		}
 		
@@ -297,12 +297,12 @@ class DDL5 extends OnePiece5
 		}
 		
 		if(!$table){
-			$this->StackError("Table name has not been set.");
+			$this->AdminNotice("Table name has not been set.");
 			return;
 		}
 		
 		if(!$column){
-			$this->StackError("Column has not been set.");
+			$this->AdminNotice("Column has not been set.");
 			return;
 		}
 		
@@ -332,7 +332,7 @@ class DDL5 extends OnePiece5
 		if(!empty($args['table'])){
 			$table_name = ConfigSQL::Quote($args['table'], $this->driver);
 		}else{
-			$this->StackError("Table name has not been set.",'en');
+			$this->AdminNotice("Table name has not been set.");
 			return false;
 		}
 		
@@ -342,14 +342,14 @@ class DDL5 extends OnePiece5
 				$column = join(',',$column);
 			}
 		}else{
-			$this->StackError("Column name has not been set.",'en');
+			$this->AdminNotice("Column name has not been set.");
 			return false;
 		}
 		
 		if(!empty($args['type'])){
 			$type = $args['type'];
 		}else{
-			$this->StackError("Index type has not been set.",'en');
+			$this->AdminNotice("Index type has not been set.");
 			return false;
 		}
 		
@@ -371,7 +371,7 @@ class DDL5 extends OnePiece5
 				break;
 				
 			default:
-				$this->StackError("Does not define this definition. \($type)\\",'en');
+				$this->AdminNotice("Does not define this definition. \($type)\\");
 				return false;
 		}
 		
@@ -390,7 +390,7 @@ class DDL5 extends OnePiece5
 				$target = "$column";
 			}
 		}else{
-			$this->StackError("Does not define this definition. ($verb)");
+			$this->AdminNotice("Does not define this definition. ($verb)");
 			return false;
 		}
 		
@@ -414,7 +414,7 @@ class DDL5 extends OnePiece5
 	function GetDropDatabase( $args )
 	{
 		if( empty($args['database']) ){
-			$this->StackError("Empty database name.");
+			$this->AdminNotice("Empty database name.");
 			return false;
 		}
 		
@@ -428,12 +428,12 @@ class DDL5 extends OnePiece5
 	function GetDropTable()
 	{
 		if( empty($args['database']) ){
-			$this->StackError("Empty database name.");
+			$this->AdminNotice("Empty database name.");
 			return false;
 		}
 		
 		if( empty($args['table']) ){
-			$this->StackError("Empty table name.");
+			$this->AdminNotice("Empty table name.");
 			return false;
 		}
 		
@@ -457,7 +457,7 @@ class DDL5 extends OnePiece5
 		}
 		
 		if(!$table){
-			$this->StackError("Table name has not been set.");
+			$this->AdminNotice("Table name has not been set.");
 			return;
 		}
 		
@@ -634,20 +634,20 @@ class DDL5 extends OnePiece5
 			
 			//  
 			if(!empty($rename) and empty($type) ){
-				$this->StackError('"type" is empty. ("type" is required "rename".)');
+				$this->AdminNotice('"type" is empty. ("type" is required "rename".)');
 				return false;
 			}
 			
 			//  Do not select both.
 			if( $first and $after ){
-				$this->StackError('FIRST and AFTER are selected. Either one.');
+				$this->AdminNotice('FIRST and AFTER are selected. Either one.');
 				return false;
 			}
 			
 			//  Character lenght.
 			if( $type == 'CHAR' or $type == 'VARCHAR' ){
 				if( !$length or !$values ){
-					$this->StackError("length is empty. (name=$name, type=$type)");
+					$this->AdminNotice("length is empty. (name=$name, type=$type)");
 					return false;
 				}
 			}
@@ -698,7 +698,7 @@ class DDL5 extends OnePiece5
 				//	$definition = "{$definition}";
 					break;
 				default:
-					$this->core->StackError('Undefined product name. ($product)');
+					$this->AdminNotice('Undefined product name. ($product)');
 			}
 			$column[] = $definition;
 		}

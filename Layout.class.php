@@ -37,7 +37,7 @@ class Layout extends OnePiece5
 				}
 				
 				//	Stack Error
-				$this->StackError("Layout directory was null. Ex: \\$method\.",'en');
+				$this->AdminNotice("Layout directory was null. Ex: \\$method\.");
 			}
 		}
 		return $layout_dir;
@@ -59,7 +59,7 @@ class Layout extends OnePiece5
 					$method = "\$this->SetEnv('layout','app:/path/of/directory');";
 				}
 				//	Stack Error
-				$this->StackError("Layout name was null. Ex: \\$method\.",'en');
+				$this->AdminNotice("Layout name was null. Ex: \\$method\.");
 			}
 		}
 		return $layout;
@@ -100,12 +100,12 @@ class Layout extends OnePiece5
 		}
 		
 		if(!file_exists($layout_dir)){
-			$this->StackError("Does not exists this directory.\n $layout_dir",'en');
+			$this->AdminNotice("Does not exists this directory.\n $layout_dir");
 			return false;
 		}
 		
 		if(!file_exists($execute_file)){
-			$this->StackError("Does not exists this file.\n $execute_file",'en');
+			$this->AdminNotice("Does not exists this file.\n $execute_file");
 			return false;
 		}
 		
@@ -114,7 +114,7 @@ class Layout extends OnePiece5
 		
 		//	Check variable.
 		if(empty($_layout)){
-			$this->StackError('\\$_layout\ variable was empty.','en');
+			$this->AdminNotice('\\$_layout\ variable was empty.');
 			return false;
 		}
 		
@@ -127,7 +127,7 @@ class Layout extends OnePiece5
 			$path = $layout_dir . $file_name;
 			
 			if(!file_exists($path)){
-				$this->StackError("Does not exists layout file. \($path)\\",'en');
+				$this->AdminNotice("Does not exists layout file. \($path)\\");
 				return false;
 			}
 			
@@ -143,7 +143,7 @@ class Layout extends OnePiece5
 				if( method_exists($e,'getLang') ){
 					$lang = $e->getLang();
 				}else{ $lang = null; }
-				$this->StackError($text,$lang);
+				$this->AdminNotice($text,$lang);
 			}
 			ob_end_clean();
 		}
@@ -152,7 +152,7 @@ class Layout extends OnePiece5
 		if( isset(${$file_name}) ){
 			echo ${$file_name};
 		}else{
-			$this->StackError("Unknown error. ($file_name)",'en');
+			$this->AdminNotice("Unknown error. ($file_name)");
 			return false;
 		}
 		
@@ -185,7 +185,7 @@ class Layout extends OnePiece5
 		if( $dispatcher = $this->Dispatcher() ){
 			if( method_exists($dispatcher, $name) ){
 				if( count($args) > 10 ){
-					$this->StackError("Limit of argument is exceeded.",'en');
+					$this->AdminNotice("Limit of argument is exceeded.");
 				}
 				for($i=0; $i<10; $i++){
 					${"arg{$i}"} = isset($args[$i]) ? $args[$i]: null;
@@ -201,7 +201,7 @@ class Layout extends OnePiece5
 	{
 		if( $dispatcher = $this->Dispatcher() ){
 			if( method_exists($dispatcher, $name) ){if( count($args) > 10 ){
-					$this->StackError("Limit of argument is exceeded.",'en');
+					$this->AdminNotice("Limit of argument is exceeded.");
 				}
 				for($i=0; $i<10; $i++){
 					${"arg{$i}"} = isset($args[$i]) ? $args[$i]: null;
