@@ -2,20 +2,6 @@
 
 abstract class Model_Base extends OnePiece5
 {
-	function Init()
-	{
-		parent::Init();
-		
-		//	Selftest is execute only in the Admin.
-		if( $this->Admin() ){
-			//	Config
-			if( method_exists( $this->Config(), 'Selftest') ){
-				$class_name = get_class($this);
-				$this->Wizard()->SetSelftestName($class_name);
-			}
-		}
-	}
-	
 	function Test()
 	{
 		$this->mark( $this->GetCallerLine() );
@@ -66,23 +52,11 @@ abstract class Model_Base extends OnePiece5
 			//  get database config
 			$config = $obj->database();
 			
-			//  database connection
+			//  Do database connection
 			if(!$io = $pdo->Connect($config)){
-				/*
-				//  Selftest
-				if( method_exists( $this->config(), 'selftest') ){
-					$model_name  = get_class($this);
-					$config_name = get_class($this->config());
-					throw new OpException("Model: $model_name, Config: $config_name,  was not have selftest method.");
-				}else if($this->Admin()){
-					$this->mark('![.red[Connect was denied.]]');
-					$this->d($config);
-				}
-				*/
-				if( $this->Admin() ){
-					$this->mark('![.red[Connect was denied.]]');
-					$this->d($config);
-				}
+				$class_name = get_class($this);
+				$this->AdminNotice("$class_name model was failed connection.");
+				$this->Location("app:/_self-test/");
 			}
 		}
 		return $pdo;
