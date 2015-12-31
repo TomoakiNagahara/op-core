@@ -20,6 +20,12 @@
  */
 class Wizard extends OnePiece5
 {
+	function Init()
+	{
+		parent::Init();
+		$this->AdminNotice("Wizard class will abolished.");
+	}
+	
 	private $_config = null; // WizardConfig
 	private $_result = null; // check's result
 	private $_wizard = null; // do wizard's result
