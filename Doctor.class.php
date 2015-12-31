@@ -219,11 +219,11 @@ class Doctor extends OnePiece5
 		$config = $config->Copy();
 		
 		//	Pre process.
-		$this->_registaration($config);
+		$this->_ConvertKeyName($config);
 		$this->_selftest_config[$class] = $config;
 	}
 	
-	private function _registaration($config)
+	private function _ConvertKeyName($config)
 	{
 		//	Database name.
 		if( empty($config->database->name) ){
