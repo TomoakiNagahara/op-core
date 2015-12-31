@@ -41,16 +41,11 @@ abstract class Model_Model extends OnePiece5
 				$database->database = $database->name;
 			}
 			
-			//	In case of Admin.
-			if( $this->Admin() ){
-				//	Save Config for Doctor.
-				$class  = get_class($this);
-				$config = $this->Config()->selftest();
-				$this->Doctor()->SaveConfig($class, $config);
-			}
-			
-			//	database connection
+			//	Do database connection
 			if(!$io = $pdo->Connect($database)){
+				//	Reservation of self-test.
+				$this->ReservationToDiagnosis();
+				
 				//	Exception.
 				$e = new OpException("Connection was failed.",'en');
 				$e->isSelftest(true);
@@ -58,6 +53,19 @@ abstract class Model_Model extends OnePiece5
 			}
 		}
 		return $pdo;
+	}
+	
+	/**
+	 * Reservation of self-test.
+	 */
+	function ReservationToDiagnosis()
+	{
+		if( $this->Admin() ){
+			$object = new ReflectionObject($this->Config());
+			$class_name = $object->getName();
+			$file_path  = $object->getFileName();
+			$this->Doctor()->Reservation($class_name, $file_path);
+		}
 	}
 }
 
