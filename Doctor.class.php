@@ -8,6 +8,7 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
  */
+
 /**
  * Doctor
  * 
@@ -46,7 +47,7 @@ class Doctor extends OnePiece5
 	 * 
 	 * @var boolean
 	 */
-	private $_is_diagnosis = null;
+	private $_is_diagnosis;
 	
 	/**
 	 * Blue print
@@ -123,11 +124,17 @@ class Doctor extends OnePiece5
 				$this->Registration($class_name, $object->selftest());
 			}
 		}
+		
+		//	
 		$this->_is_diagnosis = true;
 		
+		//	
 		$this->_log = array();
 		
+		//	
 		$this->_diagnosis = new Config();
+		
+		//	
 		$this->_blueprint = new Config();
 		$this->_blueprint->grant	 = array();
 		$this->_blueprint->user		 = array();
@@ -207,12 +214,12 @@ class Doctor extends OnePiece5
 	}
 
 	/**
-	 * Registaration class name.
+	 * Registaration class name and self-test Config.
 	 * 
 	 * @param string $class  class name
 	 * @param Config $config
 	 */
-	function Registration($class, Config $config)
+	public function Registration($class, Config $config)
 	{
 		//	Init config.
 		$config = Toolbox::toConfig($config);
@@ -223,6 +230,11 @@ class Doctor extends OnePiece5
 		$this->_selftest_config[$class] = $config;
 	}
 	
+	/**
+	 * Convert key name.
+	 * 
+	 * @param Config $config
+	 */
 	private function _ConvertKeyName($config)
 	{
 		//	Database name.
@@ -234,7 +246,7 @@ class Doctor extends OnePiece5
 			$config->database->name = $config->database->database;
 		}
 		
-		//	Pkey
+		//	Convert key name.
 		foreach( $config->table as $table_name => $table ){
 			//	Check config object.
 			if(!$table instanceof Config){
@@ -252,12 +264,17 @@ class Doctor extends OnePiece5
 					continue;
 				}
 				
-				//	Convert.
+				//	Convert key name.
 				$this->_key($column);
 			}
 		}
 	}
 	
+	/**
+	 * Convert key name.
+	 * 
+	 * @param Config $column
+	 */
 	private function _Key($column)
 	{
 		if( !empty($column->pkey) or !empty($column->ai) ){
@@ -290,16 +307,31 @@ class Doctor extends OnePiece5
 		}
 	}
 	
+	/**
+	 * Get blueprint Config.
+	 * 
+	 * @return Config
+	 */
 	function GetBlueprint()
 	{
 		return $this->_blueprint;
 	}
 	
+	/**
+	 * Get diagnosis result Config.
+	 * 
+	 * @return Config
+	 */
 	function GetDiagnosis()
 	{
 		return $this->_diagnosis;
 	}
 	
+	/**
+	 * Diagnosis result.
+	 * 
+	 * @return boolean
+	 */
 	function isDiagnosis()
 	{
 		if( $this->_root_user ){
@@ -310,6 +342,13 @@ class Doctor extends OnePiece5
 		return $io;
 	}
 	
+	/**
+	 * Diagnose
+	 * 
+	 * @param  string $password
+	 * @param  string $user
+	 * @return boolean
+	 */
 	function Diagnose($password=null, $user='root')
 	{
 		//	Set Root user's password.
