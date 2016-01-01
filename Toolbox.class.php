@@ -1,6 +1,23 @@
 <?php
 /**
- * The Toolbox for present OnePiece-Framework.
+ * Toolbox.class.php
+ * 
+ * @author Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ */
+
+/**
+ * @see    http://qiita.com/devneko/items/ee83854eb422c352abc8
+ * @param  mixed $check
+ * @param  mixed $alternate
+ * @return mixed
+ */
+function ifset(&$check, $alternate = NULL)
+{
+	return (isset($check)) ? $check : $alternate;
+}
+
+/**
+ * The Toolbox for onepiece-framework.
  *
  * @author Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  */
@@ -674,7 +691,13 @@ class Toolbox
 			$app = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 		}
 		
-		// Required plus? -> app:/url -> /var/www/htdocs//url -> /url
+		/**
+		 * Plus is required.
+		 * 
+		 * $url = '/_self-test/';
+		 * $uri = $this->ConvertURL("app:/$url"); # --> app://_self-test/
+		 * 
+		 */
 		return preg_replace('|^app:/+|', $app, $path);
 	}
 	
