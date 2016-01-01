@@ -1170,7 +1170,7 @@ class Doctor extends OnePiece5
 			$class = 'red';
 			$message = "Diagnostic results has problem.";
 		}
-		$message = $this->i18n()->Bulk($message,'en');
+		$message = $this->i18n()->En($message);
 		$this->p("![.{$class} margin:1em [$message]]");
 		
 		//	Display diagnosis.
@@ -1187,7 +1187,7 @@ class Doctor extends OnePiece5
 			
 			//	translate
 			if( $from ){
-				$message = $this->i18n()->Bulk($message, $from);
+				$message = $this->i18n()->Get($message, $from);
 			}
 			
 			//	class

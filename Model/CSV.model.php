@@ -60,7 +60,7 @@ class Model_CSV extends Model_Model
 	
 	function GetError()
 	{
-		return $this->i18n()->Bulk($this->_error);
+		return $this->i18n()->En($this->_error);
 	}
 	
 	function SetFile( $file_path )

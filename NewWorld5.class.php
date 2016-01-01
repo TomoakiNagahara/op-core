@@ -395,7 +395,7 @@ abstract class NewWorld5 extends OnePiece5
 					//	Notice un exists file.
 					if( isset($_SESSION[Router::_KEY_FILE_DOES_NOT_EXISTS_]) ){
 						$path = $_SESSION[Router::_KEY_FILE_DOES_NOT_EXISTS_];
-						$message = $this->i18n()->Bulk('This file does not exists.','en');
+						$message = $this->i18n()->En('This file does not exists.');
 						$this->Mark("![.red[ $message ($path) ]]");
 						unset($_SESSION[Router::_KEY_FILE_DOES_NOT_EXISTS_]);
 					}

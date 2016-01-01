@@ -507,7 +507,7 @@ class Env extends OnePiece5
 			$rand = rand( 0, 1000);
 			if( 1 == $rand ){
 				$_SESSION = array();
-				$message = OnePiece5::i18n()->Bulk('\OnePiece5\ did initialize the \SESSION\.');
+				$message = OnePiece5::i18n()->En('\OnePiece5\ did initialize the \SESSION\.');
 				print "<script>alert('$message');</script>";
 			}
 		}

@@ -333,6 +333,8 @@ class i18n extends OnePiece5
 	
 	function Bulk( $message, $from='en-US', $to=null )
 	{
+		$this->AdminNotice("This method will abolished.");
+		
 		if(!$to){
 			$to = $this->GetLocale();
 		}

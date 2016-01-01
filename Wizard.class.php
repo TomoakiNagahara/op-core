@@ -183,7 +183,7 @@ class Wizard extends OnePiece5
 		foreach( array('host','user','database') as $key ){
 			if( !isset($config->database->$key) ){
 				$message = "\ $class_name \ config, This value is not set. \(\$config->database->{$key})\ ";
-				$message = $this->i18n()->Bulk($message,'en');
+				$message = $this->i18n()->En($message);
 				$this->mark("![.red[$message]]");
 				return false;
 			}
@@ -215,7 +215,7 @@ class Wizard extends OnePiece5
 		//	Check duplicate registory.
 		if(!empty($selftest[$class_name]) ){
 			$message = "This class was already registration. \($class_name)\ ";
-			$message = $this->i18n()->Bulk($message);
+			$message = $this->i18n()->En($message);
 			$this->Mark($message,'selftest');
 			return false;
 		}
@@ -286,7 +286,7 @@ class Wizard extends OnePiece5
 			}else{
 				if(!method_exists( $class->Config(), 'selftest') ){
 					$message = "![.red .bold .i18n[This \Config\ class is not has \selftest\ method. ($class_name)]]";
-					$message = $this->i18n()->Bulk($message);
+					$message = $this->i18n()->En($message);
 					$this->mark($message,'selftest');
 					continue;
 				}
