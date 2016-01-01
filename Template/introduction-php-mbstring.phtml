@@ -1,0 +1,64 @@
+<?php
+/**
+ * op-core/Template/introduction-php-mbstring.phtml
+ * 
+ * @creation  2016-01-01
+ * @version   1.0
+ * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright Tomoaki Nagahara All right reserved.
+ */
+
+//	Execute.
+php_mbstring();
+
+function php_mbstring(){
+	//	PHP version.
+	$t = explode('.', PHP_VERSION);
+	$v = $t[0].$t[1];
+	
+	print '<h1>Does not install php-mbstring module.</h1>';
+	print '<p>Please install php-mbstring module.</p>';
+	print '<pre style="margin:0 1em; padding:0.5em; background-color:#ccc;"><code>';
+	
+	switch (true) {
+		case stristr(PHP_OS, 'DAR'):
+			php_mbstring_osx($v);
+			break;
+		case stristr(PHP_OS, 'WIN'):
+			php_mbstring_win($v);
+			break;
+		case stristr(PHP_OS, 'LINUX'):
+			php_mbstring_linux($v);
+			break;
+		default:
+			php_mbstring_other($v);
+		break;
+	}
+
+	print '</code></pre>';
+	print '<hr/>';
+	print '<p style="color:#ccc;">'.__FILE__.' ('.__LINE__.')</p>';
+}
+
+function php_mbstring_osx($v){
+	print <<< "EOL"
+sudo port install php{$v}-mbstring
+sudo /opt/local/apache2/bin/apachectl restart
+EOL;
+}
+
+function php_mbstring_win($v){
+
+}
+
+function php_mbstring_linux($v){
+	print <<< "EOL"
+sudo yum install php{$v}-mbstring
+sudo service httpd restart
+EOL;
+}
+
+function php_mbstring_other($v){
+	
+}

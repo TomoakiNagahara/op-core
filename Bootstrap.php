@@ -21,7 +21,7 @@ if( $_SERVER['REMOTE_ADDR'] === '127.0.0.1' ){
 
 //	Check mbstring installed.
 if(!function_exists('mb_language') ){
-	php_mbstring();
+	include(__DIR__.'/Template/introduction-php-mbstring.phtml');
 	exit;
 }
 
@@ -66,54 +66,4 @@ if(!$admin_mail = Env::Get('admin-mail') ){
 	OnePiece5::AdminNotice("SERVER_ADMIN is empty.");
 }else{
 	Validator::isEmail($admin_mail);
-}
-
-return true;
-
-function php_mbstring(){
-	
-	print '<h1>Does not install php-mbstring module.</h1>';
-	print '<p>Please install php-mbstring module.</p>';
-	print '<pre style="margin:0 1em; padding:0.5em; background-color:#ccc;"><code>';
-	
-	switch (true) {
-		case stristr(PHP_OS, 'DAR'):
-			php_mbstring_osx();
-			break;
-		case stristr(PHP_OS, 'WIN'):
-			php_mbstring_win();
-			break;
-		case stristr(PHP_OS, 'LINUX'):
-			php_mbstring_linux();
-			break;
-		default:
-			php_mbstring_other();
-		break;
-	}
-
-	print '</code></pre>';
-	print '<hr/>';
-	print '<p style="color:#ccc;">'.__FILE__.' ('.__LINE__.')</p>';
-}
-
-function php_mbstring_osx(){
-	print <<< "EOL"
-sudo port install php-mbstring
-sudo /opt/local/apache2/bin/apachectl restart
-EOL;
-}
-
-function php_mbstring_win(){
-
-}
-
-function php_mbstring_linux(){
-	print <<< "EOL"
-sudo yum install php-mbstring
-sudo service httpd restart
-EOL;
-}
-
-function php_mbstring_other(){
-	
 }
