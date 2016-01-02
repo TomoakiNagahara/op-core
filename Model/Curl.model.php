@@ -20,32 +20,92 @@
  */
 class Model_Curl extends Model_Model
 {
+	/**
+	 * If true is caching.
+	 * 
+	 * @var boolean
+	 */
+	private $_is_cache;
+	
+	/**
+	 * Debug information for developer.
+	 * 
+	 * @var array
+	 */
 	private $_debug;
 	
-	function Json($url, $post=null)
+	/**
+	 * Get json array by url.
+	 * 
+	 * @param  string $url
+	 * @param  array  $post
+	 * @return array
+	 */
+	function Json($url, $post=null, $expire=null)
 	{
 		return json_decode(
-				$this->Get($url, $post=null), 
+				//	Json string.
+				$this->Get($url, $post=null),
+				//	To Assoc flag.
 				true);
 	}
 	
-	function Get($url, $post=null)
+	/**
+	 * Get content by url.
+	 * 
+	 * @param  string $url
+	 * @param  string $post
+	 * @return string
+	 */
+	function Get($url, $post=null, $expire=null)
 	{
-		$this->_debug['url'][] = $url;
+		//	Cache
+		if( $this->_is_cache or $expire){
+			$key = md5($url);
+			$key = substr($key, 0, 8);
+			if( $content = $this->Cache()->Get($key) ){
+				$this->_debug['url']['cache'] = $url;
+				return $content;
+			}
+		}
 		
+		//	Debub
+		$this->_debug['url']['fetch'] = $url;
+		
+		//	Fetch
 		if( function_exists('curl_init') ){
 			$content = $this->Curl($url, $post);
 		}else{
 			$content = $this->Fetch($url, $post);
 		}
+		
+		//	Cache
+		if( isset($key) ){
+			$this->Cache()->Set($key, $content, $expire);
+		}
+		
 		return $content;
 	}
 	
+	/**
+	 * Do curl by url.
+	 * 
+	 * @param  string $url
+	 * @param  array $post
+	 * @return string
+	 */
 	function Curl($url, $post=null)
 	{
 		$this->AdminNotice("Does not implements, yet.");
 	}
-	
+
+	/**
+	 * Do file_get_contents by url.
+	 *
+	 * @param  string $url
+	 * @param  array $post
+	 * @return string
+	 */
 	function Fetch($url, $post=null)
 	{
 		//	Used at timeout.
