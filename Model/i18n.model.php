@@ -39,6 +39,20 @@ class Model_i18n extends Model_Model
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 * @see OnePiece5::Init()
+	 */
+	function Init()
+	{
+		parent::Init();
+		if( $this->Admin() ){
+			$this->_debug['count']['fetch']  = 0;
+			$this->_debug['count']['cache']  = 0;
+			$this->_debug['count']['select'] = 0;
+		}
+	}
+	
+	/**
 	 * Set locale.
 	 * 
 	 * @param  string $locale
@@ -136,7 +150,12 @@ class Model_i18n extends Model_Model
 		}else{
 			$url = $this->Config()->url('geo');
 			$json = $this->Model('Curl')->Json($url);
-			$country = $json['geo']['code'];
+			if( isset($json['geo']['code']) ){
+				$country = $json['geo']['code'];
+				$this->SetCookie('country', $country, 60*60*6);
+			}else{
+				$country = null;
+			}
 		}
 		return $country;
 	}
@@ -190,42 +209,61 @@ class Model_i18n extends Model_Model
 		$id = md5("$source, $to, $from");
 		$id = substr($id, 0, 8);
 		
+		//	Execute by each method.
+		if( $translation = $this->_get($id, $source, $from, $to) ){
+			//	Save to memcache.
+			$this->Cache()->Set($id, $translation);
+		}else{
+			//	Remove escape character.
+			$translation = preg_replace('|\\\|', '', $source);
+		}
+		
+		return $translation;
+	}
+	
+	function _get($id, $source, $from, $to)
+	{
+		$admin = $this->Admin();
+		
 		//	Fetch from memcache.
 		if( $translation = $this->Cache()->Get($id) ){
-			if( $this->Admin() ){
+			if( $admin ){
+				$this->_debug['count']['cache']++;
 				$this->_debug['cache'][$id] = $translation;
 			}
-			return $translation;
-		}
-		
 		//	Fetch from database.
-		if( $translation = $this->Select($id) ){
-			return $translation;
+		}else if( $translation = $this->Select($id) ){
+			if( $admin ){
+				$this->_debug['count']['select']++;
+			}
+		//	Fetch from cloud.
+		}else if( $translation = $this->_get_cloud($id, $source, $from, $to) ){
+			if( $admin ){
+				$this->_debug['count']['fetch']++;
+			}
+		}else{
+			$translation = false;
 		}
 		
-		//	Fetch from cloud.
-		$url = $this->Config()->url_i18n($source, $from, $to);
+		return $translation;
+	}
+	
+	function _get_cloud($id, $source, $from, $to)
+	{
+		$url  = $this->Config()->url_i18n($source, $from, $to);
 		$json = $this->Model('Curl')->Json($url);
 		
 		//	Error check.
-		if( empty($json) or !empty($json['error']) ){
-			if(!empty($json['error'])){
-				$this->AdminNotice($json['error']);
-			}
-			return preg_replace('|\\\|', '', $source);
+		if( empty($json) or !empty($json['error']) or empty($json['translate'])){
+			$error = ifset($json['error'], "Network error.");
+			$this->AdminNotice($error);
+			return false;
 		}
 		
-		//	Get
-		$translation = ifset($json['translate'], $source);
-		
-		//	Save to memcache.
-		$expire = $this->Admin() ? 60*60*3*1: 60*60*24*1;
-		$this->Cache()->Set($id, $translation, $expire);
-		
 		//	Save to database.
-		$this->Insert($id, $source, $to, $from, $translation);
+		$this->Insert($id, $source, $from, $to, $json['translate']);
 		
-		return $translation;
+		return $json['translate'];
 	}
 	
 	function GetLanguageList($lang='en')
@@ -260,10 +298,12 @@ class Model_i18n extends Model_Model
 	{
 		$config = $this->Config()->select($id);
 		$record = $this->DB()->Select($config);
+		
 		if( $this->Admin() ){
 			$this->_debug['db']['select'][$id]['config'] = Toolbox::toArray($config);
 			$this->_debug['db']['select'][$id]['record'] = $record;
 		}
+		
 		return ifset($record['translation'], null);
 	}
 	
@@ -277,18 +317,21 @@ class Model_i18n extends Model_Model
 	 * @param  string $translation
 	 * @return boolean
 	 */
-	function Insert($id, $source, $to, $from, $translation)
+	function Insert($id, $source, $from, $to, $translation)
 	{
 		if( $source === $translation ){
 			return false;
 		}
 		
-		$config = $this->Config()->insert($id, $source, $to, $from, $translation);
-		$new_id = $this->DB()->Insert($config);
+		$config = $this->Config()->insert($id, $source, $from, $to, $translation);
+		$result = $this->DB()->Insert($config);
+		
 		if( $this->Admin() ){
 			$this->_debug['db']['insert'][$id]['config'] = Toolbox::toArray($config);
+			$this->_debug['db']['insert'][$id]['result'] = $result;
 		}
-		return $new_id ? true: false;
+		
+		return $result ? true: false;
 	}
 	
 	/**
@@ -301,10 +344,12 @@ class Model_i18n extends Model_Model
 	{
 		$config = $this->Config()->update($id);
 		$number = $this->DB()->Update($config);
+		
 		if( $this->Admin() ){
 			$this->_debug['db']['update'][$id]['config'] = Toolbox::toArray($config);
-			$this->_debug['db']['update'][$id]['record'] = $record;
+			$this->_debug['db']['update'][$id]['result'] = $number;
 		}
+		
 		return $number ? true: false;
 	}
 	
@@ -313,7 +358,7 @@ class Model_i18n extends Model_Model
 	 */
 	function Debug()
 	{
-		if(!$this->Admin()){
+		if(!$this->Admin() and !Toolbox::isHtml() ){
 			return;
 		}
 		
@@ -399,12 +444,12 @@ class Config_i18n extends Config_Model
 	 * 
 	 * @param  string $id
 	 * @param  string $source
-	 * @param  string $to
 	 * @param  string $from
+	 * @param  string $to
 	 * @param  string $translation
 	 * @return Config
 	 */
-	function insert($id, $source, $to, $from, $translation)
+	function insert($id, $source, $from, $to, $translation)
 	{
 		$insert = $this->__insert();
 		$insert->set->{self::_COLUMN_ID_}        = $id;
@@ -424,8 +469,7 @@ class Config_i18n extends Config_Model
 	function update($id)
 	{
 		$update = $this->__update();
-		$update->set->{self::_COLUMN_ID_}		 = $id;
-		$update->set->{self::_COLUMN_UPDATED_}	 = '';
+		$update->where->{self::_COLUMN_ID_}		 = $id;
 		return $update;
 	}
 	
@@ -434,34 +478,13 @@ class Config_i18n extends Config_Model
 	 * 
 	 * @return Config
 	 */
-	function database(/*$database=null*/)
+	function database()
 	{
 		static $_database;
 		
-		/*
-		//	Custom database setting.
-		if( $database ){
-			//	Check
-			if( $_database ){
-				$this->AdminNotice("Is set already.");
-				return false;
-			}
-			
-			//	Get default database setting.
-			if(!$_database){
-				$_database = parent::__database(array('user'=>'op_mdl_i18n'));
-			}
-			
-			//	Overwrite.
-			foreach($database as $key => $var){
-				$_database->$key = $var;
-			}
-		}
-		*/
-		
-		//	Default database setting.
 		if(!$_database){
-			if(!$database = $this->GetEnv('model-i18n')){
+			$database = $this->GetEnv('model-i18n');
+			if( empty($database['user']) ){
 				$database['user'] = 'model_mdl_i18n';
 			}
 			$_database = parent::__database($database);
