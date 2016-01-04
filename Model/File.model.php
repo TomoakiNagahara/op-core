@@ -40,7 +40,8 @@ class Model_File extends Model_Model
 		$path = rtrim( $path, '/' ) . '/';
 		
 		if(!file_exists($path)){
-			$this->mark("$path is not exists.");
+			$call = $this->GetCallerLine();
+			$this->mark("$path is not exists. ($call)");
 			return array();
 		}
 		

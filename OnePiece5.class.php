@@ -1145,10 +1145,7 @@ class OnePiece5
 		if( $domain ){
 			$domain = Toolbox::GetDomain(array('scheme'=>true));
 		}
-		
-		$url = Toolbox::ConvertURL($meta);
-		
-		return $domain.$url;
+		return $domain . Toolbox::ConvertURL($meta);
 	}
 	
 	/**
@@ -1194,12 +1191,15 @@ class OnePiece5
 			if(!$name){
 				throw new OpException("Model name is empty.",'en');
 			}
-
-			//	hogeHoge -> HogeHoge	//	hogeHoge -> Hogehoge
-			//	$name = ucfirst($name);		//	$name = ucfirst(strtolower($name));
+			
+			//	hogeHoge -> HogeHoge
+			//	$name = ucfirst($name);
+			
+			//	hogeHoge -> Hogehoge
+			//	$name = ucfirst(strtolower($name));
 			
 			if( empty($_SERVER[__CLASS__]['model'][$name]) ){
-
+				
 				$model_name = $name;
 				$class_name = "Model_{$name}";
 				$file_name  = "{$name}.model.php";

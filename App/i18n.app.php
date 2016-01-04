@@ -5,7 +5,7 @@
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2013 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 
 /**
@@ -14,7 +14,7 @@
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2013 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 class App_i18n extends App
 {
