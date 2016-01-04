@@ -183,10 +183,15 @@ class OPError
 			
 			//	i18n
 			if( $from ){
-				$temp = explode(PHP_EOL, $message.PHP_EOL);
-				$message = OnePiece5::i18n()->En($temp[0], $from );
-				if( isset($temp[1]) ){
-					$message .= ' ![.gray['.trim($temp[1],'\\').']]';
+				//	Separate by line break.
+				list($main, $sub) = explode(PHP_EOL, $message.PHP_EOL);
+				
+				//	Translation.
+				$message = OnePiece5::i18n()->Get($main, $from);
+				
+				//	Add sub message.
+				if( $sub ){
+					$message .= ' ![.gray['.trim($sub,'\\').']]';
 				}
 			}
 			
