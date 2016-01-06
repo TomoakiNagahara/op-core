@@ -55,15 +55,19 @@ class Env extends OnePiece5
 				break;
 				
 			default:
-				if( preg_match('/(ROOT|DIR)$/',$key) ){
+				if( preg_match('/[-_](ROOT|DIR)$/',$key, $match) ){
 					$is_path = true;
+
+					//	OP_DIR --> OP_ROOT
+					if( $match[1] === 'DIR' ){
+						$key = preg_replace('/(ROOT|DIR)$/', "ROOT", $key);
+					}
 				}
-				
-				if( $key = preg_replace('/-/', '_', $key) ){
-					//	throw
-				}
+
+				//	OP-ROOT --> OP_ROOT
+				$key = preg_replace('/-/', '_', $key);
 		}
-			
+		
 		//	$var is a case of path.
 		if( $var and !empty($is_path) ){
 			
