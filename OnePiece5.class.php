@@ -1453,15 +1453,23 @@ class OnePiece5
 		 * 2. app-root
 		 * 3. document-root
 		 */
-		if(!$root = Env::Get('unit-root')){
+		if( $root = Env::Get('unit-root') ){
+			$_is_unit_root_ = true;
+		}else{
 			if(!$root = Env::Get('app-root')){
 				$root = $_SERVER['DOCUMENT_ROOT'];
+			}else{
+				$this->AdminNotice("Not taken into consideration.");
 			}
 		}
-		
+
 		//	Generate unit directory.
-		$dir = rtrim($root,'/')."/_".lcfirst($name);
-		
+		if( $_is_unit_root_ ){
+			$dir = rtrim($root,'/')."/".lcfirst($name);
+		}else{
+			$dir = rtrim($root,'/')."/_".lcfirst($name);
+		}
+
 		//	Instanciate
 		if( file_exists($dir) ){
 			include("$dir/{$name}.model.php");
@@ -1470,7 +1478,7 @@ class OnePiece5
 			$this->AdminNotice("This directory does not exists. \($dir)\ ");
 			$model = new OnePiece5();
 		}
-		
+
 		return $model;
 	}
 	
