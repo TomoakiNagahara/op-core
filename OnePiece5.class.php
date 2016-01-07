@@ -1455,6 +1455,7 @@ class OnePiece5
 		 */
 		if( $root = Env::Get('unit-root') ){
 			$_is_unit_root_ = true;
+			$root = $this->ConvertPath($root);
 		}else{
 			if(!$root = Env::Get('app-root')){
 				$root = $_SERVER['DOCUMENT_ROOT'];
