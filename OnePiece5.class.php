@@ -187,7 +187,7 @@ class OnePiece5
 	 */
 	static function StackError( $args, $locale=null )
 	{
-		$this->Mark("This method will abolished. Use AdminNotice().");
+		self::Mark("StackError method will abolished. Use AdminNotice().");
 		Error::Set( $args, $locale );
 	}
 	
