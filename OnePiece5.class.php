@@ -803,8 +803,9 @@ class OnePiece5
 		switch($type = gettype($args)){
 			case 'string':
 				$args = html_entity_decode($args, ENT_QUOTES, $charset);
+				$args = str_replace(array('&ldquo;','&rdquo;','&lsquo;','&rsquo;'), array('“','”','‘','’'), $args);
 				break;
-			
+				
 			case 'array':
 				foreach( $args as $key => $var ){
 					$key  = self::Decode( $key, $charset );
