@@ -1473,7 +1473,9 @@ class OnePiece5
 
 		//	Instanciate
 		if( file_exists($dir) ){
-			include("$dir/{$name}.model.php");
+			if(!class_exists("Model_{$name}", false)){
+				include("$dir/{$name}.model.php");
+			}
 			$model = $this->Model($name);
 		}else{
 			$this->AdminNotice("This directory does not exists. \($dir)\ ");
