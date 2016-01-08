@@ -185,7 +185,7 @@ class Model_i18n extends Model_Model
 	}
 	
 	/**
-	 * Translate.
+	 * Do translation.
 	 * 
 	 * @param  string $source
 	 * @param  string $to
@@ -220,8 +220,17 @@ class Model_i18n extends Model_Model
 
 		return $translation;
 	}
-
-	function _get($id, $source, $from, $to)
+	
+	/**
+	 * Execute each method.
+	 * 
+	 * @param  string $id
+	 * @param  string $source
+	 * @param  string $from
+	 * @param  string $to
+	 * @return string
+	 */
+	private function _get($id, $source, $from, $to)
 	{
 		if( $admin = $this->Admin() ){
 			$this->_debug[__FUNCTION__][] = "$id, $source, $from, $to";
@@ -250,7 +259,16 @@ class Model_i18n extends Model_Model
 		return $translation;
 	}
 
-	function _get_cloud($id, $source, $from, $to)
+	/**
+	 * Translation by cloud.
+	 * 
+	 * @param  string $id
+	 * @param  string $source
+	 * @param  string $from
+	 * @param  string $to
+	 * @return string|boolean
+	 */
+	private function _get_cloud($id, $source, $from, $to)
 	{
 		$url  = $this->Config()->url_i18n($source, $from, $to);
 		$json = $this->Model('Curl')->Json($url);
@@ -281,6 +299,12 @@ class Model_i18n extends Model_Model
 		return $json['translate'];
 	}
 
+	/**
+	 * Get the language code that corresponds.
+	 * 
+	 * @param  string $lang
+	 * @return array
+	 */
 	function GetLanguageList($lang='en')
 	{
 		$ckey = md5("$lang");
