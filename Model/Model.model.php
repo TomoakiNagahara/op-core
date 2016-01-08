@@ -91,16 +91,28 @@ abstract class Config_Model extends OnePiece5
 	const _COLUMN_DELETED_   = 'deleted';
 	const _COLUMN_TIMESTAMP_ = 'timestamp';
 	
-	function __database()
+	function __database($args=null)
 	{
 		$database = new Config();
-		$database->driver	 = 'mysql';
-		$database->host		 = 'localhost';
-		$database->port		 = '3306';
-		$database->name		 = 'onepiece';
-		$database->charset	 = 'utf8';
-		$database->user		 = 'op_mdl_model';
-		$database->password	 = $this->__password($database);
+		$database->driver    = 'mysql';
+		$database->host      = 'localhost';
+		$database->port      = '3306';
+		$database->name      = 'onepiece';
+		$database->charset   = 'utf8';
+		$database->user      = 'op_mdl_model';
+		
+		//	Overwrite.
+		if( $args ){
+			foreach($args as $key => $var){
+				$database->$key = $var;
+			}
+		}
+		
+		//	Password.
+		if( empty($database->password) ){
+			$database->password	 = $this->__password($database);
+		}
+		
 		return $database;
 	}
 	
