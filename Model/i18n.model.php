@@ -227,24 +227,24 @@ class Model_i18n extends Model_Model
 			$this->_debug[__FUNCTION__][] = "$id, $source, $from, $to";
 		}
 
-		//	Fetch from memcache.
 		if( $translation = $this->Cache()->Get($id) ){
-			if( $admin ){
-				$this->_debug['count']['cache']++;
+			$type = 'cache';
+		}else if( $translation = $this->Select($id) ){
+			$type = 'select';
+		}else if( $translation = $this->_get_cloud($id, $source, $from, $to) ){
+			$type = 'fetch';
+		}else{
+			$type = 'error';
+			$translation = false;
+		}
+
+		if( $admin ){
+			$this->_debug['count'][$type]++;
+			/*
+			if( $type === 'cache' ){
 				$this->_debug['cache'][$id] = $translation;
 			}
-		//	Fetch from database.
-		}else if( $translation = $this->Select($id) ){
-			if( $admin ){
-				$this->_debug['count']['select']++;
-			}
-		//	Fetch from cloud.
-		}else if( $translation = $this->_get_cloud($id, $source, $from, $to) ){
-			if( $admin ){
-				$this->_debug['count']['fetch']++;
-			}
-		}else{
-			$translation = false;
+			*/
 		}
 
 		return $translation;
