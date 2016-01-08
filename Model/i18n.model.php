@@ -262,7 +262,20 @@ class Model_i18n extends Model_Model
 		
 		//	Error check.
 		if( empty($json) or !empty($json['error']) or empty($json['translate'])){
-			$error = ifset($json['error'], "Network error.");
+			if( empty($json) ){
+				//	Check flag.
+				if( $this->Cache()->Get(__METHOD__) ){
+					//	Already to notice.
+					return false;
+				}else{
+					//	Set flag.
+					$this->Cache()->Set(__METHOD__, true);
+				}
+				$error = "Not connected to the Internet.";
+			}else{
+				$error = $json['error'];
+			}
+			//	Notice to admin.
 			$this->AdminNotice($error);
 			return false;
 		}
