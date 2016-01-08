@@ -66,6 +66,8 @@ class Model_i18n extends Model_Model
 			}
 		}
 		
+		$this->_debug[__FUNCTION__][] = $locale;
+
 		if( empty($lang) and empty($country) ){
 			$this->AdminNotice("Wrong value. ($locale)");
 			return false;
@@ -96,6 +98,8 @@ class Model_i18n extends Model_Model
 			if( strpos($lang, $needle) ){
 				return $this->SetLocale($lang);
 			}
+		$this->_debug[__FUNCTION__][] = $lang;
+
 		}
 		
 		$this->_lang = $lang;
@@ -131,6 +135,7 @@ class Model_i18n extends Model_Model
 	 */
 	function SetCountry($country)
 	{
+		$this->_debug[__FUNCTION__][] = $country;
 		$this->_country = $country;
 		$this->SetCookie('country',$country);
 	}
@@ -223,8 +228,10 @@ class Model_i18n extends Model_Model
 	
 	function _get($id, $source, $from, $to)
 	{
-		$admin = $this->Admin();
-		
+		if( $admin = $this->Admin() ){
+			$this->_debug[__FUNCTION__][] = "$id, $source, $from, $to";
+		}
+
 		//	Fetch from memcache.
 		if( $translation = $this->Cache()->Get($id) ){
 			if( $admin ){
