@@ -60,19 +60,16 @@ class Model_i18n extends Model_Model
 	 */
 	function SetLocale($locale)
 	{
-		foreach( array('-','_') as $needle ){
-			if( strpos($lang, $needle) ){
-				list($lang, $country) = explode($needle, $lang);
-			}
-		}
-		
 		$this->_debug[__FUNCTION__][] = $locale;
+
+		$locale = str_replace('_', '-', $locale);
+		list($lang, $country) = explode('-', $locale);
 
 		if( empty($lang) and empty($country) ){
 			$this->AdminNotice("Wrong value. ($locale)");
 			return false;
 		}
-		
+
 		$this->SetLang($lang);
 		$this->SetCountry($country);
 	}
@@ -84,7 +81,7 @@ class Model_i18n extends Model_Model
 	 */
 	function GetLocale()
 	{
-		return $this->GetLang().'-'.$this->GetCountry();
+		return $this->GetLang(); // .'-'.$this->GetCountry();
 	}
 	
 	/**
@@ -94,14 +91,12 @@ class Model_i18n extends Model_Model
 	 */
 	function SetLang($lang)
 	{
-		foreach( array('-','_') as $needle ){
-			if( strpos($lang, $needle) ){
-				return $this->SetLocale($lang);
-			}
 		$this->_debug[__FUNCTION__][] = $lang;
 
+		if( preg_match('/[-_]/', $lang) ){
+			return $this->SetLocale($lang);
 		}
-		
+
 		$this->_lang = $lang;
 		$this->SetCookie('lang',$lang);
 	}
@@ -204,16 +199,16 @@ class Model_i18n extends Model_Model
 			$this->AdminNotice("Source language code is empty.");
 			$from = 'en-us';
 		}
-		
+
 		//	To is translation language.
 		if( empty($to) ){
 			$to = $this->GetLocale();
 		}
-		
+
 		//	Generate cache key.
-		$id = md5("$source, $to, $from");
+		$id = md5("$source, $from, $to, 0");
 		$id = substr($id, 0, 8);
-		
+
 		//	Execute by each method.
 		if( $translation = $this->_get($id, $source, $from, $to) ){
 			//	Save to memcache.
@@ -222,10 +217,10 @@ class Model_i18n extends Model_Model
 			//	Remove escape character.
 			$translation = preg_replace('|\\\|', '', $source);
 		}
-		
+
 		return $translation;
 	}
-	
+
 	function _get($id, $source, $from, $to)
 	{
 		if( $admin = $this->Admin() ){
@@ -251,15 +246,15 @@ class Model_i18n extends Model_Model
 		}else{
 			$translation = false;
 		}
-		
+
 		return $translation;
 	}
-	
+
 	function _get_cloud($id, $source, $from, $to)
 	{
 		$url  = $this->Config()->url_i18n($source, $from, $to);
 		$json = $this->Model('Curl')->Json($url);
-		
+
 		//	Error check.
 		if( empty($json) or !empty($json['error']) or empty($json['translate'])){
 			if( empty($json) ){
@@ -279,13 +274,13 @@ class Model_i18n extends Model_Model
 			$this->AdminNotice($error);
 			return false;
 		}
-		
+
 		//	Save to database.
 		$this->Insert($id, $source, $from, $to, $json['translate']);
-		
+
 		return $json['translate'];
 	}
-	
+
 	function GetLanguageList($lang='en')
 	{
 		$ckey = md5("$lang");
