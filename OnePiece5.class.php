@@ -1100,7 +1100,7 @@ class OnePiece5
 			
 			// 2nd check
 			if(!file_exists($path)){
-				self::AdminNotice("Template file does not exist.\n file=$file, dir=$dir");
+				self::AdminNotice("$file does not exist.\nDir=$dir");
 				return false;
 			}
 		}
