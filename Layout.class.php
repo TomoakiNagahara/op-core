@@ -31,9 +31,9 @@ class Layout extends OnePiece5
 			if(is_null($layout_dir)){
 				//	Generate example.
 				if( $this->Dispatcher() instanceof App ){
-					$method = "\$app->SetLayoutDir('app:/path/of/directory');";
+					$method = "\$app->SetLayoutDir('app:/app/layout');";
 				}else{
-					$method = "\$this->SetEnv('layout-dir','app:/path/of/directory');";
+					$method = "\$this->SetEnv('layout-dir','app:/app/layout');";
 				}
 				
 				//	Stack Error
@@ -44,22 +44,19 @@ class Layout extends OnePiece5
 	}
 	
 	/**
-	 * To be used.
-	 * 
 	 * @return string
 	 */
-	private function _GetLayout()
+	private function _GetLayoutName()
 	{
-		if(!$layout = $this->GetEnv('layout') ){
+		if(!$layout = $this->GetEnv('layout-name') ){
 			if(is_null($layout)){
 				//	Generate example.
 				if( $this->Dispatcher() instanceof App ){
-					$method = "\$app->SetLayoutName('layout-name');";
+					$example = "\$app->SetLayoutName('layout-name');";
 				}else{
-					$method = "\$this->SetEnv('layout','app:/path/of/directory');";
+					$example = "\$this->SetEnv('layout-name','flat');";
 				}
-				//	Stack Error
-				$this->AdminNotice("Layout name was null. Ex: \\$method\.");
+				$this->AdminNotice("Layout name was null. Ex: \\$example\.");
 			}
 		}
 		return $layout;
@@ -81,31 +78,27 @@ class Layout extends OnePiece5
 	function Execute($execute_file=null)
 	{
 		if(!$execute_file){
-			//	Get layout settings.
-			$layout_dir	 = $this->_GetLayoutDir();
-			$layout		 = $this->_GetLayout();
-			
+
 			//	Do not want to layout. (False is if not want layout.)
-			if( empty($layout) ){
+			if( $this->GetEnv('layout') === false ){
 				$this->Content();
 				return;
 			}
+
+			//	Get layout settings.
+			$layout_dir  = $this->_GetLayoutDir();
+			$layout_name = $this->_GetLayoutName();
 			
 			//  Get controller name (layout controller)
 			$controller = $this->GetEnv('controller-name');
 			
 			//	Get layout controller path.
-			$layout_dir = $this->ConvertPath(rtrim($layout_dir,'/')."/$layout");
-			$execute_file = "$layout_dir/$controller";
-		}
-		
-		if(!file_exists($layout_dir)){
-			$this->AdminNotice("Does not exists this directory.\n $layout_dir");
-			return false;
+			$layout_path = $this->ConvertPath(rtrim($layout_dir,'/')."/$layout_name");
+			$execute_file = "$layout_path/$controller";
 		}
 		
 		if(!file_exists($execute_file)){
-			$this->AdminNotice("Does not exists this file.\n $execute_file");
+			$this->AdminNotice("This file does not exist..\n $execute_file");
 			return false;
 		}
 		
@@ -127,7 +120,7 @@ class Layout extends OnePiece5
 			$path = $layout_dir . $file_name;
 			
 			if(!file_exists($path)){
-				$this->AdminNotice("Does not exists layout file. \($path)\\");
+				$this->AdminNotice("Layout file does not exist. \($path)\\");
 				return false;
 			}
 			

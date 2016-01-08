@@ -130,28 +130,23 @@ class App extends NewWorld5
 	
 	function SetLayoutDir( $var )
 	{
-		$this->SetEnv('layout-dir', $var);
-		return true;
+		return $this->SetEnv('layout-dir', $var);
 	}
 	
 	function GetLayoutName()
 	{
-		return $this->GetEnv('layout');
+		return $this->GetEnv('layout-name');
 	}
 	
 	function SetLayoutName( $var )
 	{
-		//	Set layout root. (full path)
-		$layout_root = $this->GetEnv('layout-dir');
-		$layout_root = $this->ConvertPath($layout_root);
-		$this->SetEnv('layout-root',$layout_root.$var);
-		
-		return $this->SetEnv('layout', $var);
+		return $this->SetEnv('layout-name', $var);
 	}
 	
 	function SetLayoutPath( $var )
 	{
-		return $this->SetEnv('layout', $var);
+		$this->AdminNotice("This method will abolished.");
+		return $this->SetEnv('layout-path', $var);
 	}
 	
 	function GetTemplateDir()

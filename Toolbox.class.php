@@ -664,9 +664,11 @@ class Toolbox
 				break;
 				
 			case 'layout':
-				$real = Env::Get('layout-root');
+				$layout_root = Env::Get('layout-root');
+				$layout_name = Env::Get('layout-name');
+				$real = self::ConvertPath($layout_root).$layout_name.'/';
 				break;
-			
+				
 			default:
 				$real = './';
 				OnePiece5::AdminNotice("Does not define this modifier. ($modifier)");
