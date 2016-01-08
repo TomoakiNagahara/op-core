@@ -1455,26 +1455,25 @@ class OnePiece5
 		 * 3. document-root
 		 */
 		if( $root = Env::Get('unit-root') ){
-			$_is_unit_root_ = true;
 			$root = $this->ConvertPath($root);
+			$separate = '/';
 		}else{
-			if(!$root = Env::Get('app-root')){
-				$root = $_SERVER['DOCUMENT_ROOT'];
+			if( $root = Env::Get('app-root') ){
+				//	OK
 			}else{
-				$this->AdminNotice("Not taken into consideration.");
+				$root = $_SERVER['DOCUMENT_ROOT'];
 			}
+			$separate = '/_';
 		}
 
 		//	Generate unit directory.
-		if( $_is_unit_root_ ){
-			$dir = rtrim($root,'/')."/".lcfirst($name);
-		}else{
-			$dir = rtrim($root,'/')."/_".lcfirst($name);
-		}
+		$dir = rtrim($root,'/').$separate.lcfirst($name);
 
 		//	Instanciate
 		if( file_exists($dir) ){
-			if(!class_exists("Model_{$name}", false)){
+			if( class_exists("Model_{$name}", false) ){
+				//	OK
+			}else{
 				include("$dir/{$name}.model.php");
 			}
 			$model = $this->Model($name);
