@@ -1415,9 +1415,9 @@ class OnePiece5
 	 * 
 	 * @return Doctor
 	 */
-	function Doctor()
+	static function Doctor()
 	{
-		return $this->Singleton('Doctor');
+		return self::Singleton('Doctor');
 	}
 	
 	/**
