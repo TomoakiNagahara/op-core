@@ -649,7 +649,7 @@ class Toolbox
 				
 				$debug_backtrace = null;
 				break;
-				
+
 			case 'end':  // End-Point.
 			case 'ctrl': // Controller file's dirname.
 				if(!$route = Env::Get('route')){
@@ -662,22 +662,25 @@ class Toolbox
 				}
 				$real  = dirname($route[Router::_END_POINT_]).'/';
 				break;
-				
+
 			case 'layout':
 				$layout_root = Env::Get('layout-root');
 				$layout_name = Env::Get('layout-name');
 				$real = self::ConvertPath($layout_root).$layout_name.'/';
 				break;
-				
+
 			default:
 				$real = './';
 				OnePiece5::AdminNotice("Does not define this modifier. ($modifier)");
 		}
-		
+
+		//	/www/localhost//dir --> /www/localhost/dir
+		$real = str_replace('//', '/', $real);
+
 		//	Generate full path.
 		$modifier = preg_quote($modifier,'|');
 		$path = preg_replace("|^$modifier:/|i", $real, $meta);
-		
+
 		return $path;
 	}
 	
