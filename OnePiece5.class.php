@@ -187,7 +187,7 @@ class OnePiece5
 	 */
 	static function StackError( $args, $locale=null )
 	{
-		self::Mark("StackError method will abolished. Use AdminNotice().");
+		self::Mark("\StackError\ method will abolished. Please use \AdminNotice\ method..");
 		Error::Set( $args, $locale );
 	}
 	
@@ -1027,6 +1027,9 @@ class OnePiece5
 	/**
 	 * Get template file content.
 	 * 
+	 * Does not support static type.
+	 * Because, it would unusable $this. 
+	 * 
 	 * @param  string $file file name or path.(current-dir or template-dir)
 	 * @param  array|Config $args  
 	 * @return string
@@ -1063,6 +1066,9 @@ class OnePiece5
 	
 	/**
 	 * Pirnt of tempalte file.
+	 * 
+	 * Does not support static type.
+	 * Because, it would unusable $this.
 	 * 
 	 * @param  string $file file name or path.(current-dir or template-dir)
 	 * @param  array|Config $args

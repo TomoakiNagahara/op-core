@@ -348,17 +348,39 @@ class i18n extends OnePiece5
 			return "$tr ($en)";
 		}
 	}
-	
+
+	/**
+	 * Do translation from English.
+	 *
+	 * @param  string $text
+	 * @param  string $to
+	 * @return string
+	 */
 	function En($text,$to=null)
 	{
 		return $this->Get($text,'en-US',$to);
 	}
-	
+
+	/**
+	 * Do translation from Japanese.
+	 *
+	 * @param  string $text
+	 * @param  string $to
+	 * @return string
+	 */
 	function Ja($text,$to=null)
 	{
 		return $this->Get($text,'ja-JP',$to);
 	}
 	
+	/**
+	 * Do translation.
+	 * 
+	 * @param  string $text
+	 * @param  string $from
+	 * @param  string $to
+	 * @return string
+	 */
 	function Get( $text, $from='en-US', $to=null )
 	{
 		if( empty($text) ){
