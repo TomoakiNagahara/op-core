@@ -91,6 +91,12 @@ abstract class Config_Model extends OnePiece5
 	const _COLUMN_DELETED_   = 'deleted';
 	const _COLUMN_TIMESTAMP_ = 'timestamp';
 	
+	/**
+	 * Get default database configuration.
+	 * 
+	 * @param  array $args
+	 * @return Config
+	 */
 	function __database($args=null)
 	{
 		$database = new Config();
@@ -116,18 +122,23 @@ abstract class Config_Model extends OnePiece5
 		return $database;
 	}
 	
+	/**
+	 * Generate password.
+	 * 
+	 * @param unknown $database
+	 */
 	function __password($database)
 	{
 		if( empty($database) ){
 			$this->AdminNotice('Arguments was empty.');
 			return md5(__METHOD__);
 		}
-		
+
 		if( empty($database->name) ){
 			$this->AdminNotice('Database name was empty.');
 			return md5(__METHOD__);
 		}
-		
+
 		if( empty($database->user) ){
 			$this->AdminNotice('User name was empty.');
 			return md5(__METHOD__);
