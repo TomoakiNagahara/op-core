@@ -1452,7 +1452,7 @@ class OnePiece5
 	 *
 	 * @param string $name
 	 */
-	function Unit($name)
+	static function Unit($name)
 	{
 		/**
 		 * Order to search for unit-root.
@@ -1461,7 +1461,7 @@ class OnePiece5
 		 * 3. document-root
 		 */
 		if( $root = Env::Get('unit-root') ){
-			$root = $this->ConvertPath($root);
+			$root = self::ConvertPath($root);
 			$separate = '/';
 		}else{
 			if( $root = Env::Get('app-root') ){
@@ -1482,9 +1482,9 @@ class OnePiece5
 			}else{
 				include("$dir/{$name}.model.php");
 			}
-			$model = $this->Model($name);
+			$model = self::Model($name);
 		}else{
-			$this->AdminNotice("This directory does not exists. \($dir)\ ");
+			self::AdminNotice("This directory does not exists. \($dir)\ ");
 			$model = new OnePiece5();
 		}
 
