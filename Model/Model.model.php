@@ -132,8 +132,15 @@ abstract class Config_Model extends OnePiece5
 			$this->AdminNotice('User name was empty.');
 			return md5(__METHOD__);
 		}
-		
-		return md5($_SERVER['SERVER_ADDR'].', '.$database->name.', '.$database->user);
+
+		switch($server_addr = $_SERVER['SERVER_ADDR']){
+			case '::1':
+			case '127.0.0.1':
+				$server_addr = 'localhost';
+				break;
+		}
+
+		return md5($server_addr.', '.$database->name.', '.$database->user);
 	}
 	
 	function __select()
