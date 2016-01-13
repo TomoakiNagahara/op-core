@@ -20,19 +20,32 @@
  */
 class Env extends OnePiece5
 {
-	const _NAME_SPACE_		 = 'ONEPIECE_5_ENV';
+	//	Administrator setting
+	const _ADMIN_IP_ADDR_		 = 'ADMIN_IP';
+	const _ADMIN_EMAIL_ADDR_	 = 'ADMIN_MAIL';
+	const _KEY_LOCALE_			 = 'locale';
 	
-	const _ADMIN_IP_ADDR_	 = 'ADMIN_IP';
-	const _ADMIN_EMAIL_ADDR_ = 'ADMIN_MAIL';
+	/**
+	 * 
+	 * @var array
+	 */
+	static $_env;
 	
-	const _KEY_LOCALE_ = 'locale';
+	/**
+	 * Display debug information.
+	 */
+	static public function Debug()
+	{
+		OnePiece5::D(self::$_env);
+	}
 	
-	//	Just ready.
-	static $_is_localhost;
-	static $_is_admin;
-	static $_is_shell;
-	
-	static private function _Convert( $key, $var=null )
+	/**
+	 * Convert key and value. (Standardization)
+	 * 
+	 * @param string $key reference
+	 * @param string $var reference
+	 */
+	static private function _Convert( &$key, &$var=null )
 	{
 		$key = strtoupper($key);
 		
@@ -86,15 +99,17 @@ class Env extends OnePiece5
 			$var = rtrim( $var, '/').'/';
 		}
 		
-		return array( $key, $var );
+	//	return array( $key, $var );
 	}
 	
+	/**
+	 * Bootstrap
+	 */
 	static function Bootstrap()
 	{
 		self::Set('mime','text/html');
 		self::Set('charset','utf-8');
 
-		self::_init_admin();
 		self::_init_error();
 		self::_init_session();
 		self::_init_op_uniq_id();
@@ -102,21 +117,24 @@ class Env extends OnePiece5
 		self::_init_mark_label();
 	}
 	
+	/**
+	 * Init error.
+	 */
 	private static function _init_error()
 	{
 		// Error control
 		$save_level = error_reporting();
 		error_reporting( E_ALL );
 		ini_set('display_errors',1);
-		
+
 		//	Checking admin
 		$io = self::isAdmin();
-		
+
 		//	Error check.
-		if( is_null($io) ){
+		if( $io === null ){
 			OnePiece5::AdminNotice("\_init_admin\ has not been called.");
 		}
-		
+
 		//	If not an administrator.
 		if(!$io){
 			//  recovery (display_errors)
@@ -125,83 +143,45 @@ class Env extends OnePiece5
 			error_reporting( $save_level );
 		}
 	}
-	
-	private static function _init_admin()
-	{
-		//	Check if admin
-		if( self::isLocalhost() ){
-			self::$_is_admin = true;
-		}else if( isset($_SERVER[self::_ADMIN_IP_ADDR_]) ){
-			self::$_is_admin = $_SERVER[self::_ADMIN_IP_ADDR_] === $remote_addr ? true: false;
-		}else{
-			self::$_is_admin = false;
-		}
-	}
-	
+
+	/**
+	 * Init session.
+	 */
 	private static function _init_session()
 	{
-		if( self::isCLI() ){
+		if( self::isShell() ){
 			return;
 		}
-	
+
+		//	Checking header sent.
+		if( headers_sent($file,$line) ){
+			OnePiece5::AdminNotice("Header has already been sent. File: {$file}, Line number #{$line}.");
+			return;
+		}
+
 		if( session_id() ){
 			//	Checking php.ini
 			if( ini_get('session.auto_start') ){
-				/**
-				 * php.ini
-				 * session.auto_start = 1;
-				 */
-				OnePiece5::AdminNotice("php.ini: session.auto_start = 1;");
+				OnePiece5::AdminNotice('Session is already started. Open "php.ini". Write to "session.auto_start = 0;"');
 			}
-				
-			//	Checking header sent.
-			if( headers_sent($file,$line) ){
-				OnePiece5::AdminNotice("Header has already been sent. File: {$file}, Line number #{$line}.");
-			}else{
-				header('Cache-Control: private, max-age=0, pre-check=0');
-			}
-		}else{
-			if( headers_sent($file,$line) ){
-				OnePiece5::AdminNotice("Header has already been sent. File: {$file}, Line number #{$line}.");
-			}else{
-				/**
-				 * @see http://d.hatena.ne.jp/shinyanakao/20080313/1205396128
-				 * @see http://qiita.com/mugng/items/ae3c4c07f920a5e6e2ed
-				 * @see http://www.glamenv-septzen.net/view/29
-				 */
-				session_cache_expire(0);
-				session_cache_limiter('private_no_expire');
-				session_start();
-			}
+			return;
 		}
+
+		/**
+		 * @see http://d.hatena.ne.jp/shinyanakao/20080313/1205396128
+		 * @see http://qiita.com/mugng/items/ae3c4c07f920a5e6e2ed
+		 * @see http://www.glamenv-septzen.net/view/29
+		 */
+		session_cache_expire(0);
+		session_cache_limiter('private_no_expire');
+		session_start();
+
+	//	header('Cache-Control: private, max-age=0, pre-check=0');
 	}
 	
-	private static function _init_localhost()
-	{
-		$remote_addr = $_SERVER['REMOTE_ADDR'];
-		if( $remote_addr === '127.0.0.1' or $remote_addr === '::1'){
-			self::$_is_localhost = true;
-		}else{
-			self::$_is_localhost = false;
-		}
-	}
-	
-	private static function _init_shell()
-	{
-		//	Check if shell.
-		if( isset($_SERVER['SHELL']) ){
-			self::Set('shell',true);
-			self::Set('cli',  true);
-			self::Set('mime','text/plain');
-			self::$_is_shell = true;
-		}
-	
-		//	Check if admin.
-		if( isset($_SERVER['PS1']) ){
-			self::$_is_admin = true;
-		}
-	}
-	
+	/**
+	 * Init onepiece's unique id.
+	 */
 	private static function _init_op_uniq_id()
 	{
 		//	Checking op-uniq-id.
@@ -216,6 +196,9 @@ class Env extends OnePiece5
 		OnePiece5::SetCookie(OnePiece5::_KEY_COOKIE_UNIQ_ID_, $uniq_id, $expire);
 	}
 	
+	/**
+	 * Init mark label.
+	 */
 	private static function _init_mark_label()
 	{
 		//  mark_label
@@ -259,11 +242,16 @@ class Env extends OnePiece5
 		return Env::Get(self::_KEY_LOCALE_);
 	}
 	
+	/**
+	 * Set system environment locale.
+	 * 
+	 * @param string $locale
+	 */
 	static function SetLocale( $locale )
 	{
 		//	Save to cookie.
 		OnePiece5::SetCookie(self::_KEY_LOCALE_, $locale);
-		
+
 		//	parse
 		if( preg_match('|([a-z]+)[-_]([a-z]+)\.([-_a-z0-9]+)|i', $locale, $match) or true){
 			$lang = strtolower($match[1]);
@@ -272,7 +260,7 @@ class Env extends OnePiece5
 		}else{
 			OnePiece5::AdminNotice("Did not match locale format. ($locale, Ex. ja_JP.utf-8) ");
 		}
-		
+
 		// Windows is unsupport utf-8
 		/*
 		if( PHP_OS == 'WINNT' and $lang == 'ja' ){
@@ -284,27 +272,30 @@ class Env extends OnePiece5
 			return false;
 		}
 		*/
-		
-		//	Set each value
-		$_SERVER[self::_NAME_SPACE_][self::_KEY_LOCALE_] = $locale;
+
+		//	Set each value.
+		self::$_env[self::_KEY_LOCALE_] = $locale;
 		Env::Set('lang',   $lang);
 		Env::Set('area',   $area);
 		Env::Set('charset',$code);
-		
+
 		//	Get locale relation value.
 		list( $codes, $timezone ) = Env::GetLocaleValue();
-		
+
 		//	Set PHP's environment value
 		mb_language($lang);
 		mb_internal_encoding($code);
 		mb_detect_order($codes);
-		//mb_http_input();
-		//mb_http_output()
-		
+	//	mb_http_input();
+	//	mb_http_output()
+
 		//	set timezone
 		ini_set('date.timezone',$timezone);
 	}
 	
+	/**
+	 * Get system environment locale value.
+	 */
 	static function GetLocaleValue()
 	{
 		$lang = Env::Get('lang');
@@ -347,64 +338,95 @@ class Env extends OnePiece5
 		return array( $codes, $timezone );
 	}
 	
+	/**
+	 * Wrapper method of isShell.
+	 * 
+	 * @return boolean
+	 */
 	static function isCli()
 	{
 		return self::isShell();
 	}
 	
+	/**
+	 * Checking of shell.
+	 * 
+	 * @return boolean
+	 */
 	static function isShell()
 	{
-		if( self::$_is_shell === null ){
-			self::_init_shell();
+		static $_is_shell;
+
+		if( $_is_shell === null ){
+			//	Check if shell.
+			if( isset($_SERVER['SHELL']) ){
+				self::Set('shell',true);
+				self::Set('cli',  true);
+				self::Set('mime','text/plain');
+				$_is_shell = true;
+			}
+
+			//	Check if admin.
+			if( isset($_SERVER['PS1']) ){
+				self::isAdmin(true);
+			}
 		}
-		return self::$_is_shell;
+
+		return $_is_shell;
 	}
-	
+
+	/**
+	 * Checking of localhost.
+	 * 
+	 * @return boolean
+	 */
 	static function isLocalhost()
 	{
-		if( self::$_is_localhost === null ){
-			self::_init_localhost();
+		static $_is_localhost;
+
+		if( $_is_localhost === null ){
+			$remote_addr = $_SERVER['REMOTE_ADDR'];
+			if( $remote_addr === '127.0.0.1' or $remote_addr === '::1'){
+				$_is_localhost = true;
+			}else{
+				$_is_localhost = false;
+			}
 		}
-		return self::$_is_localhost;
+
+		return $_is_localhost;
 	}
-	
-	static function isAdmin()
+
+	/**
+	 * Checking of admin.
+	 * 
+	 * @return boolean
+	 */
+	static function isAdmin($is_admin=null)
 	{
-		if( self::$_is_admin === null ){
-			self::_init_admin();
+		static $_is_admin;
+
+		//	Change admin status.
+		if( $is_admin !== null ){
+			$_is_admin = $is_admin;
+			return $_is_admin;
 		}
-		return self::$_is_admin;
-	}
-	
-	static function SetAdminIpAddress($var)
-	{
-		$_SERVER[self::_NAME_SPACE_][self::_ADMIN_IP_ADDR_] = $var;
-		if( self::isLocalhost() ){
-			self::$_is_admin = true;
-		}else{
-			self::$_is_admin = $_SERVER['REMOTE_ADDR'] === $var ? true: false;
+
+		if( $_is_admin === null ){
+			//	Checking admin conditions.
+			if( self::isLocalhost() ){
+				$_is_admin = true;
+			}else{
+				$_is_admin = self::Get('admin-ip') === $_SERVER['REMOTE_ADDR'] ? true: false;
+			}
 		}
-		self::_init_error();
-		self::_init_mark_label();
+
+		return $_is_admin;
 	}
 	
-	static function GetAdminMailAddress()
-	{
-		if(!empty($_SERVER[self::_NAME_SPACE_][self::_ADMIN_EMAIL_ADDR_]) ){
-			$mail_addr = $_SERVER[self::_NAME_SPACE_][self::_ADMIN_EMAIL_ADDR_];
-		}else if(!empty($_SERVER['SERVER_ADMIN']) ){
-			$mail_addr = $_SERVER['SERVER_ADMIN'];
-		}else{
-			$mail_addr = null;
-		}
-		return $mail_addr;
-	}
-	
-	static function SetAdminMailAddress($mail_addr)
-	{
-		$_SERVER[self::_NAME_SPACE_][self::_ADMIN_EMAIL_ADDR_] = $mail_addr;
-	}
-	
+	/**
+	 * Get OnePiece5's unique ID.
+	 * @return $uniq_id;
+	 */
 	static function UniqID()
 	{
 		if(!$uniq_id = OnePiece5::GetCookie(OnePiece5::_KEY_COOKIE_UNIQ_ID_)){
@@ -412,7 +434,7 @@ class Env extends OnePiece5
 		}
 		return $uniq_id;
 	}
-	
+
 	/**
 	 * Get environment value.
 	 * 
@@ -425,27 +447,19 @@ class Env extends OnePiece5
 	 */
 	static function Get($key, $default=null)
 	{
-		//	Convert
-		list( $key, $var ) = self::_Convert( $key );
-		
-		//	Admin's E-Mail
-		if( $key === self::_ADMIN_EMAIL_ADDR_ ){
-			return self::GetAdminMailAddress();
-		}
-		
-		//	
-		if( isset($_SERVER[self::_NAME_SPACE_][$key]) ){
-			$var = $_SERVER[self::_NAME_SPACE_][$key];
+		self::_Convert($key);
+
+		if( isset(self::$_env[$key]) ){
+			$var = self::$_env[$key];
 		}else if( isset($_SERVER[$key]) ){
 			$var = $_SERVER[$key];
 		}else{
 			$var = null;
 		}
-		
-		//	
-		return $var ? $var: $default;
+
+		return $var !== null ? $var: $default;
 	}
-	
+
 	/**
 	 * Set environment value.
 	 * 
@@ -458,28 +472,15 @@ class Env extends OnePiece5
 	 */
 	static function Set( $key, $var )
 	{
-		//	Convert
-		list( $key, $var ) = self::_Convert( $key, $var );
-		
-		//	Reset admin flag.
-		if( $key === self::_ADMIN_IP_ADDR_ ){
-			return self::SetAdminIpAddress($var);
+		self::_Convert( $key, $var );
+
+		if( $key === 'MIME'){
+			OnePiece5::Header("Content-type: $var");
 		}
-		
-		//	Admin's E-Mail
-		if( $key === self::_ADMIN_EMAIL_ADDR_ ){
-			return self::SetAdminMailAddress($var);
-		}
-		
-		//	Set locale.
-		if( $key === strtoupper(self::_KEY_LOCALE_) ){
-			return self::SetLocale($var);
-		}
-		
-		//	Set
-		$_SERVER[self::_NAME_SPACE_][$key] = $var;
+
+		self::$_env[$key] = $var;
 	}
-	
+
 	/**
 	 * @see http://jp.php.net/manual/ja/function.register-shutdown-function.php
 	 */
@@ -493,7 +494,7 @@ class Env extends OnePiece5
 		OP\Error::Report();
 		
 		//	Check
-		if(!OnePiece5::Admin()){
+		if(!self::isAdmin() ){
 			return;
 		}
 		
