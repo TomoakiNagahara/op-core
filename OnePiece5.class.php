@@ -225,9 +225,9 @@ class OnePiece5
 	 * 
 	 * @param string $key
 	 */
-	static function GetEnv( $key )
+	static function GetEnv($key, $default=null)
 	{
-		return Env::Get($key);
+		return Env::Get($key, $default);
 	}
 	
 	/**

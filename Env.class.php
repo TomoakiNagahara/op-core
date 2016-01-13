@@ -426,7 +426,7 @@ class Env extends OnePiece5
 	 * @param  string $key
 	 * @return integer|string|null
 	 */
-	static function Get( $key )
+	static function Get($key, $default=null)
 	{
 		//	Convert
 		list( $key, $var ) = self::_Convert( $key );
@@ -446,7 +446,7 @@ class Env extends OnePiece5
 		}
 		
 		//	
-		return $var;
+		return $var ? $var: $default;
 	}
 	
 	/**
