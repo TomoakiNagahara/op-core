@@ -54,41 +54,41 @@ class OnePiece5
 	function __call( $name, $args )
 	{
 		$class = get_class($this);
-		OPError::MagicMethodCall( $class, $name, $args );
+		OP\Error::MagicMethodCall( $class, $name, $args );
 	}
 	
 	static function __callStatic( $name , $args )
 	{
 		$class = get_class($this);
-		OPError::MagicMethodCallStatic( $class, $name, $args);
+		OP\Error::MagicMethodCallStatic( $class, $name, $args);
 	}
 	
 	function __set( $name, $args )
 	{
 		$class	 = get_class($this);
 		$call	 = OnePiece5::GetCallerLine();
-		OPError::MagicMethodSet( $class, $name, $args, $call );
+		OP\Error::MagicMethodSet( $class, $name, $args, $call );
 	}
 	
 	function __get( $name )
 	{
 		$class = get_class($this);
 		$call  = $this->GetCallerLine();
-		OPError::MagicMethodGet( $class, $name, $call );
+		OP\Error::MagicMethodGet( $class, $name, $call );
 	}
 	
 	function __isset( $name )
 	{
 		$class = get_class($this);
 		$call = $this->GetCallerLine();
-		OPError::MagicMethodGet( $class, $name, $call );
+		OP\Error::MagicMethodGet( $class, $name, $call );
 	}
 	
 	function __unset( $name )
 	{
 		$class = get_class($this);
 		$call = $this->GetCallerLine();
-		OPError::MagicMethodGet( $class, $name, $call );
+		OP\Error::MagicMethodGet( $class, $name, $call );
 	}
 	
 	/*
@@ -144,7 +144,7 @@ class OnePiece5
 	 */
 	static function ErrorHandler( $no, $str, $file, $line, $context )
 	{
-		OPError::Handler( $no, $str, $file, $line, $context );
+		OP\Error::Handler( $no, $str, $file, $line, $context );
 	}
 	
 	/**
@@ -155,7 +155,7 @@ class OnePiece5
 	 */
 	static function ErrorExceptionHandler( $e )
 	{
-		OPError::ExceptionHandler( $e );
+		OP\Error::ExceptionHandler( $e );
 	}
 
 	/**
@@ -170,7 +170,7 @@ class OnePiece5
 	 */
 	static function AdminNotice($message, $lang='en')
 	{
-		return OPError::Set($message, $lang);
+		return OP\Error::Set($message, $lang);
 	}
 
 	/**
@@ -198,7 +198,7 @@ class OnePiece5
 	 */
 	function FetchError()
 	{
-		return OPError::Get();
+		return OP\Error::Get();
 	}
 	
 	/**
@@ -206,7 +206,7 @@ class OnePiece5
 	 */
 	function PrintError()
 	{
-		OPError::Report();
+		OP\Error::Report();
 	}
 	
 	/**

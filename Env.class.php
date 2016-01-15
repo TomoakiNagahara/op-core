@@ -489,11 +489,11 @@ class Env extends OnePiece5
 	static function Shutdown()
 	{
 		if( $error = error_get_last()){
-			OPError::LastError($error);
+			OP\Error::LastError($error);
 		}
 		
 		//	Error
-		OPError::Report();
+		OP\Error::Report();
 		
 		//	Check
 		if(!OnePiece5::Admin()){

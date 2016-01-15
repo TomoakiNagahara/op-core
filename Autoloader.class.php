@@ -30,6 +30,9 @@ class Autoloader
 	
 	static function Autoload( $class_name )
 	{
+		//	Correspond namespace.
+		$class_name = str_replace('OP\\','',$class_name);
+
 		//	In case of match to alias name.
 		if( isset(self::$_alias_table[$class_name]) ){
 			$class_name = self::$_alias_table[$class_name];

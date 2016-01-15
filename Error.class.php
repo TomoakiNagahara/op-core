@@ -1,6 +1,6 @@
 <?php
 /**
- * OPError.class.php
+ * Error.class.php
  * 
  * Creation: 2014-11-29
  * 
@@ -10,8 +10,10 @@
  * @package   op-core
  */
 
+namespace OP;
+
 /**
- * OPError
+ * Error
  * 
  * Creation: 2014-02-18
  * 
@@ -20,7 +22,7 @@
  * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
  * @package   op-core
  */
-class OPError
+class Error
 {
 	/**
 	 * Session's name space.
@@ -92,12 +94,12 @@ class OPError
 		}
 		
 		//	Check display is html.
-		if(!$is_html = Toolbox::isHTML() and !$is_cli = Env::Get('cli') ){
+		if(!$is_html = \Toolbox::isHTML() and !$is_cli = \Env::Get('cli') ){
 			return;
 		}
 		
 		//	Check admin.
-		if( OnePiece5::Admin() ){
+		if( \OnePiece5::Admin() ){
 			$io = self::_toDisplay();
 		}else{
 			$io = self::_toMail();
@@ -114,15 +116,15 @@ class OPError
 		foreach($_SESSION[self::_NAME_SPACE_] as $key => $backtraces){
 			//	Generate error message.
 			$message = $backtraces['message'];
-			$message = OnePiece5::Wiki2($message);
+			$message = \OnePiece5::Wiki2($message);
 			$message = strip_tags($message);
-			$message = OnePiece5::Decode($message);
+			$message = \OnePiece5::Decode($message);
 			
 			//	Translation.
 			if( isset($backtraces['translation']) ){
 				$temp = explode("\n",$message."\n");
 				$from = $backtraces['translation'];
-				$message = OnePiece5::i18n()->En($temp[0], $from);
+				$message = \OnePiece5::i18n()->En($temp[0], $from);
 				$message.= $temp[1];
 			}
 			
@@ -140,7 +142,7 @@ class OPError
 		$type	 = isset($backtrace['type'])	 ? $backtrace['type']:	 null;
 		$args	 = isset($backtrace['args'])	 ? $backtrace['args']:	 null;
 		
-		$file	 = OnePiece5::CompressPath($file);
+		$file	 = \OnePiece5::CompressPath($file);
 		
 		if( $name === $func or $func === '__get' or $func === 'AdminNotice' ){
 			$find = true;
@@ -161,7 +163,7 @@ class OPError
 			if(!empty($is_dump) ){
 				$did = md5(microtime());
 				$tail .= "<span class='dkey more' did='{$did}'>more...</span>";
-				$tail .= "<div id='{$did}' style='display:none;'>".Dump::GetDump($backtrace['args']).'</div>';
+				$tail .= "<div id='{$did}' style='display:none;'>".\Dump::GetDump($backtrace['args']).'</div>';
 			}
 		}
 		
@@ -187,7 +189,7 @@ class OPError
 				list($main, $sub) = explode(PHP_EOL, $message.PHP_EOL);
 				
 				//	Translation.
-				$message = OnePiece5::i18n()->Get($main, $from);
+				$message = \OnePiece5::i18n()->Get($main, $from);
 				
 				//	Add sub message.
 				if( $sub ){
@@ -196,7 +198,7 @@ class OPError
 			}
 			
 			//	Wiki2 convert. 
-			$message = OnePiece5::Wiki2($message);
+			$message = \OnePiece5::Wiki2($message);
 			
 			//	Sequence no.
 			$return .= "<tr><td colspan=4 class='' style='padding:0.5em 1em; color:red; font-weight: bold; font-size:small;'>Error #{$i} $message</td></tr>".PHP_EOL;
@@ -213,10 +215,10 @@ class OPError
 	
 	static private function _toDisplay()
 	{
-		if( Toolbox::isHtml() ){
+		if( \Toolbox::isHtml() ){
 			print self::_getBacktrace();
 			self::_AdminNoticeJs();
-			Dump::PrintAttach();
+			\Dump::PrintAttach();
 		}
 		return true;
 	}
@@ -227,7 +229,7 @@ class OPError
 	static private function _AdminNoticeJs()
 	{
 		print "<script>".PHP_EOL;
-		print file_get_contents(Toolbox::ConvertPath('op:/Template/js/AdminNotice.js')).PHP_EOL;
+		print file_get_contents(\Toolbox::ConvertPath('op:/Template/js/AdminNotice.js')).PHP_EOL;
 		print "</script>".PHP_EOL;
 	}
 	
@@ -243,13 +245,13 @@ class OPError
 		$ckey = md5($subject);
 		
 		//	Would not send same mail.
-		if( OnePiece5::GetSession($ckey) ){
+		if( \OnePiece5::GetSession($ckey) ){
 			return true;
-		}else if( OnePiece5::Cache()->Get($ckey) ){
+		}else if( \OnePiece5::Cache()->Get($ckey) ){
 			return true;
 		}else{
-			OnePiece5::SetSession($ckey, $subject);
-			OnePiece5::Cache()->Set($ckey, $subject);
+			\OnePiece5::SetSession($ckey, $subject);
+			\OnePiece5::Cache()->Set($ckey, $subject);
 		}
 		
 		//	From
@@ -257,7 +259,7 @@ class OPError
 		$from_name = 'op-core/Error';
 		
 		//	To
-		$to_addr = Env::GetAdminMailAddress();
+		$to_addr = \Env::GetAdminMailAddress();
 		$to_name = $_SERVER['HTTP_HOST'];
 		
 		//	HTML
@@ -289,7 +291,7 @@ class OPError
 		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
 		
 		$key = 'URL';
-		$var = Toolbox::GetURL(array('port'=>1,'query'=>1)); // urldecode( $_SERVER['REQUEST_URI'] );
+		$var = \Toolbox::GetURL(array('port'=>1,'query'=>1)); // urldecode( $_SERVER['REQUEST_URI'] );
 		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
 		
 		$key = 'Referer';
@@ -309,7 +311,7 @@ class OPError
 		
 		//	STYLE
 		$message .= '<style type="text/css">'.PHP_EOL;
-		$message .= file_get_contents(OnePiece5::ConvertPath('op:/Template/css/Dump.css'));
+		$message .= file_get_contents(\OnePiece5::ConvertPath('op:/Template/css/Dump.css'));
 		$message .= '</style>'.PHP_EOL;
 		
 		//	HEAD CLOSE
@@ -415,7 +417,7 @@ class OPError
 					break;
 					
 				case 'string':
-					$join[] = "<span style='color:gray;'>'".OnePiece5::Escape($temp)."'</span>";
+					$join[] = "<span style='color:gray;'>'".\OnePiece5::Escape($temp)."'</span>";
 					break;
 					
 				case 'object':
@@ -440,9 +442,9 @@ class OPError
 	static function MagicMethodCall( $class, $name, $args )
 	{
 		//  If Toolbox method.
-		if( method_exists('Toolbox', $name) and false ){
-			OnePiece5::Mark("Please use Toolbox::$name");
-			return Toolbox::$name(
+		if( method_exists('\Toolbox', $name) and false ){
+			\OnePiece5::Mark("Please use Toolbox::$name");
+			return \Toolbox::$name(
 				isset($args[0]) ? $args[0]: null,
 				isset($args[1]) ? $args[1]: null,
 				isset($args[2]) ? $args[2]: null,
@@ -464,16 +466,16 @@ class OPError
 	
 	static function MagicMethodSet( $class, $name, $args, $call )
 	{
-		$message = OnePiece5::i18n()->En("\\{$class}::{$name}\ can not be accessible.");
+		$message = \OnePiece5::i18n()->En("\\{$class}::{$name}\ can not be accessible.");
 		$message.= " ({$call}, value={$args})";
-		OnePiece5::AdminNotice($message);
+		\OnePiece5::AdminNotice($message);
 	}
 	
 	static function MagicMethodGet( $class, $name, $call )
 	{
-		$message = OnePiece5::i18n()->En("\\{$class}::{$name}\ can not be accessible.");
+		$message = \OnePiece5::i18n()->En("\\{$class}::{$name}\ can not be accessible.");
 		$message.= " ({$call})";
-		OnePiece5::AdminNotice($message);
+		\OnePiece5::AdminNotice($message);
 	}
 	
 	static function LastError( $e )
@@ -485,7 +487,7 @@ class OPError
 		
 		$type = self::ConvertStringFromErrorNumber($type);
 		
-		OnePiece5::AdminNotice("$file [$line] $type: $message");
+		\OnePiece5::AdminNotice("$file [$line] $type: $message");
 	}
 	
 	/**
@@ -503,15 +505,15 @@ class OPError
 		$type = self::ConvertStringFromErrorNumber($type);
 		
 		//	Get route table.
-		if(!$route = Env::Get('route')){
+		if(!$route = \Env::Get('route')){
 			$route['mime'] = 'text/plain';
-			OnePiece5::AdminNotice("Route table has not been set.");
+			\OnePiece5::AdminNotice("Route table has not been set.");
 		}
 		
 		//	Get mime
 		if( empty($route['mime']) ){
 			$route['mime'] = 'text/plain';
-			OnePiece5::AdminNotice("MIME has not been set in the Route table.");
+			\OnePiece5::AdminNotice("MIME has not been set in the Route table.");
 		}
 		
 		//	Generate error format.
@@ -556,11 +558,11 @@ class OPError
 		
 		//	to translate
 		if( $lang ){
-			$message = OnePiece5::i18n()->En($message);
+			$message = \OnePiece5::i18n()->En($message);
 		}
 		
 		//	join
 		$error = "$class: $file [$line] $message";
-		OnePiece5::AdminNotice($error,$lang);
+		\OnePiece5::AdminNotice($error,$lang);
 	}
 }
