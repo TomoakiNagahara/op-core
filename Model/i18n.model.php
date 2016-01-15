@@ -49,6 +49,7 @@ class Model_i18n extends Model_Model
 			$this->_debug['count']['fetch']  = 0;
 			$this->_debug['count']['cache']  = 0;
 			$this->_debug['count']['select'] = 0;
+			$this->_debug['count']['error']  = 0;
 		}
 	}
 	
