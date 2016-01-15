@@ -525,7 +525,7 @@ class Config_i18n extends Config_Model
 		if(!$_database){
 			$database = $this->GetEnv('model-i18n');
 			if( empty($database['user']) ){
-				$database['user'] = 'model_mdl_i18n';
+				$database['user'] = 'op_mdl_i18n';
 			}
 			$_database = parent::__database($database);
 		}
