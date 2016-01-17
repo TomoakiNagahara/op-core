@@ -495,18 +495,17 @@ class Toolbox
 		return self::GetURL($conf);
 	}
 	
+	/**
+	 * Set mime.
+	 * 
+	 * @param string $mime
+	 */
 	static function SetMIME($mime)
 	{
-		//	
-		Env::Set('mime',$mime);
-		
-		//	
+		Env::Set('mime',$mime);	
 		$charset = Env::Get('charset');
-		
-		//	
 		header("Content-type: $mime; charset=$charset");
 	}
-	
 	static function GetMIME($only_sub_type=null)
 	{
 		static $_determined;
