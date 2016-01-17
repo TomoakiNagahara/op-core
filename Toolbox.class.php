@@ -506,16 +506,18 @@ class Toolbox
 		$charset = Env::Get('charset');
 		header("Content-type: $mime; charset=$charset");
 	}
+
+	/**
+	 * Get mime.
+	 * 
+	 * @param boolen $only_sub_type
+	 */
 	static function GetMIME($only_sub_type=null)
 	{
-		static $_determined;
-		if( $_determined ){
-			$mime = $_determined;
-		}else 
-		
-		//	Header has already been sent.
-		if( $_is_send = headers_sent($file,$line) ){
-			
+		if( $mime = Env::Get('mime') ){
+			//	OK
+		}else if( $_is_send = headers_sent($file,$line) ){
+			//	Header has already been sent.
 			//	Get headers list.
 			foreach( $list = headers_list() as $header ){
 				list($key, $var) = explode(':',$header);
@@ -523,14 +525,9 @@ class Toolbox
 					list($mime, $charset) = explode(';',trim($var).';');
 				}
 			}
-			
+
 			//	Will save the already sent mime.
 			Env::Set('mime',$mime);
-			
-			//	Determined.
-			$_determined = $mime;
-		}else if( $mime = Env::Get('mime') ){
-			//	OK
 		}else if( empty($mime) ){
 			//	Route table base.
 			if( $route = Env::Get('route') ){
@@ -542,16 +539,17 @@ class Toolbox
 				}
 			}
 		}
-		
+
+		//	Default
 		if( empty($mime) ){
 			$mime = 'text/html';
 		}
-		
+
 		//	parse
 		if( $only_sub_type ){
 			list($temp,$mime) = explode('/',$mime);
 		}
-		
+
 		return strtolower(trim($mime));
 	}
 	
