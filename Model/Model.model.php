@@ -54,7 +54,8 @@ abstract class Model_Model extends OnePiece5
 			if(!$io = $pdo->Connect($database)){
 				$this->ReservationToDiagnosis();
 				$this->AdminNotice("Connection was failed.");
-				$this->Location("app:/_self-test/");
+				$url = $this->GetEnv('URL_SELF_TEST', "app:/_self-test/");
+				$this->Location($url);
 			}
 		}
 		return $pdo;
