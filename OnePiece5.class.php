@@ -33,6 +33,13 @@ class OnePiece5
 	
 	function __construct()
 	{
+		if(!empty($_GET['onepiece']['admin-notice']) ){
+			Toolbox::SetMime('text/javascript');
+			$path = $_SERVER['OP_ROOT'].'Template/js/AdminNotice.js';
+			print file_get_contents( $path );
+			exit;
+		}
+
 		//	Do Initialized in the init-method.(for extends class)
 		if( method_exists($this, 'Init') ){
 			$this->Init();

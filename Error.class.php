@@ -2,97 +2,91 @@
 /**
  * Error.class.php
  * 
- * Creation: 2014-11-29
- * 
+ * @creation  2014-11-29
  * @version   1.0
- * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
  * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 
+/**
+ * Added namespace at 2016-01-16
+ */
 namespace OP;
 
 /**
  * Error
  * 
- * Creation: 2014-02-18
- * 
+ * @creation  2014-02-18
  * @version   1.0
- * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
  * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 class Error
 {
 	/**
-	 * Session's name space.
-	 * 
-	 * @var string
+	 * Stack error.
+	 * @var array
 	 */
-	const _NAME_SPACE_ = '_STACK_ERROR_';
-	
-	static private function _Set( $name, $message, $backtrace=null, $translation=false )
+	static private $_error = array();
+
+	/**
+	 * Stack notice message.
+	 * 
+	 * @param string $message
+	 * @param array  $backtrace
+	 * @param string $lang langugae code
+	 */
+	static private function _Set($message, $backtrace=null, $lang=false)
 	{
 		if(!$backtrace){
 			$backtrace = debug_backtrace();
 		}
-		
-		//	key
-		$key = md5("$name, $message");
-		
-		//	save
-		$error['name']		 = $name;
+
 		$error['message']	 = $message;
 		$error['backtrace']	 = $backtrace;
 		$error['timestamp']	 = date('Y-m-d H:i:s');
-		$error['translation']= $translation;
-		
-		//	save to session
-		$_SESSION[self::_NAME_SPACE_][$key] = $error;
+		$error['lang']		 = $lang;
+
+		self::$_error[] = $error;
 	}
-	
-	static function Set( $e, $translation=null )
-	{		
-		$name = null;
-		
+
+	static function Set($e, $lang=null)
+	{
 		if( $e instanceof Exception ){
 			$message   = $e->getMessage();
 			$backtrace = $e->getTrace();
-		//	$traceStr  = $e->getTraceAsString();
 			$file      = $e->getFile();
 			$line      = $e->getLine();
 			$prev      = $e->getPrevious();
 			$code      = $e->getCode();
 			if( method_exists($e,'getLang') ){
-				$translation = $e->getLang();
+				$lang = $e->getLang();
 			}
 		}else{
-			//	is message
 			$message = $e;
-			
-			//	
 			$backtrace = debug_backtrace();
 		}
-		
-		self::_Set( $name, $message, $backtrace, $translation );
+
+		self::_Set($message, $backtrace, $lang);
 	}
 	
 	static function Get()
 	{
-		if( isset($_SESSION[self::_NAME_SPACE_]) ){
-			return array_shift($_SESSION[self::_NAME_SPACE_]);
-		}else{
-			return null;
-		}
+		return array_shift(self::$_error);
 	}
 	
 	static function Report()
 	{
-		//	Check exists error.
-		if( empty($_SESSION[self::_NAME_SPACE_]) ){
+		if( empty(self::$_error) ){
 			return;
 		}
-		
+
+		if( \Notice::Report() ){
+			return;
+		}
+
 		//	Check display is html.
 		if(!$is_html = \Toolbox::isHTML() and !$is_cli = \Env::Get('cli') ){
 			return;
@@ -103,11 +97,6 @@ class Error
 			$io = self::_toDisplay();
 		}else{
 			$io = self::_toMail();
-		}
-		
-		//	Remove error report.
-		if( $io ){
-			unset($_SESSION[self::_NAME_SPACE_]);
 		}
 	}
 	
@@ -176,7 +165,7 @@ class Error
 	{
 		$i = 0;
 		$return = '<table>';
-		foreach( $_SESSION[self::_NAME_SPACE_] as $error ){
+		foreach( self::$_error as $error ){
 			$i++;
 			$name		 = $error['name'];
 			$message	 = $error['message'];
