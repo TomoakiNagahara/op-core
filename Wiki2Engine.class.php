@@ -57,7 +57,6 @@ class Wiki2Engine extends OnePiece5
 		$elements = array();
 		
 		// Rightmost shortest match
-	//	$pattern = '/!\[('.self::$pattAttr.')\[((?:(?!\!\['.self::$pattAttr.'\[.+?\]{2}).)*?)\]{2}/s';
 		$pattern = self::GetWiki2Pattern();
 		
 		$i = null;
