@@ -1,0 +1,26 @@
+/**
+ * op-core/Template/css/AdminNotice.css
+ * 
+ * @creation  2016-01-18
+ * @version   1.0
+ * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright Tomoaki Nagahara All right reserved.
+ */
+
+@CHARSET "UTF-8";
+
+#admin-notice{
+	border: 1px solid black;
+}
+
+#admin-notice div.headline{
+	margin:  0;
+	padding: 0.5em;
+	color: red;
+	font-weight: bold;
+}
+
+#admin-notice td.line{
+	text-align: right;
+}

@@ -36,9 +36,10 @@ class Notice extends OnePiece5
 		$json['status'] = true;
 		$json['errors'][] = OP\Error::Get();
 
-		print '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>';
+	//	print '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>';
 		print '<script>__notice__='.json_encode($json).'</script>';
-		print '<script src="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=true"></script>';
+		print '<script src="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=js"></script>';
+		print '<link rel="stylesheet" type="text/css" href="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=css">';
 
 		return true;
 	}
