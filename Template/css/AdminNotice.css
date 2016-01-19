@@ -21,6 +21,45 @@
 	font-weight: bold;
 }
 
+#admin-notice table.backtrace{
+	font-size: small;
+	color: #999;
+}
+
 #admin-notice td.line{
+	text-align: right;
+}
+
+#admin-notice span.null{
+	color: red;
+}
+
+#admin-notice span.true{
+	color: blue;
+}
+
+#admin-notice span.false{
+	color: red;
+}
+
+#admin-notice span.string{
+	font-weight: bold;
+}
+
+#admin-notice span.object{
+	cursor: pointer;
+	font-style: italic;
+}
+
+#admin-notice tr.object{
+	display: _none;
+}
+
+#admin-notice td.object{
+	border: 0px solid black;
+	padding-left: 5em;
+}
+
+#admin-notice th.args{
 	text-align: right;
 }
