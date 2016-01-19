@@ -185,12 +185,13 @@ class OnePiece5
 	 * @param string $message  Message of notice to admin.
 	 * @param string $language Language code of message. 
 	 */
-	static function StackError( $args, $locale=null )
+	static function StackError($message, $lang=null)
 	{
-		self::Mark("\StackError\ method will abolished. Please use \AdminNotice\ method..");
-		Error::Set( $args, $locale );
+		$call = self::GetCallerLine();
+		self::Mark("StackError method will abolished. Please use AdminNotice method. --> $call");
+		self::AdminNotice($message, $lang);
 	}
-	
+
 	/**
 	 * Fetch stack error.
 	 * 
