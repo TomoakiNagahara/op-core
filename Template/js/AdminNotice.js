@@ -1,4 +1,12 @@
-
+/**
+ * op-core/Template/js/AdminNotice.js
+ * 
+ * @creation  2015
+ * @version   1.0
+ * @package   op-core
+ * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
+ * @copyright Tomoaki Nagahara All right reserved.
+ */
 (function(){
 //	alert('AdminNotice');
 
@@ -12,6 +20,13 @@
 	jQuery.each(__notice__.errors, function(i, error){
 		_add_each_error(i+1, error);
 	});
+
+	//	Event
+	$('span.array, span.object').click( _click_object );
+
+	function _click_object(){
+		$(this).parent().parent().parent().next().toggle();
+	}
 
 	function _add_each_error(no, error){
 		_add_headline(no, error);
@@ -37,8 +52,6 @@
 	}
 
 	function _add_backtrace(no, backtrace){
-	//	console.dir(backtrace);
-
 		var $tr = $('<tr/>');
 		$table.append($tr);
 
@@ -72,46 +85,17 @@
 
 	function _get_args(backtrace){
 		var $args = $('<span/>');
-		var html = '';
+		var html  = '';
 
 		jQuery.each(backtrace.args, function(i, v){
-			var type = typeof v;
-			switch( type ){
-				case 'null':
-					v = '<span class="null">null</span>';
-					break;
-				case 'boolean':
-					if( v ){
-						v = '<span class="true">true</span>';
-					}else{
-						v = '<span class="false">false</span>';
-					}
-					break;
-				case 'number':
-					v = '<span class="number">'+v+'</span>';
-					break;
-				case 'string':
-					v = '<span class="string">\''+v+'\'</span>';
-					break;
-				case 'object':
-					_add_object(v);
-					if( v.hasOwnProperty(0) ){
-						v = '<span class="array">array...</span>';
-					}else{
-						v = '<span class="object">object...</span>';
-					}
-					break;
-				defualt:
-					alert(type);
-			}
-			html += ' '+v+',';
+			html += ' ' + _get_value_html(v) + ',';
 		});
 
 		html = html.replace(/^ /,'');
 		html = html.replace(/,$/,'');
-		html = '('+html+')';
+		html = '<span class="args">('+html+')</span>';
 		$args.html(html);
-		
+
 		return $args;
 	}
 
@@ -149,9 +133,49 @@
 			$td.addClass('args');
 
 			$th.html(i);
-			$td.html(v);
+			$td.html( v );
+
+			$td.html( _get_value_html(v) );
 		});
 
 		return $table;
+	}
+
+	function _get_value_html(v){
+		var type = typeof v;
+
+		if( v === null ){
+			type = 'null';
+		}
+
+		switch( type ){
+			case 'null':
+				v = '<span class="null">null</span>';
+				break;
+			case 'boolean':
+				if( v ){
+					v = '<span class="true">true</span>';
+				}else{
+					v = '<span class="false">false</span>';
+				}
+				break;
+			case 'number':
+				v = '<span class="number">'+v+'</span>';
+				break;
+			case 'string':
+				v = '<span class="string">'+v+'</span>';
+				break;
+			case 'object':
+				_add_object(v);
+				if( v.hasOwnProperty(0) ){
+					v = '<span class="array">array...</span>';
+				}else{
+					v = '<span class="object">object...</span>';
+				}
+				break;
+			defualt:
+				alert(type);
+		}
+		return v;
 	}
 })();

@@ -26,12 +26,16 @@
 	color: #999;
 }
 
+#admin-notice span.args{
+}
+
 #admin-notice td.line{
 	text-align: right;
 }
 
 #admin-notice span.null{
-	color: red;
+	color: #f55;
+	font-style: italic;
 }
 
 #admin-notice span.true{
@@ -43,7 +47,6 @@
 }
 
 #admin-notice span.string{
-	font-weight: bold;
 }
 
 #admin-notice  span.array, span.object{
@@ -51,8 +54,13 @@
 	font-style: italic;
 }
 
+#admin-notice span.args span.string{
+	margin: 0.2em;
+	font-weight: bold;
+}
+
 #admin-notice tr.object{
-	display: _none;
+	display: none;
 }
 
 #admin-notice td.object{
