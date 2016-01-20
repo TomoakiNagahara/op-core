@@ -76,7 +76,12 @@ class Error
 	{
 		return array_shift(self::$_error);
 	}
-	
+
+	static function GetAll()
+	{
+		return self::$_error;
+	}
+
 	static function Report()
 	{
 		if( empty(self::$_error) ){

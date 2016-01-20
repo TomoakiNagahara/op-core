@@ -34,7 +34,7 @@ class Notice extends OnePiece5
 	static function _toDisplay()
 	{
 		$json['status'] = true;
-		$json['errors'][] = OP\Error::Get();
+		$json['errors'] = OP\Error::GetAll();
 
 	//	print '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>';
 		print '<script>__notice__='.json_encode($json).'</script>';

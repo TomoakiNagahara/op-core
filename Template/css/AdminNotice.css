@@ -35,18 +35,18 @@
 }
 
 #admin-notice span.true{
-	color: blue;
+	color: #66f;
 }
 
 #admin-notice span.false{
-	color: red;
+	color: #f55;
 }
 
 #admin-notice span.string{
 	font-weight: bold;
 }
 
-#admin-notice span.object{
+#admin-notice  span.array, span.object{
 	cursor: pointer;
 	font-style: italic;
 }

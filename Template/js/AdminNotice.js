@@ -1,6 +1,6 @@
 
 (function(){
-	alert('AdminNotice');
+//	alert('AdminNotice');
 
 	//	container.
 	$container = $('<div/>');
@@ -47,7 +47,7 @@
 		var func = backtrace.function;
 		var clas = backtrace.class ? backtrace.class: '';
 		var type = backtrace.type  ? backtrace.type:  '';
-		var args = _add_args(backtrace);
+		var args = _get_args(backtrace);
 
 		var $td = $('<td/>');
 		$td.text(no);
@@ -65,13 +65,15 @@
 		$tr.append($td);
 
 		var $td = $('<td/>');
-		$td.html(clas+type+func+args);
+		$td.html(clas+type+func+args.html());
 		$td.addClass('function');
 		$tr.append($td);
 	}
 
-	function _add_args(backtrace){
-		var args = '';
+	function _get_args(backtrace){
+		var $args = $('<span/>');
+		var html = '';
+
 		jQuery.each(backtrace.args, function(i, v){
 			var type = typeof v;
 			switch( type ){
@@ -102,11 +104,15 @@
 				defualt:
 					alert(type);
 			}
-			args += ' '+v+',';
+			html += ' '+v+',';
 		});
-		args = args.replace(/^ /,'');
-		args = args.replace(/,$/,'');
-		return '('+args+')';
+
+		html = html.replace(/^ /,'');
+		html = html.replace(/,$/,'');
+		html = '('+html+')';
+		$args.html(html);
+		
+		return $args;
 	}
 
 	function _add_object(object){
