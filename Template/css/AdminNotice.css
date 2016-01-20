@@ -11,12 +11,29 @@
 @CHARSET "UTF-8";
 
 #admin-notice{
-	border: 1px solid black;
+	border: 0px solid black;
+	_font-family: monospace;
+}
+
+#admin-notice table{
+	border-collapse: collapse;
+	margin-left: 1em;
+}
+
+#admin-notice td.no{
+	width: 1.5em;
+	text-align: right;
+}
+
+#admin-notice tr.notice{
+	border: 1px solid #cc9;
+	background-color: #cfc;
+	color: black;
 }
 
 #admin-notice div.headline{
 	margin:  0;
-	padding: 0.5em;
+	padding: 0.5em 0 0.5em 0.5em;
 	color: red;
 	font-weight: bold;
 }
@@ -61,6 +78,10 @@
 
 #admin-notice tr.object{
 	display: none;
+}
+
+#admin-notice td.object{
+	padding: 1em;
 }
 
 #admin-notice td.object{

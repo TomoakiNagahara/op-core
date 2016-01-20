@@ -81,6 +81,10 @@
 		$td.html(clas+type+func+args.html());
 		$td.addClass('function');
 		$tr.append($td);
+
+		if( func === 'AdminNotice' ){
+			$tr.addClass('notice');
+		}
 	}
 
 	function _get_args(backtrace){
