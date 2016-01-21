@@ -223,9 +223,6 @@ class Env extends OnePiece5
 			$mark_label = $_GET['mark_label'];
 			$mark_value = $_GET['mark_label_value'];
 			Developer::SaveMarkLabelValue($mark_label,$mark_value);
-		//	list($uri) = explode('?',$_SERVER['REQUEST_URI'].'?');
-		//	header("Location: $uri");
-		//	exit;
 		}
 	}
 	
