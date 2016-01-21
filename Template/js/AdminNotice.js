@@ -65,21 +65,25 @@
 		var $td = $('<td/>');
 		$td.text(no);
 		$td.addClass('no');
+		$td.addClass('backtrace');
 		$tr.append($td);
 
 		var $td = $('<td/>');
 		$td.text(file);
 		$td.addClass('file');
+		$td.addClass('backtrace');
 		$tr.append($td);
 
 		var $td = $('<td/>');
 		$td.text(line);
 		$td.addClass('line');
+		$td.addClass('backtrace');
 		$tr.append($td);
 
 		var $td = $('<td/>');
 		$td.html(clas+type+func+args.html());
 		$td.addClass('function');
+		$td.addClass('backtrace');
 		$tr.append($td);
 
 		if( func === 'AdminNotice' ){

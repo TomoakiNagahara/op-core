@@ -17,15 +17,37 @@
 
 #admin-notice table{
 	border-collapse: collapse;
+}
+
+#admin-notice table.backtrace{
 	margin-left: 1em;
 }
 
-#admin-notice td.no{
+#admin-notice table.object{
+	width: 100%;
+}
+
+#admin-notice th.args{
+	width: 12em;
+	padding-right: 0.5em;
+}
+
+#admin-notice table.backtrace td.backtrace{
+	padding-top:    0.2em;
+	padding-bottom: 0.2em;
+}
+
+#admin-notice table.object th.args, table.object td.args{
+	padding-top:    0.1em;
+	padding-bottom: 0.1em;
+}
+
+#admin-notice table.backtrace td.no{
 	width: 1.5em;
 	text-align: right;
 }
 
-#admin-notice tr.notice{
+#admin-notice table.backtrace tr.notice{
 	border: 1px solid #cc9;
 	background-color: #cfc;
 	color: black;
