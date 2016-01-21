@@ -418,4 +418,12 @@ class App extends NewWorld5
 	{
 		return Toolbox::ConvertURL(Env::Get('favicon'));
 	}
+
+	/**
+	 * Load action file.
+	 */
+	function Action($file)
+	{
+		$this->Template($file);
+	}
 }
