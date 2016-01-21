@@ -1231,7 +1231,7 @@ class Form5 extends OnePiece5
 		$config = $this->Escape($config);
 		
 		// save config. save key is limits.
-		foreach(array('name','method','action','multipart','id','class','style','error','errors','file_name','charset') as $key ){
+		foreach(array('name','method','action','multipart','id','class','style','error','errors','file_name','charset','onsubmit','onreset') as $key ){
 			if( isset($config->$key) ){
 				$this->config->$form_name->$key = $config->$key;
 			}
@@ -1420,10 +1420,10 @@ class Form5 extends OnePiece5
 	{
 		//  Check
 		if(!$form_name){
-			$this->AdminNotice('form_name is empty. please set form_name.');
+			$this->AdminNotice("form_name is empty. please set form_name.\nEx: \$this->Form()->Start('form_name')");
 			return false;
 		}
-
+		
 		//  Check
 		if(!$this->CheckConfig($form_name)){
 			return false;
@@ -1434,7 +1434,7 @@ class Form5 extends OnePiece5
 			$this->AdminNotice("Form is not finishing. (Open form is $temp_name)");
 			return sprintf('<fail class="%s, %s, %s, %s"  />', 'OnePiece', get_class($this), __FUNCTION__, __LINE__);
 		}
-
+		
 		//  Check
 		if( !is_null($action) and !is_string($action) ){
 			$type = gettype($action);
@@ -1453,10 +1453,17 @@ class Form5 extends OnePiece5
 		$form_name = $form->name;
 		$method	 = $form->method === 'get' ? 'GET' : 'POST';
 		$charset = isset($form->charset)   ? $form->charset: $this->GetEnv('charset');
-		$id		 = empty($form->id)        ? null: sprintf('id="%s"',    $form->id);
-		$class	 = empty($form->class)     ? null: sprintf('class="%s"', $form->class);
-		$style	 = empty($form->style)     ? null: sprintf('style="%s"', $form->style);
 		$enctype = empty($form->multipart) ? null: sprintf('enctype="multipart/form-data"');
+
+		//	Attribute
+		$attr = array();
+		foreach( array('id', 'class', 'style', 'onsubmit', 'onreset') as $key ){
+			$var = isset($form->{$key}) ? $form->{$key}: null;
+			if(!$var){
+				continue;
+			}
+			$attr[] = sprintf('%s="%s"', $key, $var);
+		}
 		
 		//  action
 		if( is_null($action) ){
@@ -1469,7 +1476,7 @@ class Form5 extends OnePiece5
 		}
 		
 		//  print form tag.
-		printf('<form name="%s" action="%s" method="%s" %s Accept-Charset="%s" %s %s %s>'.$nl, $form_name, $action, $method, $enctype, $charset, $id, $class, $style);
+		printf('<form name="%s" action="%s" method="%s" %s Accept-Charset="%s" %s>'.$nl, $form_name, $action, $method, $enctype, $charset, join(' ', $attr));
 		
 		if( $method == 'GET' ){
 			$this->SetCookie( $token_key_name, $token_key, 0 );
