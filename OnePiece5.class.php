@@ -972,20 +972,20 @@ class OnePiece5
 	 * @param string $code
 	 * @return boolean
 	 */
-	function Header( $str, $replace=null, $code=null )
+	static function Header( $str, $replace=null, $code=null )
 	{
-		if( headers_sent() ){
+		if( headers_sent($file, $line) ){
 			$io = false;
-			$this->AdminNotice("Already header sent.");
+			self::AdminNotice("Header is already been sent.\($file, $line)\\");
 		}else{
 			$io = true;
 			$str = str_replace( array("\n","\r"), '', $str );
 			header( $str, $replace, $code );
 		}
-	
+
 		return $io;
 	}
-	
+
 	/**
 	 * Forward local location.(not external URL)
 	 *
