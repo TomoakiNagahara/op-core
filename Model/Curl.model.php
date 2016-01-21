@@ -70,7 +70,7 @@ class Model_Curl extends Model_Model
 		}
 
 		//	Debub
-		$this->_debug['url']['fetch'] = $url;
+		$this->_debug['url']['fetch'][] = $url;
 
 		//	Fetch
 		if( function_exists('curl_init') ){
