@@ -310,25 +310,39 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function Layout()
 	{
-		//	Skip layout processing.
+		static $layout;
+
+		if( $this->GetEnv('layout') === false ){
+			$skip = true;
+		}else
+		if( $this->GetEnv('layout-name') === false){
+			$skip = true;
+		}else
 		if( $this->GetEnv('not_use_layout') ){
+			$skip = true;
+		}else
+		{
+			$skip = false;
+		}
+
+		//	Skip layout processing.
+		if( $skip ){
 			$this->Content();
 			return;
 		}
-		
+
 		//	Generate layout object.
-		static $layout = null;
 		if(!$layout){
 			$layout = new Layout();
 		}
-		
+
 		//	Register of dispatcher.
 		$layout->Dispatcher($this);
-		
+
 		//	Execute of layout.
 		$layout->Execute();
 	}
-	
+
 	/**
 	 * Get buffering content.
 	 * 
