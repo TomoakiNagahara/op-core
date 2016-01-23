@@ -401,23 +401,13 @@ class Env extends OnePiece5
 	 * 
 	 * @return boolean
 	 */
-	static function isAdmin($is_admin=null)
+	static function isAdmin()
 	{
-		static $_is_admin;
-
-		//	Change admin status.
-		if( $is_admin !== null ){
-			$_is_admin = $is_admin;
-			return $_is_admin;
-		}
-
-		if( $_is_admin === null ){
-			//	Checking admin conditions.
-			if( self::isLocalhost() ){
-				$_is_admin = true;
-			}else{
-				$_is_admin = self::Get('admin-ip') === $_SERVER['REMOTE_ADDR'] ? true: false;
-			}
+		//	Checking admin conditions.
+		if( self::isLocalhost() ){
+			$_is_admin = true;
+		}else{
+			$_is_admin = self::Get('admin-ip') === $_SERVER['REMOTE_ADDR'] ? true: false;
 		}
 
 		return $_is_admin;
