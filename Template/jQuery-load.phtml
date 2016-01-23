@@ -8,10 +8,14 @@
  * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
  */
 /* @var $this App */
+
 //	Load flag
 Env::Set('jQuery-load', true);
+
+//	Version
+$v = empty($version) ? 1: $version;
+
 ?>
-<?php $v = empty($version) ? 1: $version; ?>
 <!-- jQuery -->
 <?php if( Toolbox::isLocalhost() ): ?>
 	<script type="text/javascript" src="//localhost/jquery/jquery-<?= $v ?>.js"></script>
