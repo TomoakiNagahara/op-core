@@ -76,6 +76,10 @@ class Error
 			$backtrace = debug_backtrace();
 		}
 
+		if( $lang !== false ){
+			$message = \OnePiece5::i18n()->Get($message, $lang);
+		}
+
 		self::_Set($message, $backtrace, $lang);
 	}
 	
