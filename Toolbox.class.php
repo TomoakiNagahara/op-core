@@ -666,6 +666,13 @@ class Toolbox
 				$real = self::ConvertPath($layout_root).$layout_name.'/';
 				break;
 
+			case 'unit':
+				if(!$real = Env::Get('unit-root')){
+					OnePiece5::AdminNotice("\unit-root\ has not been set.");
+				}
+				$real = self::ConvertPath($real);
+				break;
+
 			default:
 				$real = './';
 				OnePiece5::AdminNotice("Does not define this modifier. ($modifier)");
