@@ -127,7 +127,12 @@ class App extends NewWorld5
 	{
 		return $this->SetEnv('module-dir', $var);
 	}
-	
+
+	function SetUnitDir( $var )
+	{
+		return $this->SetEnv('unit-dir', $var);
+	}
+
 	function SetLayoutDir( $var )
 	{
 		return $this->SetEnv('layout-dir', $var);
