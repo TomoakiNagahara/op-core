@@ -40,6 +40,8 @@ class Error
 	 */
 	static private function _Set($message, $backtrace=null, $lang=false)
 	{
+		$key = sha1($message);
+		$key = substr($key, 0, 8);
 		if(!$backtrace){
 			$backtrace = debug_backtrace();
 		}
@@ -49,7 +51,7 @@ class Error
 		$error['timestamp']	 = date('Y-m-d H:i:s');
 		$error['lang']		 = $lang;
 
-		self::$_error[] = $error;
+		self::$_error[$key] = $error;
 	}
 
 	static function Set($e, $lang=null)
