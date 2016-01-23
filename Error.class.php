@@ -26,13 +26,30 @@ namespace OP;
 class Error
 {
 	/**
-	 * Stack error.
+	 * Stack for notice message.
+	 * 
 	 * @var array
 	 */
 	static private $_error;
 
 	/**
-	 * Stack notice message.
+	 * For developer.
+	 */
+	static public function Debug()
+	{
+		//	\OnePiece5::D(self::$_error);
+		foreach( self::$_error as $error ){
+			foreach( $error as $key => $var ){
+				switch($key){
+					case 'message':
+						print "$key => $var\n";
+					default:
+				}
+			}
+		}
+	}
+
+	/**
 	 * 
 	 * @param string $message
 	 * @param array  $backtrace
