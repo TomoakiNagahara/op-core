@@ -23,7 +23,7 @@ class Notice extends OnePiece5
 {
 	static function Report()
 	{
-		if( OnePiece5::Admin() ){
+		if( OnePiece5::Admin() and Toolbox::isHtml() ){
 			$io = self::_toDisplay();
 		}else{
 			$io = self::_toMail();
