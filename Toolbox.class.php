@@ -617,7 +617,7 @@ class Toolbox
 		if(!preg_match('|^([a-z]+):/[^/]?|i',$meta,$match)){
 			return $meta;
 		}
-		
+
 		//	Which are modifier.
 		switch( $modifier = strtolower($match[1]) ){
 			case 'op':
@@ -626,7 +626,7 @@ class Toolbox
 			case 'proj':
 				$real = $_SERVER[strtoupper($modifier).'_ROOT'];
 				break;
-				
+
 			case 'dot':
 				static $debug_backtrace;
 				if(!$debug_backtrace){
@@ -643,7 +643,6 @@ class Toolbox
 					$real = dirname($file).'/';
 					break;
 				}
-				
 				$debug_backtrace = null;
 				break;
 
@@ -687,7 +686,7 @@ class Toolbox
 
 		return $path;
 	}
-	
+
 	/**
 	 * Used at file system. (convert to real path)
 	 * 

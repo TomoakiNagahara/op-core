@@ -30,7 +30,7 @@ class Env extends OnePiece5
 	 * @var array
 	 */
 	static $_env;
-	
+
 	/**
 	 * Display debug information.
 	 */
@@ -38,7 +38,7 @@ class Env extends OnePiece5
 	{
 		OnePiece5::D(self::$_env);
 	}
-	
+
 	/**
 	 * Convert key and value. (Standardization)
 	 * 

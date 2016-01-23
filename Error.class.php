@@ -59,7 +59,13 @@ class Error
 		self::$_error[$key] = $error;
 	}
 
-	static function Set($e, $lang=null)
+	/**
+	 * Set admin notice message.
+	 * 
+	 * @param \Exception $e
+	 * @param string $lang
+	 */
+	static public function Set($e, $lang=null)
 	{
 		if( $e instanceof Exception ){
 			$message   = $e->getMessage();
@@ -82,13 +88,23 @@ class Error
 
 		self::_Set($message, $backtrace, $lang);
 	}
-	
-	static function Get()
+
+	/**
+	 * Get an admin notice message. (only one message)
+	 * 
+	 * @return array
+	 */
+	static public function Get()
 	{
 		return array_shift(self::$_error);
 	}
 
-	static function GetAll()
+	/**
+	 * Get all admin notice message
+	 * 
+	 * @return array
+	 */
+	static public function GetAll()
 	{
 		while( $error = self::Get() ){
 			$errors[] = $error;
@@ -96,6 +112,11 @@ class Error
 		return $errors;
 	}
 
+	/**
+	 * Do reporting.
+	 * 
+	 * @return boolean
+	 */
 	static function Report()
 	{
 		if( empty(self::$_error) ){
@@ -110,7 +131,7 @@ class Error
 		if(!$is_html = \Toolbox::isHTML() and !$is_cli = \Env::Get('cli') ){
 			return;
 		}
-		
+
 		//	Check admin.
 		if( \OnePiece5::Admin() ){
 			$io = self::_toDisplay();
@@ -118,7 +139,7 @@ class Error
 			$io = self::_toMail();
 		}
 	}
-	
+
 	static private function _getMailSubject()
 	{
 		foreach($_SESSION[self::_NAME_SPACE_] as $key => $backtraces){

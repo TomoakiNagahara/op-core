@@ -18,7 +18,6 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-
 class Notice extends OnePiece5
 {
 	static function Report()
@@ -31,6 +30,9 @@ class Notice extends OnePiece5
 		return $io;
 	}
 
+	/**
+	 * Display of error.
+	 */
 	static function _toDisplay()
 	{
 		$json['status'] = true;
@@ -50,6 +52,9 @@ class Notice extends OnePiece5
 		return true;
 	}
 
+	/**
+	 * Send email to administrator.
+	 */
 	static function _toMail()
 	{
 		return false;
