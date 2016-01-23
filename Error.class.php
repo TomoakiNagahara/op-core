@@ -29,7 +29,7 @@ class Error
 	 * Stack error.
 	 * @var array
 	 */
-	static private $_error = array();
+	static private $_error;
 
 	/**
 	 * Stack notice message.
@@ -42,6 +42,11 @@ class Error
 	{
 		$key = sha1($message);
 		$key = substr($key, 0, 8);
+
+		if( self::$_error === null ){
+			self::$_error = &$_SESSION[__CLASS__];
+		}
+
 		if(!$backtrace){
 			$backtrace = debug_backtrace();
 		}
@@ -81,7 +86,10 @@ class Error
 
 	static function GetAll()
 	{
-		return self::$_error;
+		while( $error = self::Get() ){
+			$errors[] = $error;
+		}
+		return $errors;
 	}
 
 	static function Report()
