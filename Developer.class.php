@@ -105,4 +105,79 @@ class Developer extends OnePiece5
 			print '<div style="font-size:small;">[ '.join(' | ', $join).' ]</div>';
 		}
 	}
+
+	/**
+	 * Print mark.
+	 * 
+	 * @param string $str
+	 * @param string $mark_labels
+	 * @param string $call_line
+	 */
+	static function PrintMark($str, $mark_labels, $call_line)
+	{
+		//	check display label.
+		if( $mark_labels ){
+			foreach( explode(',',$mark_labels) as $mark_label ){
+				Developer::SetMarkLabel( $mark_label );
+			}
+			if(!Developer::GetSaveMarkLabelValue($mark_label) ){
+				return;
+			}
+		}
+
+		//	message
+		if( is_int($str) ){
+			$str = (string)$str;
+		}else
+			if( is_null($str) ){
+				$str = '![ .red [null]]';
+		}else
+			if( is_bool($str) ){
+				$str = $str ? '![ .blue [true]]': '![ .red [false]]';
+		}else
+			if( $str and !is_string($str) ){
+				$str = var_export($str,true);
+				$str = str_replace( array("\r","\n"), array('\r','\n'), $str);
+		}
+
+		//	Check Wiki2Engine
+		if(!class_exists('Wiki2Engine')){
+			include_once( dirname(__FILE__) .DIRECTORY_SEPARATOR. 'Wiki2Engine.class.php');
+		}
+
+		//	build
+		$nl = PHP_EOL;
+		$str = Wiki2Engine::Wiki2($str);
+		$string = "{$nl}<div class=\"OnePiece mark\" style=\"font-size:small;\">{$call_line}- {$str}</div>{$nl}";
+
+		//	Get mime. 
+		/**
+		 * Broken only test/css.
+		$mime = Env::Get('mime')
+		*/
+
+		//	Get route table
+		$route = Env::Get('route');
+		$mime  = $route['mime'];
+
+		if( $mime ){
+			list($type, $mime) = explode('/',$mime);
+			//	Branch to each mime
+			if( $type === 'text' ){
+				switch($mime){
+					case 'css':
+					case 'javascript':
+						$string = "/* ".strip_tags(trim($string))." */{$nl}";
+						break;
+					case 'plain':
+						$string = strip_tags(trim($string)).$nl;
+						break;
+				}
+			}else{
+				$string = null;
+			}
+		}
+
+		print $string;
+	}
 }
