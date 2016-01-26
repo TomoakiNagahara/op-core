@@ -33,31 +33,58 @@ class Model_Curl extends Model_Model
 	 * @var array
 	 */
 	private $_debug;
-	
+
+	/**
+	 * Get content by url.
+	 * 
+	 * @param  string  $url
+	 * @param  integer $expire
+	 * @return string
+	 */
+	function Get($url, $expire=null)
+	{
+		return $this->Request($url, $expire, null, null);
+	}
+
+	/**
+	 * Post value to url.
+	 * 
+	 * @param  string $url
+	 * @param  array  $post
+	 * @param  string $content_type
+	 * @return string
+	 */
+	function Post($url, $post, $content_type=null)
+	{
+		return $this->Request($url, null, $post, $content_type);
+	}
+
 	/**
 	 * Get json array by url.
-	 * 
+	 *
 	 * @param  string $url
 	 * @param  array  $post
 	 * @return array
 	 */
-	function Json($url, $post=null, $expire=null)
+	function Json($url, $post=null)
 	{
 		return json_decode(
 				//	Json string.
-				$this->Get($url, $post=null),
+				$this->Post($url, $post, 'json'),
 				//	To Assoc flag.
 				true);
 	}
-	
+
 	/**
-	 * Get content by url.
+	 * Do request.
 	 * 
 	 * @param  string $url
-	 * @param  string $post
+	 * @param  string $expire
+	 * @param  array  $post
+	 * @param  string $content_type
 	 * @return string
 	 */
-	function Get($url, $post=null, $expire=null)
+	function Request($url, $expire, $post, $content_type)
 	{
 		//	Cache
 		if( $this->_is_cache or $expire){
@@ -70,11 +97,11 @@ class Model_Curl extends Model_Model
 		}
 
 		//	Debub
-		$this->_debug['url']['fetch'][] = $url;
+		$this->_debug['url'][] = $url;
 
 		//	Fetch
-		if( function_exists('curl_init') ){
-			$content = $this->Curl($url, $post);
+		if( $io = function_exists('curl_init') ){
+			$content = $this->Curl($url, $post, $content_type);
 		}else{
 			$content = $this->Fetch($url, $post);
 		}
@@ -92,18 +119,7 @@ class Model_Curl extends Model_Model
 	 * 
 	 * @var array
 	 */
-	private $_headers;
-
-	/**
-	 * Add http header. (single line)
-	 * 
-	 * @param string $key
-	 * @param string $value
-	 */
-	function AddHeader($key, $value)
-	{
-		$this->_headers[$key] = $value;
-	}
+	private $_headers = array();
 
 	/**
 	 * Set http headers by array.
@@ -124,7 +140,27 @@ class Model_Curl extends Model_Model
 	{
 		return $this->_headers;
 	}
-	
+
+	/**
+	 * Add http header. (single line)
+	 *
+	 * @param string $key
+	 * @param string $value
+	 */
+	function AddHeader($key, $value)
+	{
+		$this->_headers[$key] = $value;
+	}
+
+	function BuildHeaders()
+	{
+		$headers = null;
+		foreach( $this->_headers as $key => $var ){
+			$headers[] = "$key: $var";
+		}
+		return $headers;
+	}
+
 	/**
 	 * Certificate.
 	 * 
@@ -318,11 +354,12 @@ class Model_Curl extends Model_Model
 	/**
 	 * Do curl by url.
 	 *
-	 * @param  string $url
-	 * @param  array $post
+	 * @param  string  $url
+	 * @param  array   $post
+	 * @param  string  $content_type
 	 * @return string
 	 */
-	function Curl($url, $post=null)
+	function Curl($url, $post=null, $content_type=null)
 	{
 		if( isset($this->_debug['curl']) ){
 			$this->_debug['curl']++;
@@ -330,23 +367,37 @@ class Model_Curl extends Model_Model
 			$this->_debug['curl'] = 1;
 		}
 
-	//	$this->AdminNotice("Does not implements, yet.");
-	//	return self::Fetch($url, $post);
-
 		//	Get cURL resource.
 		$curl = $this->GetCurl();
+
+		if( $post ){
+			switch( $content_type ){
+				case 'json':
+					$data = json_encode($post);
+				case 'xml':
+					$this->AddHeader('Content-Type', "application/{$content_type}");
+					break;
+				default:
+				//	Content-Type: application/x-www-form-urlencoded
+					$data = http_build_query($post);
+			}
+
+			curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'POST' );
+			curl_setopt( $curl, CURLOPT_POST, true );
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $data );
+		}
 
 		//	Fetch URL
 		curl_setopt( $curl, CURLOPT_URL, $url );
 
 		// Get http header with body
-		curl_setopt( $curl, CURLOPT_HEADER, false );
+		curl_setopt( $curl, CURLOPT_HEADER, true );
 
 		//	Get string of body. (false is to output)
 		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
 
 		// Set timeout seconds.
-		curl_setopt( $curl, CURLOPT_TIMEOUT, $this->GetTimeout());
+		curl_setopt( $curl, CURLOPT_TIMEOUT, $this->GetTimeout() );
 
 		// Track the location header. (To redirect)
 		curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
@@ -358,22 +409,15 @@ class Model_Curl extends Model_Model
 		curl_setopt( $curl, CURLOPT_USERAGENT, $this->GetUserAgent() );
 
 		//	Referer
-	//	curl_setopt( $curl, CURLOPT_REFERER, "" );
+		curl_setopt( $curl, CURLOPT_REFERER, "" );
 
-		/* ==== HEADER ==== */
+		// ==== HEADER ==== //
 
-		if( $header = $this->GetHeaders() ){
-			curl_setopt( $curl, CURLOPT_HTTPHEADER, $header );
+		if( $headers = $this->BuildHeaders() ){
+			curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
 		}
 
-		/* ==== POST ==== */
-
-		if( $post ){
-			curl_setopt( $curl, CURLOPT_POST, true );
-			curl_setopt( $curl, CURLOPT_POSTFIELDS, http_build_query($post) );
-		}
-
-		/* ==== COOKIE ==== */
+		// ==== COOKIE ==== //
 
 		// Set header's cookie data. (Direct write to http header.)
 		if( $cookie = $this->GetCookieString() ){
@@ -389,7 +433,7 @@ class Model_Curl extends Model_Model
 			curl_setopt( $curl, CURLOPT_COOKIEJAR, $this->_cookie );
 		}
 
-		/* ==== PROXY ==== */
+		// ==== PROXY ==== //
 
 		//	Set proxy.
 		if( null ){
@@ -397,24 +441,34 @@ class Model_Curl extends Model_Model
 			curl_setopt($ch, CURLOPT_PROXYPORT, $port_number);
 		}
 
-		/* ==== SSL ==== */
+		// ==== SSL ==== //
 
 		//	SSL Connection.
 		if( $this->GetCertificate() ){
 			//	Use the certificate.
 			curl_setopt( $curl, CURLOPT_CAINFO, $certificate );
 			curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, true );
-			//	curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 2 );
+		//	curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 2 );
 		}else{
 			//	Does not validation of the certificate.
 			curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
 		}
 
 		//	Execute
-		$body = curl_exec( $curl );
+		$response = curl_exec( $curl );
 
 		//	Information
 		$this->_info = curl_getinfo( $curl );
+		$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+		$header = substr($response, 0, $header_size);
+		$body   = substr($response, $header_size);
+
+		if( $this->Admin() ){
+			$result['url'] = $url;
+			$result['info'] = $this->_info;
+			$result['response'] = $body;
+			$this->_debug['result'][] = $result;
+		}
 
 		return $body;
 	}
@@ -483,18 +537,4 @@ class Model_Curl extends Model_Model
 		$this->P("Debug: Model-Curl");
 		$this->d($this->_debug);
 	}
-}
-
-/**
- * Config_Curl
- * 
- * @creation  2015-12-26
- * @version   1.0
- * @package   op-core
- * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright Tomoaki Nagahara All right reserved.
- */
-class Config_Curl extends Config_Model
-{
-	
 }
