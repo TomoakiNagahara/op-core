@@ -21,6 +21,9 @@
 		_add_each_error(i+1, error);
 	});
 
+	//	Why two times call???
+	__notice__.errors = [];
+
 	//	Event
 	$('span.array, span.object').click( _click_object );
 

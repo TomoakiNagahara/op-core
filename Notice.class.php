@@ -42,12 +42,12 @@ class Notice extends OnePiece5
 			//	jQuery was loaded.
 		}else{
 			Env::Set('jQuery-load', true);
-			print '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>';
+			print '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'.PHP_EOL;
 		}
 
-		print '<script>__notice__='.json_encode($json).'</script>';
-		print '<script src="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=js"></script>';
-		print '<link rel="stylesheet" type="text/css" href="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=css">';
+		print '<script>__notice__='.json_encode($json).'</script>'.PHP_EOL;
+		print '<script src="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=js"></script>'.PHP_EOL;
+		print '<link rel="stylesheet" type="text/css" href="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=css">'.PHP_EOL;
 
 		return true;
 	}
