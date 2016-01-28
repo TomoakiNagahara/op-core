@@ -150,23 +150,27 @@ class DoctorX extends OnePiece5
 		if(!$this->_password){
 			return;
 		}
-		
-		//	Database connection config.
-		$database = $blueprint->config->database;
-		$database->user     = $this->_user;
-		$database->password = $this->_password;
-		
+
 		try{
-			//	Database connection at root.
-			if(!$io = $this->PDO()->Connect($database)){
+			if(!isset($blueprint->connect)){
+				$this->AdminNotice("\Does not set \$blueprint->connect.\\");
 				return false;
 			}
-			
-			//	Log
-			$user = $database->user;
-			$message = "Database connection: user={$user}";
-			$this->Log($message, $io);
-			
+
+			//	Connection by root user.
+			foreach( $blueprint->connect as $connect ){
+				$connect->user     = $this->_user;
+				$connect->password = $this->_password;
+
+				if(!$io = $this->PDO()->Connect($connect)){
+					$host = $connect->host;
+					$this->AdminNotice("Does not connect. \host=$host\\");
+					return false;
+				}
+
+				$this->Log("Database connection: user={$connect->user}", $io);
+			}
+
 			//	Rebuild
 			$this->CreateUser($blueprint);
 			$this->CreateDatabase($blueprint);
