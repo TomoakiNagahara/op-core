@@ -351,11 +351,7 @@ class PDO5 extends OnePiece5
 			$db  = $this->database ? 'dbname='.$this->database.';': null;
 			if( $this->charset ){
 				if( $this->driver === 'mysql' ){
-					if( version_compare(PHP_VERSION,'7') ){
-						// PHP 7.0
-					}else{
-						$options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '{$this->charset}'";
-					}
+					$options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '{$this->charset}'";
 				}
 			}
 			
