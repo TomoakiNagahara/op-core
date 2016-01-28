@@ -1436,7 +1436,7 @@ class OnePiece5
 	 * @param  string $default
 	 * @return string
 	 */
-	function GetRequest($key, $method=null, $default=null)
+	static function GetRequest($key, $method=null, $default=null)
 	{
 		return Toolbox::GetRequest($key, $method, $default);
 	}
