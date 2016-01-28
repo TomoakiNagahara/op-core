@@ -133,7 +133,7 @@ class DoctorX extends OnePiece5
 	{
 		$this->_user	 = $user;
 		$this->_password = $password;
-		$this->Log("user:$user, password:$password");
+		$this->Log("user:$user, password:![.white[$password]]");
 	}
 	
 	function Build($blueprint)
