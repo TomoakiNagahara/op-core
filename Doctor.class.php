@@ -136,6 +136,7 @@ class Doctor extends OnePiece5
 		
 		//	
 		$this->_blueprint = new Config();
+		$this->_blueprint->connect	 = array();
 		$this->_blueprint->grant	 = array();
 		$this->_blueprint->user		 = array();
 		$this->_blueprint->database	 = array();
@@ -375,7 +376,11 @@ class Doctor extends OnePiece5
 				$config->database->password = $this->_root_password;
 				
 				//	Root user's Diagnosis.
-				$this->CheckConnection($config);
+				if(!$this->CheckConnection($config)){
+					continue;
+				}
+				
+				//	User
 				$this->CheckUser($origin);
 				
 				//	Grant will done every time.
@@ -407,6 +412,13 @@ class Doctor extends OnePiece5
 		unset($database->database);
 		unset($database->name);
 		
+		//	Connection check is each host.
+		$host = $database->host;
+		$key  = substr(md5($host), 0, 8);
+		if( isset( $this->_blueprint->connect[$key]) ){
+			return $this->_blueprint->connect[$key]->result;
+		}
+
 		//	Connection
 		$io   = $this->PDO()->Connect($database);
 		$dsn  = $this->PDO()->GetDSN();
@@ -421,6 +433,12 @@ class Doctor extends OnePiece5
 			$error = $this->FetchError();
 			$this->_log($error['message'],$io);
 		}
+
+		//	Stack blueprint.
+		$database->result = $io;
+		$this->_blueprint->connect[$key] = $database;
+
+		return $io;
 	}
 	
 	function CheckUser($config)
