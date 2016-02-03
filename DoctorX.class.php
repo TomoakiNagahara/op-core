@@ -81,13 +81,11 @@ class DoctorX extends OnePiece5
 	
 	function PrintLog()
 	{
-		$this->p("![.bold[Display Operation build log:]] ![.gray .small[".$this->GetCallerLine()."]]");
-		
 		if(!$this->_log){
 			$this->p("![ margin-left:0.6em .gray [Nothing.]]");
 			return;
 		}
-		
+
 		print '<ol>';
 		foreach($this->_log as $log){
 			$result	 = $log['result'];
@@ -102,14 +100,12 @@ class DoctorX extends OnePiece5
 			print $this->p("![li .{$class} .small[$message]]");
 		}
 		print '</ol>';
-		
+
 		$this->_log = null;
 	}
 	
 	function PrintError()
 	{
-		$this->p("![.bold[Display Operation error log:]] ![.gray .small[".$this->GetCallerLine()."]]");
-		
 		if( empty($this->_error) ){
 			$this->p("![margin:0.7em .gray[Nothing]]");
 			return;
