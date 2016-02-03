@@ -318,7 +318,7 @@ class PDO5 extends OnePiece5
 			$this->AdminNotice("This arguments type is not supported. ($type)");
 			return false;
 		}
-		
+
 		//  init
 		$this->driver   = isset($args['driver'])   ? $args['driver']   : 'mysql';
 		$this->host     = isset($args['host'])     ? $args['host']     : 'localhost';
@@ -329,15 +329,15 @@ class PDO5 extends OnePiece5
 		$this->database = isset($args['database']) ? $args['database'] : $name;
 		$charset        = isset($args['charset'])  ? $args['charset']  : null;
 		$options        = array();
-		
+
 		//	Checking charset.
 		if(!$charset){
 			$this->AdminNotice("\charset\ has not been set.\nEx: \$database->charset = 'utf8'");
 		}
-		
+
 		//	utf-8 -> utf8
 		$this->charset = $this->ConvertCharset($charset);
-		
+
 		//	check
 		foreach( array('driver','host','user') as $key ){
 			if( empty($this->$key) ){
@@ -345,7 +345,7 @@ class PDO5 extends OnePiece5
 				return false;
 			}
 		}
-		
+
 		try{
 			//	Support to PHP 5.1 ("USE db_name" is not supports.)
 			$db  = $this->database ? 'dbname='.$this->database.';': null;
@@ -354,11 +354,11 @@ class PDO5 extends OnePiece5
 					$options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '{$this->charset}'";
 				}
 			}
-			
+
 			//	Create DNS
 			$this->_dsn = "{$this->driver}:{$db}host={$this->host}";
 			$this->Qu($this->_dsn);
-			
+
 			//	Instance PDO
 			if(!$this->pdo = new PDO( $this->_dsn, $this->user, $password, $options )){
 				$this->AdminNotice("Can not connect database. \( {$this->_dsn}, {$this->user} )\ ");
@@ -379,22 +379,25 @@ class PDO5 extends OnePiece5
 				case 0:
 					$text .= " (Maybe, not installed)";
 					break;
+
 				case 1045:
 					$text = "Access was denied. \\{$this->user}@{$this->host}:{$this->port}\\";
 					break;
+
 				case 2002:
-					$text = 'No such file or directory.';
+					$text = "Connection was refused.";
 					break;
+
 				default:
-				$this->mark($code);
+				$this->mark($code.', '.$text);
 			}
 			$this->AdminNotice("$text");
 			return false;
 		}
-		
+
 		//  connected flag
 		$this->isConnect = true;
-		
+
 		return true;
 	}
 	
