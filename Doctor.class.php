@@ -109,31 +109,34 @@ class Doctor extends OnePiece5
 		//	Get reservation class name.
 		if( $reservation = $this->GetSession('reservation') ){
 			foreach($reservation as $class_name => $file_path){
-				
+
 				//	Instantiate
-				include_once($file_path);
+				if(!$io = include_once($file_path)){
+					$this->mark("$file_path is failed.");
+					continue;
+				}
 				$object = new $class_name();
-				
+
 				//	Check
 				if(!method_exists($object, 'selftest')){
 					$this->_debug[__FUNCTION__][][$class_name] = 'This class does not have self-test method.';
 					continue;
 				}
-				
+
 				//	Registration self-test Config.
 				$this->Registration($class_name, $object->selftest());
 			}
 		}
-		
+
 		//	
 		$this->_is_diagnosis = true;
-		
+
 		//	
 		$this->_log = array();
-		
+
 		//	
 		$this->_diagnosis = new Config();
-		
+
 		//	
 		$this->_blueprint = new Config();
 		$this->_blueprint->connect	 = array();
@@ -411,7 +414,7 @@ class Doctor extends OnePiece5
 		$database = $config->database->Copy();
 		unset($database->database);
 		unset($database->name);
-		
+
 		//	Connection check is each host.
 		$host = $database->host;
 		$key  = substr(md5($host), 0, 8);
@@ -423,15 +426,15 @@ class Doctor extends OnePiece5
 		$io   = $this->PDO()->Connect($database);
 		$dsn  = $this->PDO()->GetDSN();
 		$user = $database->user;
-		
+
 		//	Write diagnosis
 		$this->_diagnosis->$user->$dsn->connection = $io;
-		
+
 		//	return
 		if(!$io){
 			//	Error
 			$error = $this->FetchError();
-			$this->_log($error['message'],$io);
+			$this->_log($error['message'], $io);
 		}
 
 		//	Stack blueprint.
@@ -1156,14 +1159,14 @@ class Doctor extends OnePiece5
 	function _Log($message, $result=null, $from='en')
 	{
 		list($message, $query) = explode("\n",$message."\n");
-		
+
 		//	Generate log array.
 		$log = array();
 		$log['from']	 = $from;
 		$log['result']	 = $result;
 		$log['message']	 = $message;
 		$log['query']	 = $query;
-		
+
 		//	Stack log array.
 		$this->_log[] = $log;
 	}
@@ -1179,24 +1182,26 @@ class Doctor extends OnePiece5
 		}
 		$message = $this->i18n()->En($message);
 		$this->p("![.{$class} margin:1em [$message]]");
-		
+
 		//	Display diagnosis.
 		$Poneglyph = new Poneglyph();
 		$Poneglyph->Display($this->GetDiagnosis());
-		
+
+		//	Error log.
 		print '<ol>';
 		while($log = array_shift($this->_log)){
+
 			//	init
 			$from	 = $log['from'];
 			$result  = $log['result'];
 			$message = $log['message'];
 			$query	 = $log['query'];
-			
+
 			//	translate
 			if( $from ){
 				$message = $this->i18n()->Get($message, $from);
 			}
-			
+
 			//	class
 			if( $result === null ){
 				$class = 'gray';
@@ -1205,7 +1210,7 @@ class Doctor extends OnePiece5
 			}else{
 				$class = $result;
 			}
-			
+
 			//	print
 			print $this->p("![li .small .{$class}[{$message} \n $query]]");
 		}
@@ -1244,22 +1249,22 @@ class Poneglyph extends OnePiece5
 			if( $user === 'PRI' or $user === 'AI' ){
 				continue;
 			}
-			
+
 			//	continue
 			if( $user === 'ai' or $user === 'pkey' ){
 				continue;
 			}
-			
+
 			//	init
 			$_tank = array();
-			
+
 			//	User
 			$this->_tank['users'][$user]['io'] = true;
-			
+
 			//	parse dns
 			foreach( $dsn as $dsn_key => $dsn_var){
 				//	init
-				list($product, $temp) = explode(':', $dsn_key);
+				list($product, $temp) = explode(':', $dsn_key); // mysql:host=localhost4
 				list($temp, $host) = explode('=', $temp);
 				//	
 				foreach($dsn_var as $key => $var){
@@ -1276,6 +1281,7 @@ class Poneglyph extends OnePiece5
 							}
 							$this->_tank['users'][$user]['connection'][$host] = $var;
 							break;
+
 						case 'database':
 							foreach($var as $database => $io){
 								$this->_tank['users'][$user]['databases'][$database]['io'] = $io;
@@ -1301,14 +1307,14 @@ class Poneglyph extends OnePiece5
 								$temp = explode('.', $database_table);
 								$database = array_shift($temp);
 								$table = join('.',$temp);
-								
+
 								foreach($columns as $column => $struct){
 
 									if( is_null($struct) ){
 										$this->_tank['users'][$user]['databases'][$database]['tables'][$table]['columns'][$column]['io'] = null;
 										continue;
 									}
-									
+
 									if( empty($struct) ){
 										$io = false;
 										$this->_tank['users'][$user]['io'] = $io;
@@ -1317,7 +1323,7 @@ class Poneglyph extends OnePiece5
 										$this->_tank['users'][$user]['databases'][$database]['tables'][$table]['columns'][$column]['io'] = $io;
 										continue;
 									}
-									
+
 									foreach($struct as $attr => $io){
 										if( $io === false ){
 											$this->_tank['users'][$user]['io'] = $io;
@@ -1333,11 +1339,11 @@ class Poneglyph extends OnePiece5
 						default:
 						$this->Mark($key);
 						$this->D($var);
-					}				
+					}
 				}
 			} // end dns;
 		}
-		
+
 		$this->_Ignition();
 	}
 	
@@ -1346,9 +1352,10 @@ class Poneglyph extends OnePiece5
 		if( empty($this->_tank['users']) ){
 			return;
 		}
-		
+
 		echo '<ol>';
 		foreach($this->_tank['users'] as $user => $_user){
+			//	Each user
 			echo '<li>';
 			$color = $_user['io'] ? 'blue': 'red';
 			echo "<span style='color:$color;'>user: $user</span>";
