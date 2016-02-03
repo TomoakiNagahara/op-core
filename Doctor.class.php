@@ -1170,7 +1170,6 @@ class Doctor extends OnePiece5
 	
 	function PrintLog()
 	{
-		$this->p("![.bold .bigger[Display Selftest's diagnosis log:]]");
 		if( $this->_is_diagnosis ){
 			$class = 'green';
 			$message = "Diagnostic results was no problem.";
