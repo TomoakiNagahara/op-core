@@ -1267,7 +1267,15 @@ class Poneglyph extends OnePiece5
 					//	switch
 					switch( $key ){
 						case 'connection':
-							$this->_tank['users'][$user]['connection']['io'] = $var;
+							//	Init
+							if(!isset($this->_tank['users'][$user]['connection']['io'])){
+								$this->_tank['users'][$user]['connection']['io'] = true;
+							}
+							//	io
+							if(!$var){
+								$this->_tank['users'][$user]['connection']['io'] = false;
+							}
+							$this->_tank['users'][$user]['connection'][$host] = $var;
 							break;
 						case 'database':
 							foreach($var as $database => $io){
@@ -1348,9 +1356,21 @@ class Poneglyph extends OnePiece5
 			if( $_user['io'] ){
 				continue;
 			}
+
+			//	Each status.
 			echo '<ol>';
-			$color = $_user['connection']['io'] ? 'blue': 'red';
-			echo "<li><span style='color:$color;'>connection</span></li>";
+
+			//	Each connection by host.
+			$color = empty($_user['connection']['io']) ? 'red': 'blue';
+			echo "<li style=\"color:$color;\">Connection</li>";
+			echo '<ol>';
+			foreach( $_user['connection'] as $host => $io ){
+				if( $host === 'io' ){ continue; }
+				$color = $io ? 'blue': 'red';
+				echo "<li><span style='color:$color;'>$host</span></li>";
+			}
+			echo '</ol>';
+
 			foreach($_user['databases'] as $database => $_database ){
 				$color = $_database['io']  ? 'blue': 'red';
 				echo "<li><span style='color:$color;'>database: $database</span></li>";
