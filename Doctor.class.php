@@ -1155,11 +1155,6 @@ class Doctor extends OnePiece5
 	
 	function _Log($message, $result=null, $from='en')
 	{
-		return $this->_pdo_error_($message, $result, $from);
-	}
-	
-	function _pdo_error_($message, $result=null, $from='en')
-	{
 		list($message, $query) = explode("\n",$message."\n");
 		
 		//	Generate log array.
