@@ -714,7 +714,7 @@ class Doctor extends OnePiece5
 			
 			//	Comment difference does not rebuild.
 			if( $key === 'comment' ){
-				$io = true;
+			//	$io = true;
 			}
 			
 			//	Auto Increment
