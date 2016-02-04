@@ -11,7 +11,7 @@
 
 /**
  * Notice
- *
+ * 
  * @creation  2016-01-17
  * @version   1.0
  * @package   op-core
@@ -20,20 +20,27 @@
  */
 class Notice extends OnePiece5
 {
+	/**
+	 * Reporting.
+	 */
 	static function Report()
 	{
-		if( OnePiece5::Admin() and Toolbox::isHtml() ){
-			$io = self::_toDisplay();
-		}else{
-			$io = self::_toMail();
+		if(!OnePiece5::Admin() ){
+			self::_toMail();
+			return;
 		}
-		return $io;
+
+		if(!Toolbox::isHtml() ){
+			return;
+		}
+
+		self::toDisplay();
 	}
 
 	/**
 	 * Display of error.
 	 */
-	static function _toDisplay()
+	static public function toDisplay()
 	{
 		$json['status'] = true;
 		$json['errors'] = OP\Error::GetAll();
@@ -53,10 +60,224 @@ class Notice extends OnePiece5
 	}
 
 	/**
-	 * Send email to administrator.
+	 * Send error mail to admin.
 	 */
-	static function _toMail()
+	static public function toMail()
 	{
-		return false;
+		foreach( OP\Error::GetAll() as $error ){
+			$message = $error['message'];
+
+			//	Cache's key.
+			$ckey = md5($message);
+
+			//	Would not send same mail.
+			if( isset($_SESSION['_ONEPIECE_'][__CLASS__][$ckey]) ){
+				return true;
+			}else if( OnePiece5::Cache()->Get($ckey) ){
+				return true;
+			}else{
+				$_SESSION['_ONEPIECE_'][__CLASS__][$ckey] = $message;
+				OnePiece5::Cache()->Set($ckey, $message);
+			}
+
+			//	Execute
+			self::_toMail($error);
+		}
+	}
+
+	/**
+	 * Execute send of mail of each errors.
+	 * 
+	 * @param  array $error
+	 */
+	static private function _toMail($error)
+	{
+		$message   = $error['message'];
+		$backtrace = $error['backtrace'];
+		$timestamp = $error['timestamp'];
+		$lang      = $error['lang'];
+
+		//	Get mail subject.
+		$subject = '[Error] '.$message;
+
+		//	From
+		$from_addr = EMail::GetLocalAddress();
+		$from_name = 'op-core/Error';
+
+		//	To
+		$to_addr = Env::Get('admin-mail');
+		$to_name = $_SERVER['HTTP_HOST'];
+
+		//	HTML
+		$html = self::_GenerateBody($timestamp, $backtrace);
+
+		//	Execute EMail.
+		$mail = new EMail();
+		$mail->From($from_addr, $from_name);
+		$mail->To($to_addr, $to_name);
+		$mail->Subject($subject);
+		$mail->Content($html,'text/html');
+		$mail->Send();
+	//	$mail->Debug();
+	}
+
+	/**
+	 * Genrate html body.
+	 * 
+	 * @param  string $timestamp
+	 * @param  array  $backtrace
+	 * @return string
+	 */
+	static private function _GenerateBody($timestamp, $backtrace)
+	{
+		$key = 'Timestamp';
+		$var = $timestamp;
+		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
+
+		$key = 'UserAgent';
+		$var = $_SERVER['HTTP_USER_AGENT'];
+		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
+
+		$key = 'Host';
+		$var = $_SERVER['HTTP_HOST'];
+		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
+
+		$key = 'URL';
+		$var = Toolbox::GetURL(array('port'=>1,'query'=>1));
+		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
+
+		$key = 'Referer';
+		$var = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER']: null;
+		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
+
+		$table = '![table['.join('',$tr).']]'.PHP_EOL;
+
+		//	INIT
+		$html = '';
+
+		//	HTML
+		$html .= '<html>'.PHP_EOL;
+
+		//	HEAD
+		$html .= '<head>'.PHP_EOL;
+
+		//	STYLE
+		$html .= '<style type="text/css">'.PHP_EOL;
+		$html .= file_get_contents(OnePiece5::ConvertPath('op:/Template/css/Dump.css'));
+		$html .= '</style>'.PHP_EOL;
+
+		//	HEAD CLOSE
+		$html .= '</head>'.PHP_EOL;
+
+		//	BODY
+		$html .= '<body>'.PHP_EOL;
+
+		//	HTML
+		$html .= Wiki2Engine::Wiki2($table);
+		$html .= '<hr/>'.PHP_EOL;
+		$html .= self::_GenerateTable( array_reverse($backtrace) );
+
+		//	BODY CLOSE
+		$html .= '<body>'.PHP_EOL;
+
+		//	HTML
+		$html .= '</html>';
+
+		return $html;
+	}
+
+	/**
+	 * Generate backtrace table.
+	 * 
+	 * @param  array $backtrace
+	 * @return string
+	 */
+	static private function _GenerateTable($backtrace)
+	{
+		$table = '<table style="width:100%; font-size:small;">';
+		$table.= '<tbody>';
+
+		foreach($backtrace as $data){
+			$table .= self::_GenerateTableLine($data);
+		}
+
+		$table.= '</tbody>';
+		$table.= '</table>';
+
+		return $table;
+	}
+
+	/**
+	 * Generate backtrace table's each line.
+	 * 
+	 * @param  array $data
+	 * @return string
+	 */
+	static private function _GenerateTableLine($data)
+	{
+		$file  = isset($data['file'])     ? $data['file']     : null;
+		$line  = isset($data['line'])     ? $data['line']     : null;
+		$func  = isset($data['function']) ? $data['function'] : null;
+		$class = isset($data['class'])    ? $data['class']    : null;
+		$type  = isset($data['type'])     ? $data['type']     : null;
+		$args  = isset($data['args'])     ? $data['args']     : null;
+
+		$file = OnePiece5::CompressPath($file);
+		$args = self::_GenerateArgs($args);
+
+		$tr = '<tr>';
+		$tr.= '<td>'.$file.'</td>';
+		$tr.= '<td style="text-align:right;">'.$line.'</td>';
+		$tr.= '<td>'.$class.$type.$func."($args)</td>";
+		$tr.= '</tr>';
+
+		return $tr;
+	}
+
+	/**
+	 * Generate backtrace argument.
+	 * 
+	 * @param  array $args
+	 * @return string
+	 */
+	static private function _GenerateArgs($args)
+	{
+		foreach($args as $var){
+			$span[] = self::_GenerateArgsSpan($var);
+		}
+		return join(', ', $span);
+	}
+
+	/**
+	 * Generate backtrace argument's each value's span.
+	 * 
+	 * @param  array $var
+	 * @return string
+	 */
+	static private function _GenerateArgsSpan($var)
+	{
+		$style = null;
+		$type  = strtolower(gettype($var));
+		switch($type){
+			case 'array':
+				$style = 'font-style: italic;';
+				$count = count($var);
+				$value = "array($count)";
+				break;
+
+			case 'object':
+				$style = 'font-style: italic;';
+				$value = get_class($var);
+				break;
+
+			case 'string':
+				$value = "'$var'";
+				break;
+
+			default:
+				$style = 'font-style: italic;';
+				$value = $var;
+		}
+		return "<span style=\"$style\">$value</span>";
 	}
 }
