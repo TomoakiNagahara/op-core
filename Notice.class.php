@@ -26,7 +26,7 @@ class Notice extends OnePiece5
 	static function Report()
 	{
 		if(!OnePiece5::Admin() ){
-			self::_toMail();
+			self::toMail();
 			return;
 		}
 
@@ -72,16 +72,16 @@ class Notice extends OnePiece5
 
 			//	Would not send same mail.
 			if( isset($_SESSION['_ONEPIECE_'][__CLASS__][$ckey]) ){
-				return true;
+				return;
 			}else if( OnePiece5::Cache()->Get($ckey) ){
-				return true;
+				return;
 			}else{
 				$_SESSION['_ONEPIECE_'][__CLASS__][$ckey] = $message;
 				OnePiece5::Cache()->Set($ckey, $message);
 			}
 
 			//	Execute
-			self::_toMail($error);
+			self::_SendMail($error);
 		}
 	}
 
@@ -90,7 +90,7 @@ class Notice extends OnePiece5
 	 * 
 	 * @param  array $error
 	 */
-	static private function _toMail($error)
+	static private function _SendMail($error)
 	{
 		$message   = $error['message'];
 		$backtrace = $error['backtrace'];
@@ -242,6 +242,7 @@ class Notice extends OnePiece5
 	 */
 	static private function _GenerateArgs($args)
 	{
+		$span = array();
 		foreach($args as $var){
 			$span[] = self::_GenerateArgsSpan($var);
 		}

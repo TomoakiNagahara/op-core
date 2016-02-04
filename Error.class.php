@@ -113,6 +113,9 @@ class Error
 	 */
 	static public function Get()
 	{
+		if( empty(self::$_error) ){
+			return null;
+		}
 		return array_shift(self::$_error);
 	}
 
@@ -123,6 +126,7 @@ class Error
 	 */
 	static public function GetAll()
 	{
+		$errors = null;
 		while( $error = self::Get() ){
 			$errors[] = $error;
 		}
