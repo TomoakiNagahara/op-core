@@ -37,7 +37,6 @@ class Error
 	 */
 	static public function Debug()
 	{
-		//	\OnePiece5::D(self::$_error);
 		foreach( self::$_error as $error ){
 			foreach( $error as $key => $var ){
 				switch($key){
@@ -50,6 +49,7 @@ class Error
 	}
 
 	/**
+	 * Stacking error information.
 	 * 
 	 * @param string $message
 	 * @param array  $backtrace
@@ -97,10 +97,6 @@ class Error
 		}else{
 			$message = $e;
 			$backtrace = debug_backtrace();
-		}
-
-		if( $lang !== false ){
-			$message = \OnePiece5::i18n()->Get($message, $lang);
 		}
 
 		self::_Set($message, $backtrace, $lang);
@@ -223,41 +219,35 @@ class Error
 				isset($args[5]) ? $args[5]: null
 			);
 		}
-		
+
 		$message = "This method does not exists in class.".PHP_EOL."\ - {$class}::{$name}\\";
-		self::_Set( $name, $message, null, 'en' );
+		$backtrace = debug_backtrace();
+		self::_Set($message, $backtrace, 'en');
 	}
-	
+
 	static function MagicMethodCallStatic( $class, $name, $args )
 	{
 		//	Call static is PHP 5.3.0 later
 		self::MagicMethodCall( $class, $name, $args );
 	}
-	
+
 	static function MagicMethodSet( $class, $name, $args, $call )
 	{
-		$message = \OnePiece5::i18n()->En("\\{$class}::{$name}\ can not be accessible.");
-		$message.= " ({$call}, value={$args})";
-		\OnePiece5::AdminNotice($message);
+		$message = "\\{$class}::{$name}\ can not be accessible. ({$call})";
+		$backtrace = debug_backtrace();
+		self::_Set($message, $backtrace, 'en');
 	}
-	
+
 	static function MagicMethodGet( $class, $name, $call )
 	{
-		$message = \OnePiece5::i18n()->En("\\{$class}::{$name}\ can not be accessible.");
-		$message.= " ({$call})";
-		\OnePiece5::AdminNotice($message);
+		$message = "\\{$class}::{$name}\ can not be accessible. ({$call})";
+		$backtrace = debug_backtrace();
+		self::_Set($message, $backtrace, 'en');
 	}
-	
-	static function LastError( $e )
+
+	static function LastError($e)
 	{
-		$file	 = $e['file'];
-		$line	 = $e['line'];
-		$type	 = $e['type'];
-		$message = $e['message'];
-		
-		$type = self::ConvertStringFromErrorNumber($type);
-		
-		\OnePiece5::AdminNotice("$file [$line] $type: $message");
+		self::Set($e);
 	}
 	
 	/**
@@ -270,22 +260,20 @@ class Error
 	 * @param  unknown $context
 	 * @return boolean
 	 */
-	static function Handler( $type, $str, $file, $line, $context )
+	static function Handler($type, $str, $file, $line, $context)
 	{
 		$type = self::ConvertStringFromErrorNumber($type);
-		
+
 		//	Get route table.
 		if(!$route = \Env::Get('route')){
 			$route['mime'] = 'text/plain';
-			\OnePiece5::AdminNotice("Route table has not been set.");
 		}
-		
+
 		//	Get mime
 		if( empty($route['mime']) ){
 			$route['mime'] = 'text/plain';
-			\OnePiece5::AdminNotice("MIME has not been set in the Route table.");
 		}
-		
+
 		//	Generate error format.
 		$base = '%s [%s] %s: %s';
 		switch( $mime = strtolower($route['mime']) ){
@@ -299,12 +287,12 @@ class Error
 			default:
 				$format = $base;
 		}
-		
+
 		//  check ini setting
 		if( ini_get( 'display_errors') ){
 			printf( $format."\n", $file, $line, $type, $str );
 		}
-		
+
 		return true;
 	}
 	
@@ -313,26 +301,8 @@ class Error
 	 * 
 	 * @param OpException $e
 	 */
-	static function ExceptionHandler( $e )
+	static function ExceptionHandler($e)
 	{
-		$class	 = get_class($e);
-		$file	 = $e->GetFile();
-		$line	 = $e->GetLine();
-		$message = $e->GetMessage();
-		$lang	 = null;
-		
-		//	get language of message's original language.
-		if( method_exists($e,'getLang') ){
-			$lang = $e->getLang();
-		}
-		
-		//	to translate
-		if( $lang ){
-			$message = \OnePiece5::i18n()->En($message);
-		}
-		
-		//	join
-		$error = "$class: $file [$line] $message";
-		\OnePiece5::AdminNotice($error,$lang);
+		self::Set($e);
 	}
 }
