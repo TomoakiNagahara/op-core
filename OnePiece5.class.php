@@ -77,7 +77,7 @@ class OnePiece5
 	
 	static function __callStatic( $name , $args )
 	{
-		$class = get_class($this);
+		$class = isset($this) ? get_class($this): 'unknow';
 		OP\Error::MagicMethodCallStatic( $class, $name, $args);
 	}
 	
