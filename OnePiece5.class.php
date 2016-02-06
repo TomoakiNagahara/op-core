@@ -27,35 +27,39 @@ class OnePiece5
 {
 	const  KEY_COOKIE_UNIQ_ID	 = 'op-uniq-id';
 	const _KEY_COOKIE_UNIQ_ID_	 = self::KEY_COOKIE_UNIQ_ID;
-	
+
 	private $session = array();
 	private $_is_init  = null;
-	
+
 	function __construct()
 	{
-		switch( $type = ifset($_GET['onepiece']['admin-notice']) ){
-			case 'js':
-				Toolbox::SetMime('text/javascript');
-				$path = $_SERVER['OP_ROOT'].'Template/js/AdminNotice.js';
-				print file_get_contents( $path );
-				exit;
-
-			case 'css':
-				Toolbox::SetMime('text/css');
-				$path = $_SERVER['OP_ROOT'].'Template/css/AdminNotice.css';
-				print file_get_contents( $path );
-				exit;
-		}
-
 		//	Do Initialized in the init-method.(for extends class)
 		if( method_exists($this, 'Init') ){
 			$this->Init();
 		}
+
+		switch( $type = ifset($_GET['onepiece']['admin-notice']) ){
+			case 'js':
+				$mime = 'text/javascript';
+				$path = $_SERVER['OP_ROOT'].'Template/js/AdminNotice.js';
+				break;
+
+			case 'css':
+				$mime = 'text/css';
+				$path = $_SERVER['OP_ROOT'].'Template/css/AdminNotice.css';
+				break;
+		}
+
+		if( isset($path) ){
+			Toolbox::SetMime($mime);
+			echo file_get_contents( $path );
+			if( $this instanceof NewWorld5 ){
+				$this->Content();
+			}
+			exit;
+		}
 	}
-	
-	/**
-	 * 
-	 */
+
 	function __destruct()
 	{
 		//  Called Init?
