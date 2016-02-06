@@ -37,11 +37,12 @@ class Error
 	 */
 	static public function Debug()
 	{
+	//	var_dump(self::$_error);
 		foreach( self::$_error as $error ){
 			foreach( $error as $key => $var ){
 				switch($key){
 					case 'message':
-						print "$key => $var\n";
+						print "$key => $var<br/>\n";
 					default:
 				}
 			}
