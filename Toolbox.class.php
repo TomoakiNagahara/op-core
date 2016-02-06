@@ -503,8 +503,6 @@ class Toolbox
 	static function SetMIME($mime)
 	{
 		Env::Set('mime',$mime);	
-		$charset = Env::Get('charset');
-		header("Content-type: $mime; charset=$charset");
 	}
 
 	/**

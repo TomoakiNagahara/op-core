@@ -353,7 +353,7 @@ abstract class NewWorld5 extends OnePiece5
 		$this->AdminNotice("This method will abolished.");
 		return $this->_content;
 	}
-	
+
 	/**
 	 * Output of content.
 	 */
@@ -361,10 +361,10 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		//	Set call of Content method flag.
 		Env::Set(self::_IS_CONTENT_, true);
-		
+
 		//	Separate mime, main and sub.
-		list($main, $sub) = explode('/', $this->_mime);
-		
+		list($main, $sub) = explode('/', Env::Get('mime'));
+
 		//	Branch at mime's main.
 		switch($main){
 			case 'text':
@@ -376,12 +376,12 @@ abstract class NewWorld5 extends OnePiece5
 			default:
 				$this->AdminNotice("Does not support this mime. ({$main}/{$sub})");
 		}
-		
+
 		//	Output content to stdout.
 		print $this->_content;
 		$this->_content = '';
 	}
-	
+
 	function ContentIsText($sub)
 	{
 		switch($sub){

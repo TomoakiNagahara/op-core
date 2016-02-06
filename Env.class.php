@@ -465,7 +465,8 @@ class Env extends OnePiece5
 		self::_Convert( $key, $var );
 
 		if( $key === 'MIME'){
-			OnePiece5::Header("Content-type: $var");
+			$charset = Env::Get('charset', 'utf-8');
+			header("Content-type: $var; charset=$charset");
 		}
 
 		self::$_env[$key] = $var;
