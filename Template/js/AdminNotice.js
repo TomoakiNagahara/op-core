@@ -42,11 +42,11 @@
 			_add_each_backtrace(i+1, backtrace);
 		});
 	}
-	
+
 	function _add_headline(no, error){
 		$headline = $('<div/>');
 		$headline.addClass('headline');
-		$headline.text('#' + no + ' ' + error.message);
+		$headline.html('#' + no + ' ' + error.message);
 		$container.append($headline);
 	}
 
@@ -174,6 +174,8 @@
 				v = '<span class="number">'+v+'</span>';
 				break;
 			case 'string':
+				v = v.replace(/</g,'&lt;');
+				v = v.replace(/>/g,'&gt;');
 				v = '<span class="string">'+v+'</span>';
 				break;
 			case 'object':

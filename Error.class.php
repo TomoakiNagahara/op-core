@@ -68,7 +68,7 @@ class Error
 			$backtrace = debug_backtrace();
 		}
 
-		$error['message']	 = $message;
+		$error['message']	 = htmlentities($message, ENT_QUOTES, 'utf-8');
 		$error['backtrace']	 = $backtrace;
 		$error['timestamp']	 = date('Y-m-d H:i:s');
 		$error['lang']		 = $lang;
