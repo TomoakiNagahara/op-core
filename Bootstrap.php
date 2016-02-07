@@ -62,10 +62,9 @@ set_error_handler('OP\Error::Handler',$level);
 set_exception_handler('OP\Error::ExceptionHandler');
 
 //	Checking error reporting administrator's E-Mail address.
-if( $admin_mail = isset($_SERVER['SERVER_ADMIN']) ? $_SERVER['SERVER_ADMIN']: null ){
-	if( Validator::isEmail($admin_mail) ){
-		Env::Set('admin-mail', $admin_mail);
-	}
+$admin_mail = isset($_SERVER['SERVER_ADMIN']) ? $_SERVER['SERVER_ADMIN']: null;
+if( $admin_mail ){
+	Env::Set('admin-mail', $admin_mail);
 }else{
 	OnePiece5::AdminNotice('$_SERVER["SERVER_ADMIN"] is empty.');
 }
