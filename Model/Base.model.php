@@ -2,6 +2,11 @@
 
 abstract class Model_Base extends OnePiece5
 {
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	function Test()
 	{
 		$this->mark( $this->GetCallerLine() );

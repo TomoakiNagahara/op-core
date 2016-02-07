@@ -46,8 +46,10 @@ class Model_Login extends Model_Model
 	
 	function Init()
 	{
+		$this->Mark("This method will abolish.");
+
 		parent::Init();
-		
+
 		//	check expire
 	//	$this->mark( $this->GetCookie(self::COOKIE_KEY) );
 	//	$this->mark( time()-$this->_expire );

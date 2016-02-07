@@ -2,6 +2,11 @@
 
 class Model_CreditCard extends Model_Base
 {
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	/**
 	 * (non-PHPdoc)
 	 * @see Model_Base::Config()

@@ -20,6 +20,11 @@
  */
 class Model_Validation extends OnePiece5
 {
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	static function isDomain( $host )
 	{
 		if( $host === 'localhost' ){

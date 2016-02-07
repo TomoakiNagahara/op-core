@@ -36,6 +36,7 @@ class Config_Sample extends Config_Model
 	
 	function database()
 	{
+		$this->Mark("This method will abolish.");
 		$config = parent::database();
 		$config->user     = 't_test';
 		$config->password = 't_test';

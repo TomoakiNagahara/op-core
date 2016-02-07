@@ -21,7 +21,12 @@
 class Model_Upload extends Model_Model
 {
 	private $_error = null;
-	
+
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	function SetError($error)
 	{
 		$this->_error = $error;

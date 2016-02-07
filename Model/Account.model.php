@@ -21,7 +21,12 @@ class Model_Account extends Model_Model
 	private $_log = array();
 	private $_message = null;
 	private $_success = null;
-	
+
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	/**
 	 * @return Config_Account
 	 */

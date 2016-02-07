@@ -16,7 +16,12 @@ class Model_CSV extends Model_Model
 	private $_file_handle;
 	private $_locale_of_csv;
 	private $_column_names;
-	
+
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	function Help()
 	{
 		$this->p('![a[http://onepiece-framework.com/help/model/csv]]');

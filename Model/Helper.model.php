@@ -7,6 +7,11 @@
  */
 class Model_Helper extends Model_Model
 {
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	//	Use credit card form
 	function GetFormOptionsDateYear($config=null)
 	{

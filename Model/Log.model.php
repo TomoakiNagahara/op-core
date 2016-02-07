@@ -8,7 +8,12 @@
 class Model_Log extends Model_Model
 {
 	private $log = array();
-	
+
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	function Set( $log, $io=null )
 	{
 		$stack = array();

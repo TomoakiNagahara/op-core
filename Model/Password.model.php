@@ -6,6 +6,11 @@
  */
 class Model_Password extends Model_Model
 {
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	function Get( $length=8, $sym=4, $num=4, $ALP=4, $alp=4 )
 	{
 		$pw = '';

@@ -7,6 +7,7 @@ class Model_Nav extends Model_Model
 	
 	function Init()
 	{
+		$this->Mark("This method will abolish.");
 		parent::Init();
 		self::SetFormat();
 	}

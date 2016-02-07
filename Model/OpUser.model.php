@@ -10,6 +10,8 @@ class Model_OpUser extends Model_Model
 	
 	function Init($config=null)
 	{
+		$this->Mark("This method will abolish.");
+
 		parent::Init($config);
 		$this->InitOpUser();
 	//	$this->InitOpUserInfo();

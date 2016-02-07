@@ -25,7 +25,12 @@ class Model_UA extends Model_Model
 	//	WEB SERVER
 	const _APACHE_		 = 'APACHE';
 	const _NGINX_		 = 'NGINX';
-	
+
+	function Init()
+	{
+		$this->Mark("This method will abolish.");
+	}
+
 	function GetISP()
 	{
 		

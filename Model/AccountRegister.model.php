@@ -4,10 +4,10 @@ class Model_AccountRegister extends Model_Account
 {
 	function init()
 	{
-		$this->mark('This model is discontinued.');
+		$this->Mark("This method will abolish.");
 		return parent::Init();
 	}
-	
+
 	/*
 	const STATUS_ACCOUNT_EXISTS = 'Account is exists.';
 	const STATUS_ACCOUNT_CREATE = 'Account was created.';
