@@ -206,6 +206,13 @@ class Error
 		return $type;
 	}
 
+	/**
+	 * Method was not exist.
+	 * 
+	 * @param string $class class name
+	 * @param string $name  method name
+	 * @param array  $args  argument
+	 */
 	static function MagicMethodCall( $class, $name, $args )
 	{
 		//  If Toolbox method.
@@ -221,36 +228,63 @@ class Error
 			);
 		}
 
-		$message = "This method does not exists in class.".PHP_EOL."\ - {$class}::{$name}\\";
+		$message = "This method was not exist. \({$class}::{$name}\\";
 		$backtrace = debug_backtrace();
 		self::_Set($message, $backtrace, 'en');
 	}
 
+	/**
+	 * Method was not exist.
+	 * 
+	 * @param string $class class name
+	 * @param string $name  method name
+	 * @param array  $args  argument
+	 */
 	static function MagicMethodCallStatic( $class, $name, $args )
 	{
 		//	Call static is PHP 5.3.0 later
 		self::MagicMethodCall( $class, $name, $args );
 	}
 
+	/**
+	 * Can not be accessible.
+	 * 
+	 * @param string $class class name
+	 * @param string $name  method name
+	 * @param array  $args  argument
+	 * @param string $call  caller line
+	 */
 	static function MagicMethodSet( $class, $name, $args, $call )
 	{
-		$message = "\\{$class}::{$name}\ can not be accessible. ({$call})";
+		$message = "\\{$class}::{$name}\ can not be accessible. \({$call})\\";
 		$backtrace = debug_backtrace();
 		self::_Set($message, $backtrace, 'en');
 	}
 
+	/**
+	 * Can not be accessible.
+	 * 
+	 * @param string $class class name
+	 * @param string $name  method name
+	 * @param string $call  caller line
+	 */
 	static function MagicMethodGet( $class, $name, $call )
 	{
-		$message = "\\{$class}::{$name}\ can not be accessible. ({$call})";
+		$message = "\\{$class}::{$name}\ can not be accessible. \({$call})\\";
 		$backtrace = debug_backtrace();
 		self::_Set($message, $backtrace, 'en');
 	}
 
+	/**
+	 * The last error that occurred.
+	 * 
+	 * @param mixed $e
+	 */
 	static function LastError($e)
 	{
 		self::Set($e);
 	}
-	
+
 	/**
 	 * This method has been transferred from OnePiece5::ErrorHandler.
 	 * 
