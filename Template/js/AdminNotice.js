@@ -46,8 +46,32 @@
 	function _add_headline(no, error){
 		$headline = $('<div/>');
 		$headline.addClass('headline');
-		$headline.html('#' + no + ' ' + error.message);
+		$headline.html( _generate_message(no, error) );
 		$container.append($headline);
+	}
+
+	function _generate_message(no, error){
+		var lang = error.lang;
+		var message = error.message;
+	//	console.dir(message.split("\n"));
+
+		//	Separate sub message by line feed code.
+		var match = message.match(/(.+)\n(.+)/);
+		if( match ){
+			message = match[1];
+			supplement = '<span class="supplement">'+match[2]+'</span>';
+		}else{
+			supplement = '';
+		}
+
+		//	Replace backslash. This is a \test\. --> This is a test.
+		message = message.replace(/\\(\w+)\\/g,"$1");
+
+		var $span = $('<span/>');
+		$span.addClass('message');
+		$span.addClass('i18n');
+		$span.html('#' + no + ' ' + message + supplement);
+		return $span.html();
 	}
 
 	function _add_each_backtrace(no, backtrace){

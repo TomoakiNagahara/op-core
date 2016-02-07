@@ -115,3 +115,9 @@
 #admin-notice th.args{
 	text-align: right;
 }
+
+#admin-notice span.supplement{
+	margin-left: 1em;
+	color: #999;
+	font-weight: normal;
+}
