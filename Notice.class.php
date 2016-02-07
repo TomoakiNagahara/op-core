@@ -55,8 +55,6 @@ class Notice extends OnePiece5
 		print '<script>__notice__='.json_encode($json).'</script>'.PHP_EOL;
 		print '<script src="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=js"></script>'.PHP_EOL;
 		print '<link rel="stylesheet" type="text/css" href="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=css">'.PHP_EOL;
-
-		return true;
 	}
 
 	/**
@@ -65,19 +63,20 @@ class Notice extends OnePiece5
 	static public function toMail()
 	{
 		foreach( OP\Error::GetAll() as $error ){
-			$message = $error['message'];
-
 			//	Cache's key.
-			$ckey = md5($message);
+			$ckey = md5($error['message']);
 
 			//	Would not send same mail.
 			if( isset($_SESSION['_ONEPIECE_'][__CLASS__][$ckey]) ){
-				return;
+				//	Already send.
+				continue;
 			}else if( OnePiece5::Cache()->Get($ckey) ){
-				return;
+				//	Already send.
+				continue;
 			}else{
-				$_SESSION['_ONEPIECE_'][__CLASS__][$ckey] = $message;
-				OnePiece5::Cache()->Set($ckey, $message);
+				//	Does not duplicate send.
+				$_SESSION['_ONEPIECE_'][__CLASS__][$ckey] = $error['message'];
+				OnePiece5::Cache()->Set($ckey, $error['message'], 60*60*24*1);
 			}
 
 			//	Execute
@@ -96,6 +95,14 @@ class Notice extends OnePiece5
 		$backtrace = $error['backtrace'];
 		$timestamp = $error['timestamp'];
 		$lang      = $error['lang'];
+
+		//	Translation
+		if( $lang ){
+			list($a, $b) = explode("\n", $error['message']);
+			$message = $this->i18n()->Get($a, $lang, Env::Get('lang')).$b;
+		}else{
+			$message = $this->i18n()->RemoveBackSlash($error['message']);
+		}
 
 		//	Get mail subject.
 		$subject = '[Error] '.$message;
