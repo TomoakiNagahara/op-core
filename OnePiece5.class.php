@@ -1215,7 +1215,6 @@ class OnePiece5
 	/**
 	 * Get PDO5 object
 	 * 
-	 * @param  $name class name
 	 * @return PDO5
 	 */
 	function PDO()
@@ -1224,21 +1223,21 @@ class OnePiece5
 			$op_root = $this->GetEnv('op-root');
 			$op_root = rtrim($op_root,'/').'/';
 			$path = $op_root.'PDO/PDO5.class.php';
-			
+
 			if(!file_exists($path)){
 				$this->AdminNotice("Does not exists file. \($path)\\");
 				return false;
 			}
-			
+
 			if(!include_once($path) ){
 				$this->AdminNotice("Does not include file. \($path)\\");
 				return false;
 			}
-			
+
 			//	Instance
 			$this->_pdo = new PDO5();
 		}
-		
+
 		return $this->_pdo;
 	}
 	
