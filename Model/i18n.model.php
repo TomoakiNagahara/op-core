@@ -325,7 +325,7 @@ class Model_i18n extends Model_Model
 	 */
 	function GetLanguageList($lang='en')
 	{
-		$ckey = md5("$lang");
+		$ckey = md5(__METHOD__.', '.$lang);
 		if(!$list = $this->Cache()->Get($ckey) ){
 			$this->_debug['count']['language']['fetch']++;
 		}else{
