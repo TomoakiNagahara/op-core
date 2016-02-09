@@ -332,43 +332,6 @@ class Toolbox
 	*/
 	
 	
-	/*
-	static function ConvertConfigToArray( $args )
-	{
-		OnePiece5::AdminNotice("Used checking. Is this use?");
-		
-		$type = gettype($args);
-		
-		switch($type){
-			case 'string':
-				$path = Toolbox::ConvertPath($args);
-				if( file_exists($path) ){
-					include($path);
-				}else{
-					OnePiece5::AdminNotice("File does not exist. ($path)");
-					return false;
-				}
-				if(isset($_config)){
-					$config = $_config;
-				}else if(isset($_conf)){
-					$config = $_conf;
-				}else if(isset($_forms)){
-					$config = $_forms;
-				}else if(isset($_form)){
-					$config[] = $_form;
-				}
-				break;
-			case 'array':
-				$config = $args;
-				break;
-			case 'object':
-				$config = self::ConvertArrayFromObject($args);
-				break;
-		}
-		
-		return $config;
-	}
-	*/
 	
 	/*
 	static function GetFileListFromDir($path='./')
