@@ -215,7 +215,7 @@ class OnePiece5
 	 * @param string $key
 	 * @param string|array $var
 	 */
-	function SetSession($key, $var)
+	static function SetSession($key, $var)
 	{
 		if( $key === null ){
 			$_SESSION['_ONEPIECE_'][__CLASS__] = $var;
