@@ -195,14 +195,6 @@ class OnePiece5
 	}
 	
 	/**
-	 * Print error.
-	 */
-	function PrintError()
-	{
-		OP\Error::Report();
-	}
-	
-	/**
 	 * Set env-value.
 	 * 
 	 * @param string $key
