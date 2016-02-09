@@ -149,22 +149,6 @@ class OnePiece5
 	{
 		return Env::isAdmin();
 	}
-	
-	/**
-	 * Wrapper method.
-	 * Error.class.php is not load until was needed.
-	 * 
-	 * @param number  $no
-	 * @param string  $str
-	 * @param string  $file
-	 * @param number  $line
-	 * @param unknown $context
-	 */
-	static function ErrorHandler( $no, $str, $file, $line, $context )
-	{
-		OP\Error::Handler( $no, $str, $file, $line, $context );
-	}
-	
 	/**
 	 * Wrapper method.
 	 * Error.class.php is not load until was needed.
