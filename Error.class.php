@@ -78,7 +78,7 @@ class Error
 	}
 
 	/**
-	 * Set admin notice message.
+	 * Set admin notice message. (For external class interface)
 	 * 
 	 * @param \Exception $e
 	 * @param string $lang
@@ -99,7 +99,6 @@ class Error
 			$message = $e;
 			$backtrace = debug_backtrace();
 		}
-
 		self::_Set($message, $backtrace, $lang);
 	}
 
@@ -228,7 +227,7 @@ class Error
 			);
 		}
 
-		$message = "This method was not exist. \({$class}::{$name}\\";
+		$message = "This method was not exist. \({$class}::{$name})\\";
 		$backtrace = debug_backtrace();
 		self::_Set($message, $backtrace, 'en');
 	}
@@ -293,11 +292,11 @@ class Error
 	 * @param  string  $file
 	 * @param  integer $line
 	 * @param  unknown $context
-	 * @return boolean
 	 */
 	static function Handler($type, $str, $file, $line, $context)
 	{
 		$type = self::ConvertStringFromErrorNumber($type);
+	//	$backtrace = debug_backtrace();
 
 		//	Get route table.
 		if(!$route = \Env::Get('route')){
@@ -327,8 +326,6 @@ class Error
 		if( ini_get( 'display_errors') ){
 			printf( $format."\n", $file, $line, $type, $str );
 		}
-
-		return true;
 	}
 	
 	/**
