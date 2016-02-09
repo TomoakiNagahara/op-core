@@ -842,13 +842,15 @@ class Toolbox
 	 * @param  string  $bit
 	 * @return string
 	 */
+	/*
 	static function Dec2Bin($int, $bit=null)
 	{
 		//	2015-04-20
 		OnePiece5::AdminNotice("Abolish this method.");
 		return toBinary($int, $bit);
 	}
-	
+	*/
+
 	/**
 	 * Detect character code from string.
 	 * 
