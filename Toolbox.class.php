@@ -333,28 +333,6 @@ class Toolbox
 	
 	
 	
-	/*
-	static function GetFileListFromDir($path='./')
-	{
-		OnePiece5::AdminNotice("Used checking. Is this use?");
-		
-		$list = array();
-		
-		if( $dir = opendir($path) ){
-			while($file = readdir($dir)){
-				if( $file === '.' or $file === '..' ){
-					continue;
-				}
-				if( preg_match('|^\.|',$file)){
-					continue;
-				}
-				$list[] = $file;
-			}
-		}
-		
-		return $list;
-	}
-	*/
 	
 	/**
 	 * Generate URL
