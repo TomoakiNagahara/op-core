@@ -20,6 +20,12 @@
  */
 abstract class Model_Model extends OnePiece5
 {
+	function init()
+	{
+		parent::Init();
+		$this->__Selftest();
+	}
+
 	/**
 	 * Old method name.
 	 */
@@ -38,40 +44,48 @@ abstract class Model_Model extends OnePiece5
 	{
 		$pdo = parent::PDO();	
 		if(!$pdo->isConnect()){
-			
+
 			//  get database config
 			$database = $this->config()->database();
 			if(!$database instanceof Config ){
 				throw new OpException("Database connection configuration was not \Config\ object.",'en');
 			}
-			
+
 			//	databaes name
 			if( isset($database->name) ){
 				$database->database = $database->name;
 			}
-			
+
 			//	Do database connection
 			if(!$io = $pdo->Connect($database)){
-				$this->ReservationToDiagnosis();
-				$this->AdminNotice("Connection was failed.");
-				$url = $this->GetEnv('URL_SELF_TEST', "app:/_self-test/");
-				$this->Location($url);
+				throw new OpException("Connection was failed.",'en');
 			}
 		}
 		return $pdo;
 	}
-	
+
 	/**
-	 * Reservation of self-test.
+	 * Reservation of self-test at Doctor.
 	 */
-	function ReservationToDiagnosis()
+	function __Selftest()
 	{
-		if( $this->Admin() ){
-			$object = new ReflectionObject($this->Config());
-			$class_name = $object->getName();
-			$file_path  = $object->getFileName();
-			$this->Doctor()->Reservation($class_name, $file_path);
+		if(!$this->Admin()){
+			return;
 		}
+
+		if(!method_exists($this, 'Config')){
+			return;
+		}
+
+		$config = $this->Config();
+		if(!method_exists($config, 'selftest')){
+			return;
+		}
+
+		$object = new ReflectionObject($this->Config());
+		$class_name = $object->getName();
+		$file_path  = $object->getFileName();
+		$this->Doctor()->Reservation($class_name, $file_path);
 	}
 }
 
