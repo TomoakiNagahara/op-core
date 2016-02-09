@@ -27,14 +27,7 @@ class Doctor extends OnePiece5
 	 * @var array
 	 */
 	private $_debug;
-	
-	/**
-	 * OnePiece's PDO5 object
-	 * 
-	 * @var PDO5
-	 */
-	private $_pdo;
-	
+
 	/**
 	 * Diagnosis.
 	 * 
@@ -90,7 +83,18 @@ class Doctor extends OnePiece5
 	 * @var array
 	 */
 	private $_selftest_config = array();
-	
+
+	function __destruct()
+	{
+		parent::__destruct();
+		if( $this->isDiagnosis() === null ){
+			if(!$this->Diagnose() ){
+				$url = Env::Get('URL_SELF_TEST','app:/_self-test');
+				$this->Location($url);
+			}
+		}
+	}
+
 	/**
 	 * Operation
 	 *
@@ -392,10 +396,12 @@ class Doctor extends OnePiece5
 					$table->name = $table_name;
 					$this->WriteGrant($origin->database, $table);
 				}
+			}else{
+				//	
+				$this->CheckConnection($config);
 			}
 			
 			//	Diagnosis.
-			$this->CheckConnection($config);
 			$this->CheckDatabase($config);
 			$this->CheckTable($config);
 			$this->CheckColumn($config);
@@ -407,20 +413,40 @@ class Doctor extends OnePiece5
 		
 		return $this->_is_diagnosis;
 	}
-	
+
+	/**
+	 * PDO5 instance generator.
+	 * 
+	 * {@inheritDoc}
+	 * @see OnePiece5::PDO()
+	 * @param  boolean $reset
+	 * @return PDO5
+	 */
+	function PDO($reset=null)
+	{
+		static $pdo;
+
+		if( $reset ){
+			$pdo = null;
+		}
+
+		if( $pdo ){
+			return $pdo;
+		}
+
+		$pdo = parent::PDO();
+		return $pdo;
+	}
+
 	function CheckConnection($config)
 	{
+		//	Reset connection.
+		$this->PDO(true);
+
 		//	Database connection config.
 		$database = $config->database->Copy();
 		unset($database->database);
 		unset($database->name);
-
-		//	Connection check is each host.
-		$host = $database->host;
-		$key  = substr(md5($host), 0, 8);
-		if( isset( $this->_blueprint->connect[$key]) ){
-			return $this->_blueprint->connect[$key]->result;
-		}
 
 		//	Connection
 		$io   = $this->PDO()->Connect($database);
@@ -439,7 +465,7 @@ class Doctor extends OnePiece5
 
 		//	Stack blueprint.
 		$database->result = $io;
-		$this->_blueprint->connect[$key] = $database;
+		$this->_blueprint->connect[$dsn] = $database;
 
 		return $io;
 	}
