@@ -55,6 +55,9 @@
 		var message = error.message;
 	//	console.dir(message.split("\n"));
 
+		//	Replace backslash. This is a \test\. --> This is a test.
+		message = message.replace(/\\ ?([^\\]+) ?\\/g,"$1");
+
 		//	Separate sub message by line feed code.
 		var match = message.match(/(.+)\n(.+)/);
 		if( match ){
@@ -63,9 +66,6 @@
 		}else{
 			supplement = '';
 		}
-
-		//	Replace backslash. This is a \test\. --> This is a test.
-		message = message.replace(/\\ ?([#:\w\(\)]+) ?\\/g,"$1");
 
 		var $span = $('<span/>');
 		$span.addClass('message');
