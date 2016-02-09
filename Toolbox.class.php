@@ -885,6 +885,7 @@ class Toolbox
 	 * @param  string $from
 	 * @return string
 	 */
+	/*
 	static function toUTF8($str, $from=null)
 	{
 		if(!$from){
@@ -897,4 +898,5 @@ class Toolbox
 		}
 		return mb_convert_encoding($str, 'utf-8', $from);
 	}
+	*/
 }
