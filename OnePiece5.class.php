@@ -646,55 +646,53 @@ class OnePiece5
 	 */
 	static function D( $args, $mark_label=null )
 	{
+		print '<div style="font-size:small;">'."\n";
+
 		// displayed is only admin-ip.
 		if(!self::admin()){ return; }
-		
+
 		// displayed is Admin-ip and flag.
 		if( $mark_label ){
 			if(!Developer::GetSaveMarkLabelValue($mark_label)){
 				return;
 			}
 		}
-		
+
 		//	Call line.
 		$line = self::GetCallerLine();
-		
+
 		//	type
 		$type = gettype($args);
-		
+
 		//	join
 		$line .= " - ".$type;
-		
+
 		//	CLI
 		if( self::GetEnv('cli') ){
 			$mime = Toolbox::GetMIME(1);
 			$flag = ($mime == 'js' or $mime == 'css') ? true: false;
 			if( $flag ){ print '/*'.PHP_EOL; }
-			self::p($line);
+			print self::html($line, 'div');
 			print_r($args);
 			if( $flag ){ print '*/'.PHP_EOL; }
 			return;
 		}
-		
+
 		if( class_exists('Dump',true) ){
-			self::p($line, 'div', array('class' => array('OnePiece','small','_bold','mark'), 
-			                            'style' => array('color'=>'black',
-			                            				 'font-size' => '9pt',
-														 'background-color'=>'white'
-														)));
+			print "<div>$line</div>\n";
 			if( $args instanceof Config ){
 				$args = Toolbox::toArray($args);
 			}
-			
-			// Dump.class.php include by __autoloader
-			Dump::d($args);
+
+			Dump::D($args);
 		}else{
-			$line = self::Wiki2($line,array('tag'=>true));
-			print strip_tags($line);
+			print $line."\n";
 			print serialize($args);
 		}
+
+		print "</div>\n";
 	}
-	
+
 	/**
 	 * Decode value.
 	 * 

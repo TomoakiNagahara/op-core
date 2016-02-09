@@ -27,7 +27,9 @@ div.op-dump-root table.op-dump-table{
 	
 	border-collapse: separate !important;
 	border-spacing: 0px !important;
-	
+
+	font-size: small;
+
 	_display: table;
 }
 
