@@ -142,6 +142,10 @@ class Notice extends OnePiece5
 		$var = $timestamp;
 		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
 
+		$key = 'User';
+		$var = $_SERVER['REMOTE_ADDR'].' --> '.gethostbyaddr($_SERVER['REMOTE_ADDR']);
+		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
+
 		$key = 'UserAgent';
 		$var = $_SERVER['HTTP_USER_AGENT'];
 		$tr[] = "![tr[ ![th[$key]] ![td[$var]] ]]".PHP_EOL;
