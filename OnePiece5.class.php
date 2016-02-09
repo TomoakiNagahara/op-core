@@ -149,16 +149,6 @@ class OnePiece5
 	{
 		return Env::isAdmin();
 	}
-	/**
-	 * Wrapper method.
-	 * Error.class.php is not load until was needed.
-	 * 
-	 * @param Exception $e
-	 */
-	static function ErrorExceptionHandler( $e )
-	{
-		OP\Error::ExceptionHandler( $e );
-	}
 
 	/**
 	 * This method will inform to administrator by mail.
