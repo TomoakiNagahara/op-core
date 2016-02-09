@@ -216,12 +216,27 @@ class Model_i18n extends Model_Model
 			$this->Cache()->Set($id, $translation);
 		}else{
 			//	Remove escape character.
-			$translation = preg_replace('|\\\|', '', $source);
+			$translation = $this->RemoveBackslash($source);
 		}
 
 		return $translation;
 	}
-	
+
+	/**
+	 * Remove back slash.
+	 * 
+	 * <pre>
+	 * This is a \test\. --> This is a test.
+	 * </pre>
+	 * 
+	 * @param  string $source
+	 * @return string
+	 */
+	function RemoveBackslash($source)
+	{
+		return preg_replace('|\\\([^\\\]+)\\\|i', '$1', $source);
+	}
+
 	/**
 	 * Execute each method.
 	 * 
