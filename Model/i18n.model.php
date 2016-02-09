@@ -50,6 +50,8 @@ class Model_i18n extends Model_Model
 			$this->_debug['count']['cache']  = 0;
 			$this->_debug['count']['select'] = 0;
 			$this->_debug['count']['error']  = 0;
+			$this->_debug['count']['language']['fetch'] = 0;
+			$this->_debug['count']['language']['cache'] = 0;
 		}
 	}
 	
@@ -324,7 +326,10 @@ class Model_i18n extends Model_Model
 	function GetLanguageList($lang='en')
 	{
 		$ckey = md5("$lang");
-		if( $list = $this->Cache()->Get($ckey) ){
+		if(!$list = $this->Cache()->Get($ckey) ){
+			$this->_debug['count']['language']['fetch']++;
+		}else{
+			$this->_debug['count']['language']['cache']++;
 			return $list;
 		}
 		
