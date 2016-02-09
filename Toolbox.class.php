@@ -331,12 +331,6 @@ class Toolbox
 	}
 	*/
 	
-	/*
-	function ConvertConfigFromPath( $args )
-	{
-		return $config;
-	}
-	*/
 	
 	/*
 	static function ConvertConfigToArray( $args )
