@@ -899,11 +899,11 @@ class OnePiece5
 	 * @param boolean $exit default is true.
 	 * @return void|boolean
 	 */
-	function Location( $url, $exit=true )
+	static function Location( $url, $exit=true )
 	{
 		//	Document root path
-		$url = $this->ConvertUrl($url,false);
-		
+		$url = self::ConvertUrl($url,false);
+
 		//	Check infinity loop.
 		if( $_SERVER['REQUEST_METHOD'] === 'POST' ){
 			//	Does not for infinity.
@@ -912,25 +912,38 @@ class OnePiece5
 			list($request_uri) = explode('?',$_SERVER['REQUEST_URI']);
 			//	Compare URL.
 			if( $io = rtrim($url,'/') === rtrim($request_uri,'/') ){
-				$this->mark("![.red[Location is Infinite loop. ($url)]]");
+				self::Mark("![.red[Location is Infinite loop. ($url)]]");
 				return false;
 			}
 		}
-	
-		$io = $this->Header("Location: " . $url);
+
+		//	Checking transmission of header.
+		if( headers_sent($file, $line) ){
+			//	Already sent.
+			$io = true;
+			print '<script type="text/javascript"> location.href = "'.$url.'"; </script>';
+		}else{
+			//	Has not been sent.
+			$io = self::Header("Location: $url");
+		}
+
 		if( $io ){
-			$location['message'] = 'Do Location!!' . date('Y-m-d H:i:s');
-			$location['post']	 = $_POST;
-			$location['get']	 = $_GET;
-			$location['referer'] = $_SERVER['REQUEST_URI'];
-			$this->SetSession('Location', $location);
+			if( self::Admin() ){
+				$location['message'] = 'Do Location!!' . date('Y-m-d H:i:s');
+				$location['post']	 = $_POST;
+				$location['get']	 = $_GET;
+				$location['referer'] = $_SERVER['REQUEST_URI'];
+				self::SetSession('Location', $location);
+			}
+
 			if( $exit ){
 				exit(0);
 			}
 		}
+
 		return $io;
 	}
-	
+
 	/**
 	 * Get template file content.
 	 * 
