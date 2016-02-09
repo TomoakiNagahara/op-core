@@ -65,7 +65,7 @@
 		}
 
 		//	Replace backslash. This is a \test\. --> This is a test.
-		message = message.replace(/\\(\w+)\\/g,"$1");
+		message = message.replace(/\\ ?([#:\w\(\)]+) ?\\/g,"$1");
 
 		var $span = $('<span/>');
 		$span.addClass('message');
