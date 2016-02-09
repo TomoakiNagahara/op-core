@@ -858,6 +858,7 @@ class Toolbox
 	 * @param  string $str
 	 * @return string|NULL
 	 */
+	/*
 	static function GetCharset($str)
 	{
 		$sets[] = 'UTF-8';
@@ -871,12 +872,13 @@ class Toolbox
 		$sets[] = 'ASCII';
 		$sets[] = 'JIS';
 		foreach($sets as $charset){
-			if( mb_convert_encoding($str, $charset, $charset) == $str ){
+			if( mb_convert_encoding($str, $charset, $charset) === $str ){
 				return $charset;
 			}
 		}
 		return null;
 	}
+	*/
 	
 	/**
 	 * Will convert the string to UTF-8.
