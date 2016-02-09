@@ -10,6 +10,7 @@ class Api extends OnePiece5
 	
 	function Init()
 	{
+		$this->Mark("This class will abolished.");
 		parent::Init();
 		$this->_ch = curl_init();
 	}
