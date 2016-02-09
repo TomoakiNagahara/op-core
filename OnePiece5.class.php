@@ -238,7 +238,7 @@ class OnePiece5
 	 * 
 	 * @param string $key
 	 */
-	function GetSession($key)
+	static function GetSession($key)
 	{
 		if( $key === null ){
 			return $_SESSION['_ONEPIECE_'][__CLASS__];
