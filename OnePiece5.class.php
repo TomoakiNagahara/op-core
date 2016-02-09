@@ -185,16 +185,6 @@ class OnePiece5
 	}
 
 	/**
-	 * Fetch stack error.
-	 * 
-	 * @return array
-	 */
-	function FetchError()
-	{
-		return OP\Error::Get();
-	}
-	
-	/**
 	 * Set env-value.
 	 * 
 	 * @param string $key
