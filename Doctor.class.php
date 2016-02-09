@@ -168,39 +168,6 @@ class Doctor extends OnePiece5
 		$this->_root_user     = $user;
 		$this->_root_password = $password;
 	}
-	
-	/**
-	 * Save to session.
-	 * 
-	 * @param string $class  class name
-	 * @param Config $config
-	 */
-	/*
-	function SaveConfig($class, Config $config)
-	{
-		$session = $this->GetSession('config');
-		$session[$class] = $config;
-		$this->SetSession('config', $session);
-	}
-	*/
-	
-	/**
-	 * Load from session.
-	 */
-	/*
-	function LoadConfig()
-	{
-		$session = $this->GetSession('config');
-		
-		if(!$session){
-			return;
-		}
-		
-		foreach($session as $label => $config){
-			$this->Registration($label, $config);
-		}
-	}
-	*/
 
 	/**
 	 * Reservation from class name and file path.
@@ -215,7 +182,7 @@ class Doctor extends OnePiece5
 			$debug[$class_name] = $file_path;
 			$this->_debug[__FUNCTION__][] = $debug;
 		}
-		
+
 		$reservation = $this->GetSession('reservation');
 		$reservation[$class_name] = $file_path;
 		$this->SetSession('reservation', $reservation);
@@ -232,12 +199,12 @@ class Doctor extends OnePiece5
 		//	Init config.
 		$config = Toolbox::toConfig($config);
 		$config = $config->Copy();
-		
+
 		//	Pre process.
 		$this->_ConvertKeyName($config);
 		$this->_selftest_config[$class] = $config;
 	}
-	
+
 	/**
 	 * Convert key name.
 	 * 
@@ -349,7 +316,7 @@ class Doctor extends OnePiece5
 		}
 		return $io;
 	}
-	
+
 	/**
 	 * Diagnose
 	 * 
@@ -363,33 +330,33 @@ class Doctor extends OnePiece5
 		if( $password ){
 			$this->Root($user, $password);
 		}
-		
+
 		//	Init diagnosis.
 		$this->InitDiagnosis();
-		
+
 		//	Each per config.
 		foreach( $this->_selftest_config as $label => $origin ){
 			//	Clone of nesting property.
 			$config = $origin->Copy();
-			
+
 			//	Set config. (Is this required?)
 			$this->_blueprint->config->$label = Toolbox::toObject($config);
-			
+
 			//	Set root and password.
 			if( $this->_root_user ){
-				
+
 				//	Change root user name and password.
 				$config->database->user     = $this->_root_user;
 				$config->database->password = $this->_root_password;
-				
+
 				//	Root user's Diagnosis.
 				if(!$this->CheckConnection($config)){
 					continue;
 				}
-				
+
 				//	User
 				$this->CheckUser($origin);
-				
+
 				//	Grant will done every time.
 				foreach( $config->table as $table_name => $table ){
 					$table = $table->Copy();
@@ -400,17 +367,17 @@ class Doctor extends OnePiece5
 				//	
 				$this->CheckConnection($config);
 			}
-			
+
 			//	Diagnosis.
 			$this->CheckDatabase($config);
 			$this->CheckTable($config);
 			$this->CheckColumn($config);
 		}
-		
+
 		$this->CheckPkey();
 		$this->CheckPkeyDrop();
 		$this->CehckAutoIncrement();
-		
+
 		return $this->_is_diagnosis;
 	}
 
