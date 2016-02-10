@@ -18,6 +18,22 @@
  */
 class App_i18n extends App
 {
+	/***
+	 * Html's lang attribute, and translation lang code.
+	 * 
+	 * {@inheritDoc}
+	 * @see NewWorld5::SetLang()
+	 * @param $lang translate to language code.
+	 */
+	function SetLang($lang)
+	{
+		//	Use for html's lang attribute.
+		parent::SetLang($lang);
+
+		//	Use for translation's to lang code.
+		$this->i18n()->SetLang($lang);
+	}
+
 	/**
 	 * Wrap the NewWorld Dispatch method.
 	 * 
