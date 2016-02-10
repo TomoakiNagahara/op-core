@@ -46,6 +46,9 @@ class Model_i18n extends Model_Model
 	{
 		parent::Init();
 
+		//	Set default language.
+		$this->SetLang( $this->GetLang() );
+
 		//	For admin.
 		if( $this->Admin() ){
 			$this->_debug['count']['fetch']  = 0;
@@ -261,7 +264,7 @@ class Model_i18n extends Model_Model
 			$type = 'cache';
 		}else if( $translation = $this->Select($id) ){
 			$type = 'select';
-		}else if( $translation = $this->_get_cloud($id, $source, $from, $to) ){
+		}else if( $translation = $this->_Translation($id, $source, $from, $to) ){
 			$type = 'fetch';
 		}else{
 			$type = 'error';
@@ -270,11 +273,6 @@ class Model_i18n extends Model_Model
 
 		if( $admin ){
 			$this->_debug['count'][$type]++;
-			/*
-			if( $type === 'cache' ){
-				$this->_debug['cache'][$id] = $translation;
-			}
-			*/
 		}
 
 		return $translation;
@@ -289,28 +287,27 @@ class Model_i18n extends Model_Model
 	 * @param  string $to
 	 * @return string|boolean
 	 */
-	private function _get_cloud($id, $source, $from, $to)
+	private function _Translation($id, $source, $from, $to)
 	{
 		$url  = $this->Config()->url_i18n($source, $from, $to);
 		$json = $this->Model('Curl')->Json($url);
 
 		//	Error check.
-		if( empty($json) or !empty($json['error']) or empty($json['translate'])){
-			if( empty($json) ){
-				//	Check flag.
-				if( $this->Cache()->Get(__METHOD__) ){
-					//	Already to notice.
-					return false;
-				}else{
-					//	Set flag.
-					$this->Cache()->Set(__METHOD__, true);
-				}
-				$error = "Not connected to the Internet.";
+		if( empty($json) ){
+			//	Check flag.
+			if( $this->Cache()->Get(__METHOD__) ){
+				//	Already to notice.
+				return false;
 			}else{
-				$error = $json['error'];
+				//	Set flag.
+				$this->Cache()->Set(__METHOD__, true);
 			}
-			//	Notice to admin.
-			$this->AdminNotice($error);
+			$this->AdminNotice("\\$json\ was empty. (Not connected to the Internet?)");
+		}else if(!empty($json['error'])){
+			$this->AdminNotice($json['error']);
+			return false;
+		}else if( empty($json['translate']) ){
+			$this->AdminNotice("Translate string is empty. \($source)\\");
 			return false;
 		}
 
