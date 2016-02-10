@@ -1358,9 +1358,9 @@ class OnePiece5
 	static function Wiki2( $string, $options=null )
 	{
 		if( class_exists('Wiki2Engine',true) ){
-			return nl2br(trim(Wiki2Engine::Wiki2( $string, $options ))) . PHP_EOL;
+			return nl2br(trim(Wiki2Engine::Wiki2( $string, $options )));
 		}else{
-			return nl2br( self::Escape(trim($string)) ) . PHP_EOL;
+			return nl2br( self::Escape(trim($string)) );
 		}
 	}
 
