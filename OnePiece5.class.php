@@ -624,24 +624,37 @@ class OnePiece5
 	 * 
 	 * <pre>
 	 * Example:
-	 * $this->P('Message','div',array('class'=>'bold blue'));
+	 * $this->P('Message', 'en', array('class'=>'bold blue'));
 	 * </pre>
 	 * 
 	 * @param string $str
-	 * @param string $tag
+	 * @param string $translation from language code.
 	 * @param array  $attr
 	 */
-	static function P( $str, $tag='p', $attr=null)
+	static function P( $str, $translation=false, $attr=array())
 	{
+		//	Translation.
+		if( $translation ){
+			$to  = self::i18n()->GetLang();
+			if( $to !== $translation ){
+				$str = self::i18n()->Get($str, $translation, $to);
+			}
+			$attr['lang'] = $to;
+		}
+
+		//	Tag
+		$tag = isset($attr['tag']) ? $attr['tag']: 'P';
+
 		//	In case of plain text.
 		if( Toolbox::isHtml() ){
 			print self::Html( $str, $tag, $attr );
 		}else{
 			print trim( html_entity_decode(strip_tags(self::Html( $str, $tag, $attr ))) );
 		}
+
 		print PHP_EOL;
 	}
-	
+
 	/**
 	 * Dump
 	 * 
