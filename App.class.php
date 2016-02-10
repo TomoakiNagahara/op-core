@@ -79,85 +79,258 @@ class App extends NewWorld5
 		return $action;
 	}
 
+	/**
+	 * Set admin IP-Address. Use for admin notice.
+	 * 
+	 * <pre>
+	 * $this->SetAdminIP('192.168.1.1');
+	 * </pre>
+	 * 
+	 * @param string $var IP-Address
+	 */
 	function SetAdminIP($var)
 	{
 		$this->SetEnv('admin-ip', $var);
 	}
 
+	/**
+	 * Set admin EMail Address. Use for admin notice.
+	 * 
+	 * <pre>
+	 * $this->SetAdminEMail('user@example.com');
+	 * </pre>
+	 * 
+	 * @param string $var EMail address
+	 */
 	function SetAdminEMail($var)
 	{
 		$this->SetEnv('admin-mail', $var);
 	}
 
+	/**
+	 * Set controller name. So-called end-point.
+	 * 
+	 * <pre>
+	 * $this->SetControllerName('index.php');
+	 * </pre>
+	 * 
+	 * @param string $var file name
+	 */
 	function SetControllerName( $var )
 	{
 		$this->SetEnv('controller-name', $var);
 	}
 
+	/**
+	 * Set model directory. Meata-qualifier can be used.
+	 *
+	 * <pre>
+	 * $this->SetModelDir('app:/app/model');
+	 * </pre>
+	 *
+	 * @param string $var file path.
+	 */
 	function SetModelDir( $var )
 	{
 		$this->SetEnv('model-dir', $var);
 	}
 
+	/**
+	 * Set unit directory. Meata-qualifier can be used.
+	 *
+	 * <pre>
+	 * $this->SetUnitDir('app:/app/unit');
+	 * </pre>
+	 *
+	 * @param string $var file path.
+	 */
 	function SetUnitDir( $var )
 	{
 		$this->SetEnv('unit-dir', $var);
 	}
 
+	/**
+	 * Set layout directory. Meata-qualifier can be used.
+	 *
+	 * <pre>
+	 * $this->SetLayoutDir('app:/app/layout');
+	 * </pre>
+	 *
+	 * @param string $var file path.
+	 */
 	function SetLayoutDir( $var )
 	{
 		$this->SetEnv('layout-dir', $var);
 	}
 
+	/**
+	 * Set layout name.
+	 *
+	 * <pre>
+	 * $this->SetLayoutName('flat');
+	 * </pre>
+	 *
+	 * @param string $var layout name.
+	 */
+	function SetLayoutName( $var )
 	{
 		$this->SetEnv('layout-name', $var);
 	}
 
+	/**
+	 * Get layout name.
+	 *
+	 * <pre>
+	 * $layout = $this->GetLayoutName();
+	 * </pre>
+	 *
+	 * @return string
+	 */
 	function GetLayoutName()
 	{
 		return $this->GetEnv('layout-name');
 	}
 
+	/**
+	 * Set template directory. Meta-qualifier can be used.
+	 * 
+	 * <pre>
+	 * $this->SetTemplateDir('app:/app/template');
+	 * </pre>
+	 * 
+	 * @param string $var
+	 */
 	function SetTemplateDir( $var )
 	{
 		$this->SetEnv('template-dir', $var);
 	}
 
+	/**
+	 * Get template directory.
+	 *
+	 * <pre>
+	 * $this->GetTemplateDir();
+	 * </pre>
+	 *
+	 * @return string
+	 */
 	function GetTemplateDir()
 	{
 		return $this->GetEnv('template-dir');
 	}
 
+	/**
+	 * Html-pass-through-feature is not need controller.
+	 * Html files's content is direct output.
+	 * Of course, PHP is run! in content!!
+	 * 
+	 * <pre>
+	 * $this->SetHtmlPassThrough(true);
+	 * </pre>
+	 *
+	 * @param boolean $var
+	 */
 	function SetHtmlPassThrough( $var )
 	{
 		$this->SetEnv('HtmlPassThrough', $var);
 	}
 
+	/**
+	 * Get current value.
+	 * 
+	 * <pre>
+	 * $this->GetTitle();
+	 * </pre>
+	 * 
+	 * @return string
+	 */
 	function GetTitle()
 	{
 		return $this->GetEnv('title');
 	}
 
+	/**
+	 * Set value will use at title tag. Existing title will be overwritten.
+	 * 
+	 * <pre>
+	 * $this->SetTitle('My site name');
+	 * </pre>
+	 * 
+	 * @param string $var
+	 */
 	function SetTitle( $var )
 	{
 		$this->SetEnv('title', $var);
 	}
-	function GetTitle()
 
+	/**
+	 * Prepend to existing value.
+	 * 
+	 * <pre>
+	 * $this->PrependTitle('Page Name:');
+	 * </pre>
+	 * 
+	 * @param string $var
+	 */
+	function PrependTitle($var)
 	{
 		$this->SetTitle($var. $this->GetTitle());
 	}
 
+	/**
+	 * Append to existing value.
+	 * 
+	 * <pre>
+	 * $this->AppendTitle(' - Supplemental');
+	 * </pre>
+	 * 
+	 * @param string $var
+	 */
+	function AppendTitle($var)
+	{
+		$this->SetTitle($this->GetTitle().$var);
+	}
+
+	/**
+	 * Output title tag.
+	 * 
+	 * <pre>
+	 * <head>
+	 * <?php $this->Title(); ?>
+	 * </head>
+	 * </pre>
+	 */
 	function Title()
 	{
 		print '<title>'.$this->GetTitle('title').'</title>';
 	}
 
+	/**
+	 * Set doctype.
+	 * 
+	 * <pre>
+	 * $this->SetDoctype('html');
+	 * $this->SetDoctype('xml');
+	 * $this->SetDoctype('xhtml');
+	 * </pre>
+	 * 
+	 * @param string $var
+	 */
 	function SetDoctype( $var )
 	{
 		$this->SetEnv('doctype', $var);
 	}
 
+	/**
+	 * Output doctype tag.
+	 * 
+	 * <pre>
+	 * <?php $this->Doctype('html'); ?>
+	 * </pre>
+	 * 
+	 * @param string $doctype html, xml, xhtml
+	 * @param number $version 5, 4, 4.01
+	 */
 	function Doctype( $doctype='html', $version=null )
 	{
 		if(!$doctype){
@@ -335,6 +508,8 @@ class App extends NewWorld5
 
 	/**
 	 * Load action file.
+	 * 
+	 * @param string file path.
 	 */
 	function Action($file)
 	{
