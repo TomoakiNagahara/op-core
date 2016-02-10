@@ -114,6 +114,13 @@ abstract class Config_Model extends OnePiece5
 	 */
 	function __database($args=null)
 	{
+		//	Local cache feature.
+		static $cache;
+		$ckey = md5(serialize($args));
+		if( isset($cache[$ckey]) ){
+			return $cache[$ckey];
+		}
+
 		$database = new Config();
 		$database->driver    = 'mysql';
 		$database->host      = 'localhost';
@@ -121,19 +128,22 @@ abstract class Config_Model extends OnePiece5
 		$database->name      = 'onepiece';
 		$database->charset   = 'utf8';
 		$database->user      = 'op_mdl_model';
-		
+
 		//	Overwrite.
 		if( $args ){
 			foreach($args as $key => $var){
 				$database->$key = $var;
 			}
 		}
-		
+
 		//	Password.
 		if( empty($database->password) ){
 			$database->password	 = $this->__password($database);
 		}
-		
+
+		//	Save to local cache.
+		$cache[$ckey] = $database;
+
 		return $database;
 	}
 	
