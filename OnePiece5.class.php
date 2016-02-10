@@ -587,29 +587,38 @@ class OnePiece5
 		$tag   = self::Escape($tag);
 		$attr  = self::Escape($attr);
 		$str   = self::Wiki2($str, array('tag'=>true) );
-		$style = '';
-		$class = '';
-		
-		if(isset($attr['class'])){
-			if(is_array($attr['class'])){
-				$temp = implode(' ',$attr['class']);
+		$join  = null;
+		$attribute = null;
+
+		if( isset($attr['class']) ){
+			if( is_array($attr['class']) ){
+				$temp = join(' ',$attr['class']);
 			}else{
 				$temp = $attr['class'];
 			}
-			$class = sprintf(' class="%s"', $temp);
+			$join[] = sprintf('class="%s"', $temp);
 		}
-		
-		if(isset($attr['style'])){
+
+		if( isset($attr['style']) ){
 			foreach($attr['style'] as $key => $var){
 				$styles[] = "$key:$var;";
 			}
-			$style = sprintf(' style="%s"', implode(' ', $styles));
+			$join[] = sprintf('style="%s"', join(' ', $styles));
 		}
-		
-		return PHP_EOL."<{$tag}{$class}{$style}>{$str}</{$tag}>".PHP_EOL;
-		return sprintf($nl.'<%s %s %s>%s</%s>'.$nl, $tag, $class, $style, $str, $tag );
+
+		if( isset($attr['lang']) ){
+			$join[] = sprintf('lang="%s"', $attr['lang']);
+		}
+
+		//	Generate attribute.
+		if( $join ){
+			$attribute = ' '.join(' ', $join);
+		}
+
+		//	Generate html.
+		return "<{$tag}{$attribute}>{$str}</{$tag}>";
 	}
-	
+
 	/**
 	 * Display at html format by p tag.
 	 * 
