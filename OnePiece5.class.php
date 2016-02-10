@@ -572,7 +572,7 @@ class OnePiece5
 		//	Print mark.
 		Developer::PrintMark( $str, $mark_labels, self::GetCallerLIne(0,1,'mark') );
 	}
-	
+
 	/**
 	 * Display at html format.
 	 * 
@@ -583,7 +583,6 @@ class OnePiece5
 	 */
 	static function Html($str, $tag='span', $attr=null)
 	{
-	//	$nl    = self::GetEnv('newline');
 		$str   = self::Escape($str);
 		$tag   = self::Escape($tag);
 		$attr  = self::Escape($attr);
@@ -892,7 +891,6 @@ class OnePiece5
 			$str = str_replace( array("\n","\r"), '', $str );
 			header( $str, $replace, $code );
 		}
-
 		return $io;
 	}
 
@@ -1345,7 +1343,7 @@ class OnePiece5
 			return nl2br( self::Escape(trim($string)) ) . PHP_EOL;
 		}
 	}
-	
+
 	/**
 	 * EMail
 	 * 

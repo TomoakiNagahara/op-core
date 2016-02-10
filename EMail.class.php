@@ -258,6 +258,9 @@ class EMail extends OnePiece5
 		return $full_name;
 	}
 	
+	/**
+	 * Get valid email address.
+	 */
 	static function GetLocalAddress()
 	{
 		return get_current_user().'@'.gethostbyaddr($_SERVER['SERVER_ADDR']);

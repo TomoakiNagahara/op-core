@@ -37,7 +37,7 @@ class Model_i18n extends Model_Model
 		}
 		return $config;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see OnePiece5::Init()
@@ -45,6 +45,8 @@ class Model_i18n extends Model_Model
 	function Init()
 	{
 		parent::Init();
+
+		//	For admin.
 		if( $this->Admin() ){
 			$this->_debug['count']['fetch']  = 0;
 			$this->_debug['count']['cache']  = 0;
@@ -54,7 +56,7 @@ class Model_i18n extends Model_Model
 			$this->_debug['count']['language']['cache'] = 0;
 		}
 	}
-	
+
 	/**
 	 * Set locale.
 	 * 
@@ -76,7 +78,7 @@ class Model_i18n extends Model_Model
 		$this->SetLang($lang);
 		$this->SetCountry($country);
 	}
-	
+
 	/**
 	 * Get locale.
 	 * 
@@ -86,7 +88,7 @@ class Model_i18n extends Model_Model
 	{
 		return $this->GetLang(); // .'-'.$this->GetCountry();
 	}
-	
+
 	/**
 	 * Set language code.
 	 *
@@ -103,7 +105,7 @@ class Model_i18n extends Model_Model
 		$this->_lang = $lang;
 		$this->SetCookie('lang',$lang);
 	}
-	
+
 	/**
 	 * Get language code.
 	 *
@@ -117,15 +119,16 @@ class Model_i18n extends Model_Model
 		if( $lang = $this->GetCookie('lang') ){
 			//	OK
 		}else{
+			//	This is system language code.
 			$lang = $this->GetEnv('lang');
 		}
-		
+
 		//	Legacy of the past.
 		list($lang) = explode('-', $lang);
-		
+
 		return $lang;
 	}
-	
+
 	/**
 	 * Set country code.
 	 *

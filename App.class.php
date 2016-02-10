@@ -5,15 +5,8 @@
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
-
-/**
- * include parent class
- */
-if(!include_once('NewWorld5.class.php')){
-	exit(0);
-}
 
 /**
  * App
@@ -23,19 +16,12 @@ if(!include_once('NewWorld5.class.php')){
 class App extends NewWorld5
 {
 	/**
-	 * op-unit-selftest directory name.
-	 *
-	 * @var string
-	 */
-	const _UNIT_URL_SELFTEST_ = '/_self-test/';
-	
-	/**
 	 * SmatURL's key separate character 
 	 * 
 	 * @var string
 	 */
 	private $_args_keys_needle = ':';
-	
+
 	/**
 	 * Get URL-Argument. (SmartURL)
 	 * 
@@ -49,12 +35,12 @@ class App extends NewWorld5
 		if(!$args){
 			$args = parent::GetArgs();
 		}
-		
+
 		//	Return all
 		if( is_null($key) ){
 			return $args;
 		}
-		
+
 		//	Return a specific value.
 		if( is_int($key) ){
 			//	at integer
@@ -73,12 +59,16 @@ class App extends NewWorld5
 				}
 			}
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
-	 * Get Action key name by URL.
+	 * Get Action name by URL.
+	 * 
+	 * <pre>
+	 * $action = $this->GetAction();
+	 * </pre>
 	 * 
 	 * @return string
 	 */
@@ -88,113 +78,92 @@ class App extends NewWorld5
 		$action = empty($args[0]) ? 'index': $args[0];
 		return $action;
 	}
-	
-	function SetConfig($file_name)
-	{
-		if( file_exists($file_name) ){
-			include($file_name);
-		}else{
-			self::Mark("Does not exists this file. ($file_name)");
-		}
-	}
-	
+
 	function SetAdminIP($var)
 	{
-		return $this->SetEnv('admin-ip', $var);
-	}
-	
-	function SetAdminEMail($var)
-	{
-		return $this->SetEnv('admin-mail', $var);
-	}
-	
-	function SetControllerName( $var )
-	{
-		return $this->SetEnv('controller-name', $var);
-	}
-	
-	function SetSettingName( $var )
-	{
-		return $this->SetEnv('setting-name', $var);
-	}
-	
-	function SetModelDir( $var )
-	{
-		return $this->SetEnv('model-dir', $var);
+		$this->SetEnv('admin-ip', $var);
 	}
 
-	function SetModuleDir( $var )
+	function SetAdminEMail($var)
 	{
-		return $this->SetEnv('module-dir', $var);
+		$this->SetEnv('admin-mail', $var);
+	}
+
+	function SetControllerName( $var )
+	{
+		$this->SetEnv('controller-name', $var);
+	}
+
+	function SetModelDir( $var )
+	{
+		$this->SetEnv('model-dir', $var);
 	}
 
 	function SetUnitDir( $var )
 	{
-		return $this->SetEnv('unit-dir', $var);
+		$this->SetEnv('unit-dir', $var);
 	}
 
 	function SetLayoutDir( $var )
 	{
-		return $this->SetEnv('layout-dir', $var);
+		$this->SetEnv('layout-dir', $var);
 	}
-	
+
+	{
+		$this->SetEnv('layout-name', $var);
+	}
+
 	function GetLayoutName()
 	{
 		return $this->GetEnv('layout-name');
 	}
-	
-	function SetLayoutName( $var )
+
+	function SetTemplateDir( $var )
 	{
-		return $this->SetEnv('layout-name', $var);
+		$this->SetEnv('template-dir', $var);
 	}
-	
-	function SetLayoutPath( $var )
-	{
-		$this->AdminNotice("This method will abolished.");
-		return $this->SetEnv('layout-path', $var);
-	}
-	
+
 	function GetTemplateDir()
 	{
 		return $this->GetEnv('template-dir');
 	}
 
-	function SetTemplateDir( $var )
-	{
-		return $this->SetEnv('template-dir', $var);
-	}
-	
 	function SetHtmlPassThrough( $var )
 	{
-		return $this->SetEnv('HtmlPassThrough', $var);
+		$this->SetEnv('HtmlPassThrough', $var);
 	}
-	
-	function SetTitle( $var )
-	{
-		$this->SetEnv('title', $var);
-	}
-	
+
 	function GetTitle()
 	{
 		return $this->GetEnv('title');
 	}
-	
+
+	function SetTitle( $var )
+	{
+		$this->SetEnv('title', $var);
+	}
+	function GetTitle()
+
+	{
+		$this->SetTitle($var. $this->GetTitle());
+	}
+
 	function Title()
 	{
 		print '<title>'.$this->GetTitle('title').'</title>';
 	}
-	
+
 	function SetDoctype( $var )
 	{
-		$this->SetEnv('doctype',$args);
+		$this->SetEnv('doctype', $var);
 	}
-	
 	function Doctype( $doctype=null, $version=null )
+
 	{
 		if(!$doctype){
 			$doctype = $this->GetEnv('doctype');
 		}
-		
+
 		switch($doctype){
 			case 'xml':
 				$doctype = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -217,77 +186,44 @@ class App extends NewWorld5
 		}
 		print $doctype.PHP_EOL;
 	}
-	
-	function InitLang()
-	{
-		if( $lang = $this->GetCookie('lang') ){
-			$this->SetLang($lang);
-		}
-	}
-	
-	function SetLang( $var )
-	{
-		if( $var ){
-			$this->SetEnv('lang',$var);
-			$this->SetCookie('lang', $var);
-		}
-	}
-	
-	function GetLang()
-	{
-		if(!$lang = $this->GetEnv('lang')){
-			$lang = $this->GetCookie('lang');
-		}
-		return $lang;
-	}
-	
+
 	function SetCharset( $var )
 	{
 		$this->SetEnv('charset',$var);
 	}
-	
+
 	function GetCharset( $args=null )
 	{
 		return $this->GetEnv('charset');
 	}
-	
-	function SetMime( $mime )
-	{
-		$this->SetEnv('mime',$mime);
-	}
-	
-	function GetMime()
-	{
-		return $this->GetEnv('mime');
-	}
-	
+
 	function AddKeyword( $var )
 	{
 		$this->AddKeywords( $var );
 	}
-	
+
 	function AddKeywords( $var )
 	{
 		$keywords = $this->GetEnv('keywords');
 		$keywords.= ", $var";
 		$this->SetEnv('keywords',$keywords);
 	}
-	
+
 	function SetKeyword( $var )
 	{
 		$this->SetEnv('keywords',$var);
 	}
-	
+
 	function SetKeywords( $var )
 	{
 		$this->SetEnv('keywords',$var);
 	}
-	
+
 	function GetKeywords()
 	{
 		return $this->GetEnv('keywords');
 	}
-	
+
 	function Keywords()
 	{
 		print '<meta name="keywords" content="'.$this->GetKeywords().'">';
@@ -297,63 +233,37 @@ class App extends NewWorld5
 	{
 		$this->SetEnv('description',$var);
 	}
-	
+
 	function GetDescription()
 	{
 		return $this->GetEnv('description');
 	}
-	
+
 	function Description()
 	{
 		print '<meta name="description" content="'.$this->GetDescription().'">';
 	}
-	
+
 	function SetNotFoundPage($filepath)
 	{
 		$this->SetEnv(NewWorld5::_NOT_FOUND_PAGE_, $filepath);
 	}
-	
-	function SetMemcache($memcache)
-	{
-		$this->SetEnv('memcache',$memcache);
-	}
-	
-	function GetMemcache()
-	{
-		if(!$memcache = $this->GetEnv('memcache') ){
-			$memcache = new Config();
-		}
-		return $memcache;
-	}
-	
-	function SetDatabase( $database )
-	{
-		$this->SetEnv('database',$database);
-	}
-	
-	function GetDatabase()
-	{
-		if(!$database = $this->GetEnv('database') ){
-			$database = new Config();
-		}
-		return $database;
-	}
-	
+
 	function SetTablePrefix( $prefix )
 	{
 		$this->SetEnv('table_prefix',$prefix);
 	}
-	
+
 	function En($english)
 	{
 		return $this->i18n()->En($english);
 	}
-	
+
 	function Ja($japanese)
 	{
 		return $this->i18n()->Ja($japanese);
 	}
-	
+
 	/**
 	 * @return Model_Cloud
 	 */
@@ -365,7 +275,7 @@ class App extends NewWorld5
 		}
 		return $model;
 	}
-	
+
 	/**
 	 * Import is wrapper of Template method.
 	 * 
@@ -376,7 +286,7 @@ class App extends NewWorld5
 	{
 		return $this->Template($path);
 	}
-	
+
 	/**
 	 * Wrapper of NewWorld5's Dispatch method.
 	 * Do check of Admin-IP and Admin-Mail.
@@ -388,7 +298,7 @@ class App extends NewWorld5
 	{
 		$admin_ip	 = Env::Get('admin-ip');
 		$admin_email = Env::Get('admin-mail');
-		
+
 		//	Checking Administrator's settings.
 		if(!Toolbox::isLocalhost() and (!$admin_ip or !$admin_email) ){
 			$this->SetLayoutName(false);
@@ -399,7 +309,7 @@ class App extends NewWorld5
 			$route['debug'][] = 'App have created a route table.';
 			$route['debug'][] = __FILE__.', '.__METHOD__.', '.__LINE__;
 		}
-		
+
 		//	Execute page controller.(End-poind)
 		parent::Dispatch($route);
 	}
@@ -413,7 +323,7 @@ class App extends NewWorld5
 	{
 		Env::Set('favicon',$var);
 	}
-	
+
 	/**
 	 * Get Favicon URL
 	 * 

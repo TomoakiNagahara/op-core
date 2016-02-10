@@ -542,19 +542,19 @@ abstract class NewWorld5 extends OnePiece5
 		//	Set json value.
 		$this->_json[$key] = $var;
 	}
-	
+
 	function GetJson( $key )
 	{
 		return isset($this->_json[$key]) ? $this->_json[$key]: null;
 	}
-	
+
 	/**
 	 * This language code is NewWorld's scope.
 	 * Not system(PHP's multibyte function, timezone, etc), Not i18n(user use language code)
 	 * NewWorld is use html tag. (<html lang="<?php $this->Lang() ?>">)
 	 */
 	private $_lang;
-	
+
 	/**
 	 * Set html's language code.
 	 * 
@@ -564,7 +564,7 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		$this->_lang = $lang;
 	}
-	
+
 	/**
 	 * Get html's language code.
 	 */
@@ -572,7 +572,7 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		return $this->_lang ? $this->_lang: $this->GetEnv('lang');
 	}
-	
+
 	/**
 	 * print html's language code.
 	 * 
@@ -582,7 +582,7 @@ abstract class NewWorld5 extends OnePiece5
 	{
 		print $this->GetLang();
 	}
-	
+
 	/**
 	 * This method will abolished.
 	 * 
