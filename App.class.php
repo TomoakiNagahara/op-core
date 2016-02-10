@@ -157,33 +157,32 @@ class App extends NewWorld5
 	{
 		$this->SetEnv('doctype', $var);
 	}
-	function Doctype( $doctype=null, $version=null )
 
+	function Doctype( $doctype='html', $version=null )
 	{
 		if(!$doctype){
 			$doctype = $this->GetEnv('doctype');
 		}
 
 		switch($doctype){
+			case 'html':
+				if( $version === null or $version === 5 ){
+					$doctype = '<!DOCTYPE html>';
+				}else
+				if( $version == 4 or $version == '4.01' ){
+					$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">';
+				}
+				break;
 			case 'xml':
 				$doctype = '<?xml version="1.0" encoding="UTF-8"?>';
 				break;
-				
 			case 'xhtml':
 				$doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">';
 				break;
-
-			case 'html':
-				if( $version == 4 or $version == '4.01' ){
-					$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">';
-				}else{
-					$doctype = '<!DOCTYPE html>';
-				}
-				break;
-				
 			default:
-				$doctype = '<!DOCTYPE html>';
+				$doctype = null;
 		}
+
 		print $doctype.PHP_EOL;
 	}
 
