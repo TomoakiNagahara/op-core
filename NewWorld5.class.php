@@ -570,7 +570,7 @@ abstract class NewWorld5 extends OnePiece5
 	 */
 	function GetLang()
 	{
-		return $this->_lang ? $this->_lang: $this->GetEnv('lang');
+		return $this->_lang;
 	}
 
 	/**
