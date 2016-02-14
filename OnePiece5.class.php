@@ -246,12 +246,12 @@ class OnePiece5
 		if( $key === null ){
 			$_SESSION['_ONEPIECE_'][__CLASS__] = $var;
 		}
-		
+
 		if( $var === null ){
 			unset($_SESSION['_ONEPIECE_'][__CLASS__][$key]);
 			return;
 		}
-		
+
 		$_SESSION['_ONEPIECE_'][__CLASS__][$key] = $var;
 	}
 
@@ -269,14 +269,14 @@ class OnePiece5
 		if( $key === null ){
 			return $_SESSION['_ONEPIECE_'][__CLASS__];
 		}
-		
+
 		if( isset( $_SESSION['_ONEPIECE_'][__CLASS__][$key]) ){
 			return $_SESSION['_ONEPIECE_'][__CLASS__][$key];
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * SetCookie is auto set to $_COOKIE, and value is valid all value! (string, number, array and object!!)
 	 *

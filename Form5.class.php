@@ -16,7 +16,7 @@
  */
 class Form5 extends OnePiece5
 {
-	private	$status;
+	private $status;
 	private $config;
 	private $_log	 = null;
 	private $_token	 = null;
@@ -37,18 +37,13 @@ class Form5 extends OnePiece5
 	{
 		//	Log
 		if( $this->_log ){ $this->_log[] = __METHOD__; }
-		
+
 		parent::Init();
 		$this->status = new Config();
 		$this->config = new Config();
 		$this->_token = &$_SESSION['OnePiece5']['Form5']['token'];
-		
+
 		//	Session-ID is regenerate.
-		/*
-		if( headers_sent( $file, $line ) ){
-			$this->mark("skip session regenerate. headers is already sent.($file, $line)",'debug');
-		}else
-		*/
 		if( $this->admin() ){
 			//	history for debug. 
 			$history = $this->GetSession('history');
@@ -59,90 +54,80 @@ class Form5 extends OnePiece5
 			$this->SetSession('history', $history);
 		}
 	}
-	
+
 	private function _GetSubmit( $input_name, $form_name )
 	{
 		//  Get form config.
 		if(!$form = $this->GetConfig( $form_name )){
 			return false;
 		}
-		
+
 		//  Check input config.
 		if(!is_null($input_name) ){
 			if(!isset($form->input->$input_name) ){
 				$this->AdminNotice("Does not exists input config. ($form_name, $input_name)");
 				return false;
-			}else{
-				$input = $form->input->$input_name;
 			}
 		}
-		
-		//  If case of file upload.
-		if( isset($_FILES[$input_name]) ){
-			
-			if( $_FILES[$input_name]['size'] == 0 ){
-				$request = null;
-			}else{
-				$request = $_FILES[$input_name]['name']."({$_FILES[$input_name]['type']})";
-			}
-			
-		}else{
-			$request = Toolbox::GetRequest( $input_name, $form->method );
-		}
-		
-		//  charset
-		$charset = $form->charset;
-		
-		//  convert
-		if( is_null($input_name) ){
-			//  many
+
+		//	Get submitted value.
+		$request = $this->_GenerateRequest($form);
+
+		return $input_name ? $request[$input_name]: $request;
+	}
+
+	/**
+	 * Generate submitted value.
+	 * 
+	 * @param  Config form config
+	 * @return array
+	 */
+	private function _GenerateRequest($form)
+	{
+		static $request;
+
+		if(!$request){
+			$charset = $form->charset;
+			$request = Toolbox::GetRequest(null, $form->method);
+
 			foreach( $form->input as $input_name => $input ){
-				//	
+				//
 				if(!isset($request[$input_name])){
 					continue;
 				}
-				
-				//	
+
+				//
 				$value = &$request[$input_name];
-				
+
 				/*
 				if( isset($input->replace) ){
 					$value = $this->CheckReplace( $value, $input->replace, $charset );
 				}
 				*/
-				
+
 				if( isset($input->convert) ){
 					$value = $this->CheckConvert( $value, $input->convert, $charset );
 				}
 			}
-		}else{
-			// single
-			
-			/*
-			if( !is_null($request) and isset($input->replace) ){
-				$request = $this->CheckReplace( $request, $input->replace, $charset );
-			}
-			*/
-			
-			if( !is_null($request) and isset($input->convert) ){
-				$request = $this->CheckConvert( $request, $input->convert, $charset );
+
+			if( $_FILES ){
+				$request = array_merge($request, $_FILES);
 			}
 		}
-		
+
 		return $request;
 	}
-	
+
 	private function SetRequest( $value, $input_name, $form_name )
 	{
 		if(!$this->CheckConfig( $form_name, $input_name )){
 			return false;
 		}
-		
 		return Toolbox::SetRequest( $value, $input_name, $this->config->$form_name->method );
 	}
-	
+
 	/*******************************************************************************/
-	
+
 	public function Secure( $form_name )
 	{
 		if(!$this->CheckConfig( $form_name )){
@@ -174,27 +159,21 @@ class Form5 extends OnePiece5
 		
 		return $this->status->$form_name->message;
 	}
-	
+
 	private function SetStatus( $form_name, $message )
 	{
 		if(!$this->Admin()){
 			return;
 		}
-		
-		/*
-		if(!$this->CheckConfig( $form_name )){
-			return false;
-		}
-		*/
-		
+
 		if(!isset($this->status->$form_name->stack)){
 			$this->status->$form_name->stack = array();
 		}
-		
+
 		$this->status->$form_name->message = $message;
 		$this->status->$form_name->stack[] = $message;
 	}
-	
+
 	/*******************************************************************************/
 	
 	private function GetTokenKeyName( $form_name )
@@ -733,68 +712,74 @@ class Form5 extends OnePiece5
 		if(!$this->CheckTokenKey( $form_name )){
 			return false;
 		}
-		
+
 		// get session
 		$session = $this->GetSession('form');
-		
+
 		// Submitted value.
 		$request = $this->_GetSubmit( null, $form_name);
-		
+
 		// 
 		$form = $this->GetConfig($form_name);
-		
+
 		//  charset
 		$charset = isset($form->charset) ? $form->charset: $this->GetEnv('charset');
-		
+
 		// 
 		$fail = null;
-		
+
 		//  this is submit request base check.
 		foreach( $request as $input_name => $value ){
-			
+
 			//  this form name
 			if( $input_name === 'form_name' ){
 				continue;
 			}
-			
+
 			//  token key
 			if( $input_name === $this->GetTokenKeyName($form_name) ){
 				continue;
 			}
-			
+
 			//  get input
 			$input = $form->input->$input_name;
-			
-			//	readonly is skip
+
+			//  readonly is skip
 			if( !empty($input->readonly) or !empty($input->disabled) ){
 				continue;
 			}
-			
+
 			if(!isset($form->input->$input_name)){
 				$this->AdminNotice("Does not set input config.($form_name, $input_name)");
 				continue;
 			}
-			
+
 			//  submit is skip
 			if( $input->type === 'submit' ){
 				if(!isset($input->save) or !$input->save){
 					continue;
 				}
 			}
-			
+
 			//  charset
 			$input->charset = $charset;
-			
+
 			//  Check submitted value.
-			if( $io = $this->CheckInputValue($input, $form_name, $value) ){
-				
+			if(!$this->CheckInputValue($input, $form_name, $value) ){
+				$fail = true;
+				$this->SetStatus($form_name, "NG: check input value. ($form_name, $input_name)");
+			}else{
+				$this->SetStatus($form_name, "OK: check input value. ($form_name, $input_name)");
+
 				// does not save
 				if( isset($input->save) and !$input->save ){
+					$this->SetStatus($form_name, "XX: Will not save. ($input_name)");
 					continue;
 				}
-				
+
 				//  file
 				if( $input->type === 'file' ){
+					$this->SetStatus($form_name, "XX: This input is file. ($input_name)");
 					$value = $this->SaveFile($input, $form_name);
 					if( is_null($value) ){
 						//	File has not been submit.
@@ -805,20 +790,13 @@ class Form5 extends OnePiece5
 					}
 					continue;
 				}
-				
+
 				//	Trimming a value.
 				$value = $this->Trim($input, $value);
-				
+
 				// save session
 				$session[$form_name][$input_name]['value'] = $value;
-				/*
-				if( is_string($value) ){
-					$session[$form_name][$input_name]['value'] = $value;
-				}else if(is_array($value)){
-					$session[$form_name][$input_name]['value'] = $value;
-				}
-				*/
-				
+
 				// save cookie
 				if( isset($input->cookie) and !is_null($value) ){
 					//  Remove check index.
@@ -828,22 +806,19 @@ class Form5 extends OnePiece5
 					$expire = $input->cookie === true ? 0: $input->cookie;
 					$this->SetCookie("$form_name/$input_name", $value, $expire );
 				}
-			}else{
-				$fail = true;
-				$this->SetStatus($form_name, "NG: check input value. ($form_name, $input_name)");
 			}
 		}
-		
+
 		// save
 		$this->SetSession('form',$session);
-		
+
 		// status
 		if( is_null($fail) ){
 			$this->SetStatus($form_name, 'secure');
 		}else{
 			$this->SetStatus($form_name, 'NG: save request');
 		}
-		
+
 		return true;
 	}
 	
@@ -862,53 +837,57 @@ class Form5 extends OnePiece5
 		$input_name = $input->name;
 		$save_value = $this->GetInputValueRaw($input->name, $form_name);
 		$post_value = $this->_GetSubmit($input->name, $form_name);
-		
+		$session    = $this->GetSession('form');
+
 		//	$save_value is document_root path. (always?)
 		if( $save_value ){
 			//  Is remover?
 			if( empty($post_value) or (is_array($post_value) and count($post_value) == 1 and empty($post_value[0])) ){
-				
+
 				//	get save directory
 				$dir = empty($input->save->dir) ? null: $input->save->dir;
-				
+
 				//	Convert real path
 				$path = $this->ConvertPath($dir.$save_value);
-								
+
 				//	Check file exists 
 				if(!file_exists($path)){
 					$this->AdminNotice("Does not exists file. ($path)");
 					return false;
 				}
-				
+
 				//  challenge to delete the upload file.
 				if(!unlink($path)){
 					//  delete is failed.
 					$this->AdminNotice("Can not delete the file. ($save_value)");
-					
+
 					//  recovery post value TODO: Is this correct????
 					$value = $this->ConvertURL($save_value);
 					$id = $form_name.'-'.$input_name.'-'.md5($value);
-					
+
 					//  TODO: ???
 					$_POST[$input_name][$id] = $value;
-					
+
 					return false;
 				}
-				
+
 				//  Reset form config. 
 				$this->SetInputValue( null, $input_name, $form_name );
-			
+
 				//	TODO: SetInputValue fail to permit=image (Why?)
-				$this->session['form'][$form_name][$input_name]['value'] = '';
-				
+				$session[$form_name][$input_name]['value'] = '';
+
 				//  Status
 				$this->SetStatus( $form_name, "XX: File delete is success. ($form_name, $input_name)");
-				
+
 				//  Return value is empty path.
 				return '';
 			}
 		}
-		
+
+		//	Save to session.
+		$this->SetSession('form', $session);
+
 		if( isset($_FILES[$input->name]) ){
 			$_file = $_FILES[$input->name];
 			$name  = $_file['name'];
@@ -1560,7 +1539,7 @@ class Form5 extends OnePiece5
 		
 		return true;
 	}
-	
+
 	private function CreateInputTag( $input, $form_name, $value_default=null )
 	{
 		//  init
@@ -1569,7 +1548,7 @@ class Form5 extends OnePiece5
 		$join = array();
 		$tail = '';
 		$value_of_input = null;
-		
+
 		//  attribute
 		foreach($input as $key => $var){
 			switch($key){
@@ -1582,11 +1561,11 @@ class Form5 extends OnePiece5
 				case 'save':
 					${$key} = $var;
 					break;
-					
+
 				case 'value':
 					$value_of_input = $var;
 					break;
-				
+
 				case 'readonly':
 				case 'disabled':
 					$readonly = true;
@@ -1594,8 +1573,8 @@ class Form5 extends OnePiece5
 						$join[] = sprintf('%s="%s"',$key,$key);
 					}
 					break;
-					
-				case 'session': // What is this? Where do use?
+
+				case 'session': // What is this? Where do use? 
 				//	$input->save = $input->session;
 					$input->save = $var;
 				case 'error':
@@ -1608,10 +1587,10 @@ class Form5 extends OnePiece5
 				case 'joint':
 				case 'group':
 					break;
-					
+
 				case 'class':
 					$class = $var;
-					
+
 				default:
 					if(!is_string($var)){
 						$var = Toolbox::toString( $var, ' ');
@@ -1619,7 +1598,7 @@ class Form5 extends OnePiece5
 					$join[] = sprintf('%s="%s"',$key,$var);
 			}
 		}
-		
+
         //  name
         if(empty($name)){
             $name = $input->name;
@@ -1632,7 +1611,7 @@ class Form5 extends OnePiece5
         }else{
         	$type = strtolower($type);
         }
-		
+
 		//  id
 		if( empty($id) ){
 			$id = $form_name.'-'.$input_name;			
@@ -1646,40 +1625,40 @@ class Form5 extends OnePiece5
 			}
 		}
 		$join[] = sprintf('id="%s"',$id);
-		
+
 		//	Class
 		if( empty($class) ){
 			switch($type){
 				case 'submit':
 					$join[] = 'class="op-input op-input-button op-input-submit"';
 					break;
-					
+
 				case 'textarea':
 					$join[] = 'class="op-input op-input-text op-input-textarea"';
 					break;
-					
+
 				case 'password':
 					$join[] = 'class="op-input op-input-text op-input-password"';
 					break;
-					
+
 				default:
 					$join[] = sprintf('class="op-input op-input-%s"',$type);
-			}	
+			}
 		}
-		
+
 		//  Other attributes
 		$attr = join(' ',$join);
 
 		// request
 		$_request = $this->_GetSubmit( null, $form_name );
-		
+
 		// Value
 		if( $type === 'password' ){
 			$value = null;
 		}else if( !empty($input->group) ){
 			//	Bulk input value
 		}else if( $type === 'submit' or $type === 'button' or $type === 'file' ){
-			
+
 			if( $value_default ){
 				//	Over write
 				$value = $value_default;
@@ -1688,7 +1667,7 @@ class Form5 extends OnePiece5
 			}else{
 				$value = $value_of_input;
 			}
-			
+
 		}else if( isset($_request[$input_name]) and empty($readonly) ){
 			$value = $_request[$input_name];
 		}else if('checkbox' === $type or 'radio' === $type){
@@ -1696,7 +1675,7 @@ class Form5 extends OnePiece5
 		}else{
 			$value = $this->GetInputValueRaw($input_name, $form_name);
 		}
-		
+
 		// case of save to cookie 
 		if( !isset($value) or is_null($value) ){
 			$value = $this->GetCookie($form_name.'/'.$input_name);
@@ -1704,10 +1683,10 @@ class Form5 extends OnePiece5
 				$value = $value_of_input;
 			}
 		}
-		
+
 		//  tail
 		$tail = $this->Decode($tail);
-		
+
 		// radio
 		if('radio' === $type){
 			if( isset($value) and isset($input->value) ){
@@ -1717,7 +1696,7 @@ class Form5 extends OnePiece5
 				$checked = isset($checked) ? $checked: '';
 			}
 		}
-		
+
 		//  checkbox
 		if('checkbox' === $type ){
 			// checked
@@ -1725,11 +1704,11 @@ class Form5 extends OnePiece5
 			if( (isset($save) ? $save: true) and is_array($value) ){
 				$checked = isset($value[$id]) ? true: false;
 			}
-			
+
 			//  inner tag value
 			$value = isset($input->value) ? $input->value: '';
 		}
-		
+
 		//  input is group cace
 		if( is_array($value) ){
 			if( $type === 'group' ){
@@ -1738,18 +1717,18 @@ class Form5 extends OnePiece5
 				$value = isset($value[$id]) ? $value[$id]: '';
 			}
 		}
-		
+
 		//  name
 		if( 'radio' !== $type and ('checkbox' === $type or isset($input->child)) ){
 			$name .= "[$id]";
 		}
-		
+
 		//  create
 		switch($type){
 			case 'textarea':
 				$tag = sprintf('<textarea name="%s" %s>%s</textarea>'.$tail, $name, $attr, $value);
 				break;
-				
+
 			case 'select':
 				//	If group case, use by parent was rewritten value.
 				if(!empty($input->group)){
@@ -1757,7 +1736,7 @@ class Form5 extends OnePiece5
 				}
 				$tag = sprintf('<select name="%s" %s>%s</select>'.$tail, $name, $attr, $this->CreateOption( $input->options, $value));
 				break;
-				
+
 			case 'file':
 				//  remove checkbox
 				$value = $this->GetInputValue($input_name);
@@ -1769,7 +1748,7 @@ class Form5 extends OnePiece5
 				}else{
 					$exists = null;
 				}
-				
+
 				if( is_string($value) and $value and $exists ){
 					if( isset($input->remover) and empty($input->remover)){
 						//	Does not create remover
@@ -1786,8 +1765,9 @@ class Form5 extends OnePiece5
 						$remover->value   = $value;
 						$remover->label   = $value_default ? $value_default: $value;
 						$remover->checked = true;
+						$remover->remover = true;
 					}
-					
+
 					//  Create remover
 					if( $remover ){
 						$tag = $this->CreateInputTag($remover, $form_name);
@@ -1797,43 +1777,43 @@ class Form5 extends OnePiece5
 					$tag = sprintf('<input type="%s" name="%s" value="%s" %s />'.$tail, $type, $input_name, $value, $attr);
 				}
 				break;
-				
+
 			default:
 				//  single or multi
 				if( isset($input->options) ){
-					
+
 					//	Separate value.
 					$values = explode( $input->joint, $value );
-					
+
 					//  child
 					foreach( $input->options as $index => $option ){
-						
+
 						//	Notice value
 						if( !isset($option->value) and $type!=='group' ){
 							$this->AdminNotice("This option was not set value attribute. ({$input->name})");
 						}
-						
+
 						//	Supplement label
 						if( empty($option->label) ){
 							$option->label = $option->value;
 						}
-						
+
 						//	Create input config from parent input.
 						$child = Toolbox::Copy($input);
 						$child->child = true;
 						$child->index = $index;
 						unset($child->options);
-						
+
 						//  Copy of option's value. 
 						foreach( $option as $key => $var ){
 							$child->$key = $var;
 						}
-						
+
 						//	Set group flag
 						if( $input->type == 'group' ){
 							$child->group = true;
 						}
-						
+
 						//  Set to label and checkbox.
 						if( $child->type === 'radio' or $child->type === 'checkbox' ){
 							$child->label = isset($option->label) ? $option->label: $option->value;
@@ -1841,45 +1821,47 @@ class Form5 extends OnePiece5
 							//	Each option value.
 							$child->value = array_shift($values);
 						}
-						
+
 						//	Create input tag.
 						$tag .= $this->CreateInputTag($child, $form_name);
 					}
 				}else{
+
 					//	single
 					$label_tag = null;
-					
+
 					//	checkbox and radio
 					if( $type === 'checkbox' or $type === 'radio' ){
 						//  value
 						$value = $input->value;
+
 						//  label
 						if( empty($label) ){
 							$label = $value;
 						}
 						$label_tag = sprintf('<label id="%s-label" %s>', $id, $attr);
 					}
-					
+
 					//  tail
 					if(isset($tail)){
 						$label_tag .= $tail;
 					}
-					
+
 					//  checked
-					if(!empty($checked)){
+					if(!empty($checked) or isset($input->remover) ){
 						$attr .= ' checked="checked"';
 					}
-					
+
 					//	If case of submit
 					if( $type === 'submit'){
 						$name = null;
 					}
-					
+
 					//	This is an ad hoc solution. (Very bad solution.)
 					if( !empty($input->child) ){
 						$value = $input->value;
 					}
-					
+
 					//  create tag
 					if( $label_tag ){ $tag .= $label_tag; }
 					$tag .= sprintf('<input type="%s" name="%s" value="%s" %s />', $type, $name, $value, $attr);
@@ -1887,12 +1869,12 @@ class Form5 extends OnePiece5
 				}
 				break;
 		}
-		
+
 		//  dummy
 		if( $type === 'checkbox' and !isset($input->child) ){
 			$tag .= sprintf('<input type="hidden" name="%s[]" value=""/>', $input_name) . $nl;
 		}
-		
+
 		return $tag . $nl;
 	}
 	
@@ -2004,17 +1986,16 @@ class Form5 extends OnePiece5
 	function Debug( $form_name )
 	{
 		if(!$this->admin() ){
-		//	$this->mark('Does not view debug info. because you are not admin.');
 			return false;
 		}
-		
+
 		if(!$form_name){
 			if(!$form_name = $this->GetCurrentFormName()){
 				$this->mark('![ .red [Debug method is required form_name.]]');
 				return false;
 			}
 		}
-		
+
 		$temp['form_name'] = $form_name;
 		$temp['Status']	 = $this->GetStatus($form_name);
 		$temp['Error']	 = Toolbox::toArray($this->status->$form_name->error);
@@ -2023,7 +2004,7 @@ class Form5 extends OnePiece5
 		$temp['history'] = $this->GetSession('history');
 		$temp['save_token_key'] = $this->GetSession('save-token-key');
 		$temp['post_token_key'] = $this->GetSession('post-token-key');
-		
+
 		//  Print debug information
 		$call = $this->GetCallerLine();
 		$this->p("Form debugging (![.small[ $call ]])");
