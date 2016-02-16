@@ -1444,4 +1444,28 @@ class OnePiece5
 	{
 		return Toolbox::GetRequest($key, $method, $default);
 	}
+
+	/**
+	 * Adjustment of the world time. (Virtual time)
+	 * 
+	 * @return integer
+	 */
+	static function Time()
+	{
+		/* @var $date Model_Date */
+		$date = self::Model('Date');
+		return $date->GetTime();
+	}
+
+	/**
+	 * Adjustment of the world date. (Virtual date)
+	 *
+	 * @return string Y-m-d H:i:s
+	 */
+	static function Date()
+	{
+		/* @var $date Model_Date */
+		$date = self::Model('Date');
+		return $date->GetDate();
+	}
 }
