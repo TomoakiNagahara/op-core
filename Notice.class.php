@@ -99,8 +99,12 @@ class Notice extends OnePiece5
 
 		//	Translation
 		if( $lang ){
+			/**
+			 * Does not work i18n.
+			 * 
 			list($a, $b) = explode("\n", $error['message']);
 			$message = $this->i18n()->Get($a, $lang, Env::Get('lang')).$b;
+			 */
 		}else{
 			$message = $this->i18n()->RemoveBackSlash($error['message']);
 		}
