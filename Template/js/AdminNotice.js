@@ -8,13 +8,22 @@
  * @copyright Tomoaki Nagahara All right reserved.
  */
 (function(){
-//	alert('AdminNotice');
+	if( __notice__ ){
+		//	Exists notice variable.
+		if( __notice__.errors ){
+			//	OK, This is object.
+		}else{
+			alert('__notice__ was not object.');
+		}
+	}
+
+	//	Get body. (If does not have body tag.)
+	$body = $('html');
 
 	//	container.
 	$container = $('<div/>');
 	$container.attr('id','admin-notice');
-	$container.text('');
-	$('body').append($container);
+	$body.append($container);
 
 	//	Each errors.
 	jQuery.each(__notice__.errors, function(i, error){
@@ -75,10 +84,6 @@
 	}
 
 	function _add_each_backtrace(no, backtrace){
-		_add_backtrace(no, backtrace);
-	}
-
-	function _add_backtrace(no, backtrace){
 		var $tr = $('<tr/>');
 		$table.append($tr);
 
