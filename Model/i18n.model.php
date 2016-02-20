@@ -303,6 +303,7 @@ class Model_i18n extends Model_Model
 				$this->Cache()->Set(__METHOD__, true);
 			}
 			$this->AdminNotice('\\$json\ was empty. (Not connected to the Internet?)');
+			return $source;
 		}else if(!empty($json['error'])){
 			$this->AdminNotice($json['error']);
 			return false;
