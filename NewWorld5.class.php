@@ -5,7 +5,7 @@
  * @creation  2009 on Kozhikode.
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 
 /**
@@ -19,7 +19,7 @@
  * @creation  2009 on Kozhikode.
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2009 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 abstract class NewWorld5 extends OnePiece5
 {

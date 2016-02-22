@@ -104,10 +104,14 @@ class Layout extends OnePiece5
 		
 		//	Execute layout controller.
 		include($execute_file);
-		
+
+		//	For compatibility.
+		if(!isset($_layout)){
+			$this->AdminNotice('\\$_layout\ variable was empty.');
+		}
+
 		//	Check variable.
 		if(empty($_layout)){
-			$this->AdminNotice('\\$_layout\ variable was empty.');
 			return false;
 		}
 		
