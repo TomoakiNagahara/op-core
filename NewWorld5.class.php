@@ -552,6 +552,8 @@ abstract class NewWorld5 extends OnePiece5
 	 * This language code is NewWorld's scope.
 	 * Not system(PHP's multibyte function, timezone, etc), Not i18n(user use language code)
 	 * NewWorld is use html tag. (<html lang="<?php $this->Lang() ?>">)
+	 * 
+	 * @var string
 	 */
 	private $_lang;
 
@@ -567,6 +569,8 @@ abstract class NewWorld5 extends OnePiece5
 
 	/**
 	 * Get html's language code.
+	 * 
+	 * @return string $lang
 	 */
 	function GetLang()
 	{
@@ -576,7 +580,9 @@ abstract class NewWorld5 extends OnePiece5
 	/**
 	 * print html's language code.
 	 * 
+	 * <pre>
 	 * <html lang="<?php $this->Lang() ?>">
+	 * </pre>
 	 */
 	function Lang()
 	{

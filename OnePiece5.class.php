@@ -51,19 +51,19 @@ class OnePiece5
 			$this->AdminNotice("\\$class\ has not call \parent::init()\.");
 		}
 	}
-	
+
 	function __call( $name, $args )
 	{
 		$class = method_exists($this, $name) ? null: get_class($this);
 		OP\Error::MagicMethodCall($class, $name, $args, OnePiece5::GetCallerLine());
 	}
-	
+
 	static function __callStatic( $name , $args )
 	{
 		$class = isset($this) ? get_class($this): null;
 		OP\Error::MagicMethodCallStatic($class, $name, $args, OnePiece5::GetCallerLine());
 	}
-	
+
 	function __set( $name, $args )
 	{
 		$class	 = get_class($this);
@@ -1414,7 +1414,7 @@ class OnePiece5
 
 		return $model;
 	}
-	
+
 	/**
 	 * Get submitted value. from form and url query.
 	 * 

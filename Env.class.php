@@ -6,7 +6,7 @@
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 
 /**
@@ -16,7 +16,7 @@
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2014 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 class Env extends OnePiece5
 {
@@ -241,7 +241,7 @@ class Env extends OnePiece5
 	{
 		return Env::Get(self::_KEY_LOCALE_);
 	}
-	
+
 	/**
 	 * Set system environment locale.
 	 * 
