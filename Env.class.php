@@ -249,17 +249,11 @@ class Env extends OnePiece5
 	 */
 	static function SetLocale( $locale )
 	{
-		//	Save to cookie.
+		//	Save to cookie. (Will abolished.)
 		OnePiece5::SetCookie(self::_KEY_LOCALE_, $locale);
 
-		//	parse
-		if( preg_match('|([a-z]+)[-_]([a-z]+)\.([-_a-z0-9]+)|i', $locale, $match) or true){
-			$lang = strtolower($match[1]);
-			$area = strtoupper($match[2]);
-			$code = strtoupper($match[3]);
-		}else{
-			OnePiece5::AdminNotice("Did not match locale format. ($locale, Ex. ja_JP.utf-8) ");
-		}
+		//	Parse locale code.
+		list($lang, $area, $code) = Locale::ParseLocaleCode($locale);
 
 		// Windows is unsupport utf-8
 		/*
@@ -280,7 +274,8 @@ class Env extends OnePiece5
 		Env::Set('charset',$code);
 
 		//	Get locale relation value.
-		list( $codes, $timezone ) = Env::GetLocaleValue();
+		$timezone = Locale::GetTimezone($locale);
+		$codes    = Locale::GetEncodingOrderDetect($locale);
 
 		//	Set PHP's environment value
 		mb_language($lang);
@@ -292,52 +287,7 @@ class Env extends OnePiece5
 		//	set timezone
 		ini_set('date.timezone',$timezone);
 	}
-	
-	/**
-	 * Get system environment locale value.
-	 */
-	static function GetLocaleValue()
-	{
-		$lang = Env::Get('lang');
-		$area = Env::Get('area');
-		
-		//	detect order value
-		switch($lang){
-			case 'en':
-				$codes[] = 'UTF-8';
-				$codes[] = 'ASCII';
-				break;
-				
-			case 'ja':
-				$codes[] = 'eucjp-win';
-				$codes[] = 'sjis-win';
-				$codes[] = 'UTF-8';
-				$codes[] = 'ASCII';
-				$codes[] = 'JIS';
-				break;
-			default:
-			$this->AdminNotice("Does not define this language code. ($lang)");
-		}
-		
-		/**
-		 * timezone list
-		 * @see http://jp2.php.net/manual/ja/timezones.php
-		 */
-		switch($area){
-			case 'US':
-				$timezone = 'America/Chicago';
-				break;
-				
-			case 'JP':
-				$timezone = 'Asia/Tokyo';
-				break;
-			default:
-			$this->AdminNotice("Does not define this country code. ($lang)");
-		}
-		
-		return array( $codes, $timezone );
-	}
-	
+
 	/**
 	 * Wrapper method of isShell.
 	 * 
