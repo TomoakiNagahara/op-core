@@ -72,7 +72,7 @@ class DoctorX extends OnePiece5
 		}
 		
 		if( $result === false ){
-			$error = $this->FetchError();
+			$error = OP\Error::Get();
 			$error['call'] = $this->GetCallerLine();
 			unset($error['backtrace']);
 			$this->_error[] = $error;

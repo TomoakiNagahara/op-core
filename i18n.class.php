@@ -310,7 +310,7 @@ class i18n extends OnePiece5
 				/*
 				//	Error process.
 				if(empty($message)){
-					$error = $this->FetchError();
+					$error = OP\Error::Get();
 					$message = $error['message'];
 				}
 				$this->Mark("![.red[$message]]",__CLASS__);

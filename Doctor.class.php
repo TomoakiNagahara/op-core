@@ -426,7 +426,7 @@ class Doctor extends OnePiece5
 		//	return
 		if(!$io){
 			//	Error
-			$error = $this->FetchError();
+			$error = OP\Error::Get();
 			$this->_log($error['message'], $io);
 		}
 
@@ -496,7 +496,7 @@ class Doctor extends OnePiece5
 		
 		if(!is_array($table_list)){
 			//	Error process.
-			$error = $this->FetchError();
+			$error = OP\Error::Get();
 			$this->_log($error['message'],false);
 			return;
 		}
@@ -755,7 +755,7 @@ class Doctor extends OnePiece5
 			$struct = array();
 			
 			//	Error
-			$error = $this->FetchError();
+			$error = OP\Error::Get();
 			$this->_log($error['message'],false);
 			return false;
 		}
