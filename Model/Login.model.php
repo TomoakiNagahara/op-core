@@ -2,13 +2,16 @@
 /**
  * Login.model.php
  * 
+ * @creation  2015
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2015 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 
 /**
+ * Model_Login
+ * 
  * Manages the login status.
  * Only do it.
  * 
@@ -25,44 +28,42 @@
  * }
  * </pre>
  * 
+ * @creation  2015
  * @version   1.0
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
- * @copyright 2015 (C) Tomoaki Nagahara All right reserved.
+ * @copyright Tomoaki Nagahara All right reserved.
  */
 class Model_Login extends Model_Model
 {
 	const SESSION_LOGIN_ID         = 'loggedin-id';
 	const SESSION_FIRST_LOGIN_TIME = 'first-login-time';
 	const COOKIE_LAST_ACCESS_TIME  = 'last-access-time';
-	
-	const MESSAGE_EXPIRE_SESSION = 'Session has expire. (Session has destroyed)';
-	const MESSAGE_EXPIRE_LAST    = 'Login has expire. (From the last access)';
-	const MESSAGE_EXPIRE_FIRST   = 'Login has expire. (From the first login)';
-	
+
+	const MESSAGE_EXPIRE_SESSION   = 'Session has expire. (Session has destroyed)';
+	const MESSAGE_EXPIRE_LAST      = 'Login has expire. (From the last access)';
+	const MESSAGE_EXPIRE_FIRST     = 'Login has expire. (From the first login)';
+
+	private $_is_login = null;
 	private $_message = null;
-	private $_expire  = 1200;  // 60 sec * 20 min
+	private $_expire  =  1200; // 60 sec * 20 min
 	private $_effect  = 10800; // 60 sec * 60 min * 3 hour
-	
+
 	function Init()
 	{
-		$this->Mark("This method will abolish.");
-
 		parent::Init();
 
 		//	check expire
-	//	$this->mark( $this->GetCookie(self::COOKIE_KEY) );
-	//	$this->mark( time()-$this->_expire );
 		if( $this->GetCookie(self::COOKIE_LAST_ACCESS_TIME) > (time() - $this->_expire) ){
-		//	$this->mark('OK');
+			//	OK
 		}else{
-		//	$this->mark('NG');
+			//	NG
 			$this->_message = self::MESSAGE_EXPIRE_LAST;
 			$this->Logout();
 		}
 		$this->SetCookie(self::COOKIE_LAST_ACCESS_TIME, time(), 0);
 	}
-	
+
 	/**
 	 * This is old method. Wrap of GetLoginID method.
 	 * This is method of deprecated.
@@ -87,7 +88,7 @@ class Model_Login extends Model_Model
 			$this->AdminNotice('Arguments \$id\ is empty. If logout, use \$this->Logout()\.');
 			return false;
 		}
-		
+
 		//	Set first login time
 		if( $_id = $this->GetSession(self::SESSION_LOGIN_ID) ){
 			//	
@@ -96,13 +97,13 @@ class Model_Login extends Model_Model
 				$this->SetSession( self::SESSION_FIRST_LOGIN_TIME, time() );
 			}
 		}
-		
+
 		//	Set login-ID to session
 		$io = $this->SetSession( self::SESSION_LOGIN_ID, $id );
-		
+
 		return $io ? true: false;
 	}
-	
+
 	/**
 	 * Get login-ID
 	 * 
@@ -112,12 +113,10 @@ class Model_Login extends Model_Model
 	{
 		//	Get login-ID from session
 		$id = $this->GetSession( self::SESSION_LOGIN_ID );
-		
+
 		//	If empty
 		if( $id ){
-			//	Check login effective
-		//	$this->mark( $this->GetSession(self::SESSION_FIRST_LOGIN_TIME) );
-		//	$this->mark( time() - $this->_effect );
+			//	Check login effective.
 			if( $this->GetSession(self::SESSION_FIRST_LOGIN_TIME) < (time() - $this->_effect) ){
 				$id = null;
 				$this->_message = self::MESSAGE_EXPIRE_FIRST;
@@ -128,19 +127,20 @@ class Model_Login extends Model_Model
 				$this->_message = self::MESSAGE_EXPIRE_SESSION;
 			}
 		}
-		
+
 		return $id;
 	}
-	
+
 	/**
 	 * To logout
 	 */
 	function Logout()
 	{
+		$this->_is_login = false;
 		$this->SetSession( self::SESSION_LOGIN_ID, null );
 		return true;
 	}
-	
+
 	/**
 	 * Return to boolean
 	 * 
@@ -148,9 +148,12 @@ class Model_Login extends Model_Model
 	 */
 	function isLoggedin()
 	{
-		return $this->GetLoginId() ? true: false;
+		if( $this->_is_login === null ){
+			$this->_is_login = $this->GetLoginId() ? true: false;
+		}
+		return $this->_is_login;
 	}
-	
+
 	/**
 	 * Get status message
 	 * 
