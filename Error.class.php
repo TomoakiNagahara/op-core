@@ -211,12 +211,13 @@ class Error
 	 * @param string $class class name
 	 * @param string $name  method name
 	 * @param array  $args  argument
+	 * @param string $call  Caller line
 	 */
-	static function MagicMethodCall( $class, $name, $args )
+	static function MagicMethodCall($class, $name, $args, $call)
 	{
 		//  If Toolbox method.
 		if( method_exists('\Toolbox', $name) and false ){
-			\OnePiece5::Mark("Please use Toolbox::$name");
+			\OnePiece5::Mark("Please use Toolbox::$name, $call");
 			return \Toolbox::$name(
 				isset($args[0]) ? $args[0]: null,
 				isset($args[1]) ? $args[1]: null,
@@ -227,7 +228,10 @@ class Error
 			);
 		}
 
-		$message = "This method was not exist. \({$class}::{$name})\\";
+		$supplement = $class ? "$class->$name ": null;
+		$supplement.= "method=$name, call=$call";
+
+		$message = "This method was not exist. \($supplement)\\";
 		$backtrace = debug_backtrace();
 		self::_Set($message, $backtrace, 'en');
 	}
@@ -238,11 +242,12 @@ class Error
 	 * @param string $class class name
 	 * @param string $name  method name
 	 * @param array  $args  argument
+	 * @param string $call  Caller line
 	 */
-	static function MagicMethodCallStatic( $class, $name, $args )
+	static function MagicMethodCallStatic($class, $name, $args, $call)
 	{
 		//	Call static is PHP 5.3.0 later
-		self::MagicMethodCall( $class, $name, $args );
+		self::MagicMethodCall($class, $name, $args, $call);
 	}
 
 	/**

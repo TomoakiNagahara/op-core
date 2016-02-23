@@ -54,14 +54,14 @@ class OnePiece5
 	
 	function __call( $name, $args )
 	{
-		$class = get_class($this);
-		OP\Error::MagicMethodCall( $class, $name, $args );
+		$class = method_exists($this, $name) ? null: get_class($this);
+		OP\Error::MagicMethodCall($class, $name, $args, OnePiece5::GetCallerLine());
 	}
 	
 	static function __callStatic( $name , $args )
 	{
-		$class = isset($this) ? get_class($this): 'unknow';
-		OP\Error::MagicMethodCallStatic( $class, $name, $args);
+		$class = isset($this) ? get_class($this): null;
+		OP\Error::MagicMethodCallStatic($class, $name, $args, OnePiece5::GetCallerLine());
 	}
 	
 	function __set( $name, $args )
