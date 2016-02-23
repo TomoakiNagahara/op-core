@@ -162,9 +162,17 @@ class Form5 extends OnePiece5
 
 	private function SetStatus( $form_name, $message )
 	{
-		if(!$this->Admin()){
-			return;
-		}
+		/**
+		 * Use self::Secure();
+		 *
+		 * <pre>
+		 * return 'secure' === $this->status->$form_name->message ? true: false;
+		 * <$pre>
+		 *
+		 if(!$this->Admin()){
+		 return;
+		 }
+		 */
 
 		if(!isset($this->status->$form_name->stack)){
 			$this->status->$form_name->stack = array();
