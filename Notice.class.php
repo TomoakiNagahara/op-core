@@ -81,6 +81,37 @@ class Notice extends OnePiece5
 			print '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'.PHP_EOL;
 		}
 
+		//	Remove object.
+		foreach( $json['errors'] as &$error ){
+			foreach( $error['backtrace'] as &$backtrace ){
+				//	What is this?
+				if( isset($backtrace['object']) ){
+					unset($backtrace['object']);
+				}
+
+				//	Empty arguments.
+				if( empty($backtrace['args']) ){
+					continue;
+				}
+
+				//	Remove object arguments.
+				foreach( $backtrace['args'] as &$args ){
+					//	Not object.
+					if( gettype($args) !== 'object' ){
+						continue;
+					}
+
+					//	Get class name.
+					$class_name = get_class($args);
+
+					//	Set class name
+					$args = null;
+					$args = $class_name;
+				}
+			}
+		}
+
+		//	Print error notice.
 		print '<script>__notice__='.json_encode($json).'</script>'.PHP_EOL;
 		print '<script src="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=js"></script>'.PHP_EOL;
 		print '<link rel="stylesheet" type="text/css" href="'.$_SERVER['SCRIPT_NAME'].'?onepiece[admin-notice]=css">'.PHP_EOL;
