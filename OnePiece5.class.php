@@ -38,25 +38,8 @@ class OnePiece5
 			$this->Init();
 		}
 
-		switch( $type = ifset($_GET['onepiece']['admin-notice']) ){
-			case 'js':
-				$mime = 'text/javascript';
-				$path = $_SERVER['OP_ROOT'].'Template/js/AdminNotice.js';
-				break;
-
-			case 'css':
-				$mime = 'text/css';
-				$path = $_SERVER['OP_ROOT'].'Template/css/AdminNotice.css';
-				break;
-		}
-
-		if( isset($path) ){
-			Toolbox::SetMime($mime);
-			echo file_get_contents( $path );
-			if( $this instanceof NewWorld5 ){
-				$this->Content();
-			}
-			exit;
+		if( isset($_GET['onepiece']['admin-notice']) ){
+			Notice::PrintTemplate();
 		}
 	}
 

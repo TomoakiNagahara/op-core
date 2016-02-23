@@ -21,6 +21,35 @@
 class Notice extends OnePiece5
 {
 	/**
+	 * Print template file.
+	 */
+	static function PrintTemplate()
+	{
+		switch( $type = $_GET['onepiece']['admin-notice'] ){
+			case 'js':
+				$mime = 'text/javascript';
+				$path = $_SERVER['OP_ROOT'].'Template/js/AdminNotice.js';
+				break;
+
+			case 'css':
+				$mime = 'text/css';
+				$path = $_SERVER['OP_ROOT'].'Template/css/AdminNotice.css';
+				break;
+		}
+
+		if( isset($path) ){
+			Env::Set('MIME', $mime);
+			echo file_get_contents( $path );
+			if( isset($this) ){
+				if( $this instanceof NewWorld5 ){
+					$this->Content();
+				}
+			}
+			exit;
+		}
+	}
+
+	/**
 	 * Reporting.
 	 */
 	static function Report()
