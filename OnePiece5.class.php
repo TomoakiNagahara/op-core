@@ -39,7 +39,16 @@ class OnePiece5
 		}
 
 		if( isset($_GET['onepiece']['admin-notice']) ){
+			//	Output template.
 			Notice::PrintTemplate();
+
+			//	In case of NewWorld.k
+			if( $this instanceof NewWorld5 ){
+				$this->Content();
+			}
+
+			//	Termination.
+			exit;
 		}
 	}
 

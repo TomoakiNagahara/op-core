@@ -45,7 +45,6 @@ class Notice extends OnePiece5
 					$this->Content();
 				}
 			}
-			exit;
 		}
 	}
 
