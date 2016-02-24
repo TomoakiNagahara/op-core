@@ -19,7 +19,7 @@ function php_mbstring(){
 	
 	print '<h1>Does not install php-mbstring module.</h1>';
 	print '<p>Please install php-mbstring module.</p>';
-	print '<pre style="margin:0 1em; padding:0.5em; background-color:#ccc;"><code>';
+	print '<pre style="margin:0 1em; padding:0.5em; background-color:#dfdfdf;"><code>';
 	
 	switch (true) {
 		case stristr(PHP_OS, 'DAR'):
@@ -53,8 +53,21 @@ function php_mbstring_win($v){
 }
 
 function php_mbstring_linux($v){
+	if( file_exists('/etc/redhat-release') ){
+		if( $v > 53 ){
+			php_mbstring_linux_redhat($v);
+			return;
+		}
+	}
 	print <<< "EOL"
-sudo yum install php{$v}-mbstring
+sudo yum install php-mbstring
+sudo service httpd restart
+EOL;
+}
+
+function php_mbstring_linux_redhat($v){
+	print <<< "EOL"
+sudo yum --enablerepo=remi-php{$v} install php-mbstring
 sudo service httpd restart
 EOL;
 }
