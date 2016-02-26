@@ -155,17 +155,14 @@ class Notice extends OnePiece5
 		$timestamp = $error['timestamp'];
 		$lang      = $error['lang'];
 
-		//	Translation
+		//	Translation.
 		if( $lang ){
-			/**
-			 * Does not work i18n.
-			 * 
-			list($a, $b) = explode("\n", $error['message']);
-			$message = $this->i18n()->Get($a, $lang, Env::Get('lang')).$b;
-			 */
-		}else{
-			$message = $this->i18n()->RemoveBackSlash($error['message']);
+			list($a, $b) = explode("\n", $message);
+			$message = OnePiece5::i18n()->Get($a, $lang).$b;
 		}
+
+		//	Entity decode.
+		$message = html_entity_decode($message, ENT_QUOTES, 'utf-8');
 
 		//	Get mail subject.
 		$subject = '[Error] '.$message;
@@ -346,6 +343,7 @@ class Notice extends OnePiece5
 				break;
 
 			case 'string':
+				$var = OnePiece5::Escape($var, ENT_QUOTES, 'utf-8');
 				$value = "'$var'";
 				break;
 

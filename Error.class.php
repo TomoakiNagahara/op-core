@@ -58,22 +58,30 @@ class Error
 	 */
 	static private function _Set($message, $backtrace=null, $lang=false)
 	{
+		//	Generate cache key.
 		$key = sha1($message);
 		$key = substr($key, 0, 8);
 
+		//	Stack error to Session.
 		if( self::$_error === null ){
 			self::$_error = &$_SESSION[__CLASS__];
 		}
 
+		//	Get backtrace.
 		if(!$backtrace){
 			$backtrace = debug_backtrace();
 		}
 
-		$error['message']	 = htmlentities($message, ENT_QUOTES, 'utf-8');
+		//	Force encode.
+		$message = htmlentities($message, ENT_QUOTES, 'utf-8');
+
+		//	Generate error information.
+		$error['message']	 = $message;
 		$error['backtrace']	 = $backtrace;
 		$error['timestamp']	 = date('Y-m-d H:i:s');
 		$error['lang']		 = $lang;
 
+		//	Duplicate message is overwrite.
 		self::$_error[$key] = $error;
 	}
 

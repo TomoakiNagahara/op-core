@@ -1312,7 +1312,7 @@ class OnePiece5
 	{
 		return self::Singleton('Form5');
 	}
-	
+
 	/**
 	 * i18n is translate object.
 	 * 
@@ -1322,7 +1322,7 @@ class OnePiece5
 	{
 		return self::Model('i18n');
 	}
-	
+
 	/**
 	 * Cache is presents the memcached interface.
 	 *
