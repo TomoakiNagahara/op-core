@@ -17,37 +17,57 @@
  */
 function _GetRootsPath($meta=null, $path=null)
 {
-	//	...
-	static $root;
+	return RootPath($meta, $path);
+}
 
+/** Get/Set meta root path.
+ *
+ * @param	 string		 $meta is label name.
+ * @param	 string		 $path is full file path.
+ * @return	 array
+ */
+function RootPath($meta=null, $path=null)
+{
 	//	...
-	if(!$root or ($meta and $path) ){
+	static $_root;
+
+	//	Init $_root
+	if( empty($_root) ){
 		//	...
 		global $_OP;
 
-		//	...
-		if( $meta and $path ){
-			//	...
-			$temp = strtoupper($meta) . '_ROOT';
-
-			//	...
-			$_OP[$temp] = $path;
-		}
-
-		//	...
-		$root = [];
-
-		//	...
+		/** Why want to rebuild?
+		 *  $_OP['OP_ROOT'] --> $_root['op:/']
+		 */
 		foreach( $_OP as $key => $val ){
+			//	...
 			list($key1, $key2) = explode('_', $key);
+
+			//	...
 			if( $key2 === 'ROOT' ){
-				$root[ strtolower($key1) . ':/' ] = rtrim($val, '/').'/';
-			}
-		}
+				$_root[ strtolower($key1) . ':/' ] = rtrim($val, '/').'/';
+			};
+		};
+	};
+
+	//	...
+	if( $meta and $path ){
+		//	...
+		if(!file_exists($path)){
+			throw new \Exception("This file path has not been exists. ($path)");
+		};
+
+		//	...
+		$_root[ strtolower($meta) . ':/' ] = rtrim($path, '/').'/';
 	}
 
 	//	...
-	return $root;
+	if( $meta and $path === null ){
+		return $_root["{$meta}:/"] ?? false;
+	};
+
+	//	...
+	return $_root;
 }
 
 /** Compress to meta path from local file path.
@@ -61,7 +81,7 @@ function _GetRootsPath($meta=null, $path=null)
  */
 function CompressPath($path)
 {
-	foreach( _GetRootsPath() as $key => $var ){
+	foreach( RootPath() as $key => $var ){
 		if( strpos($path, $var) === 0 ){
 			$path = substr($path, strlen($var));
 			return $key . ltrim($path,'/');
@@ -81,7 +101,7 @@ function CompressPath($path)
  */
 function ConvertPath($path)
 {
-	foreach( _GetRootsPath() as $key => $var ){
+	foreach( RootPath() as $key => $var ){
 		if( strpos($path, $key) === 0 ){
 			$path = substr($path, strlen($key));
 			return $var.$path;
@@ -109,6 +129,9 @@ function ConvertURL($url)
 	//	...
 	global $_OP;
 
+	//	...
+	$result = $url;
+
 	//	Full path.
 	$rewrite_base = rtrim($_OP[DOC_ROOT], '/');
 
@@ -134,20 +157,42 @@ function ConvertURL($url)
 		$result = substr($url, strlen($rewrite_base));
 
 	}else{
-		//	What is this?
+		//	...
+		if( $pos  = strpos($url, ':/') ){
+			$meta = substr($url, 0, $pos);
+			$path = substr($url, $pos+2);
+			$root = RootPath($meta);
+			$result = substr( $root.$path, strlen($rewrite_base));
+		};
+
+		/*
+		//	What is this? <-- Checking if value is meta path.
 		$key = ':/';
 
-		//	???
+		//	Search meta path label.
 		$len = strpos($url, $key) + strlen($key);
 
-		//	Why?
-		foreach( _GetRootsPath() as $key => $dir ){
+		//
+		if( $len ){
+		//	Why? <-- Replace meta path label.
+		foreach( RootPath() as $key => $dir ){
 			//	match
 			if( strpos($url, $key) === 0 ){
 				//	Convert
+
+
+				if( $url == 'admin:/notfound/' ){
+					D($key, $dir);
+					D($url);
+					return;
+				};
+
 				$result = ConvertURL( CompressPath($dir . substr($url, $len)) );
+				break;
 			}
 		}
+		};
+		*/
 	}
 
 	/** Add slash to URL tail.
@@ -221,7 +266,7 @@ function Decode($value, $charset=null)
 	}
 
 	//	...
-	switch( $type = gettype($value) ){
+	switch( /* $type = */ gettype($value) ){
 		//	...
 		case 'string':
 			$value = DecodeString($value, $charset);
@@ -240,6 +285,8 @@ function Decode($value, $charset=null)
 
 		//	...
 		default:
+			//	Does infinite loop.
+		//	Notice::Set("Has not been support this type. ($type)");
 	}
 
 	//	...
@@ -276,7 +323,7 @@ function Escape($var, $charset=null)
 	}
 
 	//	...
-	switch( $type = gettype($var) ){
+	switch( /* $type = */ gettype($var) ){
 		case 'string':
 			return _EscapeString($var, $charset);
 
@@ -292,6 +339,7 @@ function Escape($var, $charset=null)
 			break;
 
 		default:
+		//	Notice::Set("Has not been support this type. ($type)");
 	}
 
 	//	...
@@ -338,11 +386,12 @@ function _EscapeString($var, $charset='utf-8')
  *
  * This function is convert to fixed length unique string from long or short strings.
  *
- * @param  null|integer|float|string|array|object $var
- * @param  integer $length
- * @return string  $hash
+ * @param	 null|integer|float|string|array|object $var
+ * @param	 integer	 $length
+ * @param	 string|null $salt
+ * @return	 string		 $hash
  */
-function Hasha1($var, $length=8){
+function Hasha1($var, $length=8, $salt=null){
 	//	...
 	if( is_string($var) ){
 		//	...
@@ -351,7 +400,12 @@ function Hasha1($var, $length=8){
 	}
 
 	//	...
-	return substr(sha1($var . _OP_SALT_), 0, $length);
+	if( $salt === null ){
+		$salt = _OP_SALT_;
+	};
+
+	//	...
+	return substr(sha1($var . $salt), 0, $length);
 }
 
 /** ifset
@@ -366,51 +420,6 @@ function ifset(&$check, $alternate=null)
 	return isset($check) ? $check : $alternate;
 }
 
-/** Parse html tag attribute from string to array.
- *
- * @param  string $attr
- * @return array  $result
- */
-function Attribute(string $attr)
-{
-	//	...
-	$key = 'tag';
-	$result = null;
-
-	//	...
-	for($i=0, $len=strlen($attr); $i<$len; $i++){
-		//	...
-		switch( $attr[$i] ){
-			case '.':
-				$key = 'class';
-				if(!empty($result[$key]) ){
-					$result[$key] .= ' ';
-				}
-				continue 2;
-
-			case '#':
-				$key = 'id';
-				continue 2;
-
-			case ' ':
-				continue 2;
-
-			default:
-		}
-
-		//	...
-		if( empty($result[$key]) ){
-			$result[$key] = '';
-		}
-
-		//	...
-		$result[$key] .= $attr[$i];
-	}
-
-	//	...
-	return $result;
-}
-
 /** Output secure JSON.
  *
  * @param	 array	 $json
@@ -418,17 +427,13 @@ function Attribute(string $attr)
  */
 function Json($json, $attr)
 {
-	//	Decode
-	$json = Decode($json);
-
-	//	Convert to json.
-	$json = json_encode($json);
-
-	//	Encode XSS. (Not escape quote)
-	$json = htmlentities($json, ENT_NOQUOTES, 'utf-8');
+	//	...
+	if(!Unit::Load('html') ){
+		return false;
+	}
 
 	//	...
-	Html($json, 'div.'.$attr, false);
+	echo \OP\UNIT\Html::Json($json, $attr);
 }
 
 /** Display HTML.
@@ -443,36 +448,11 @@ function Json($json, $attr)
  */
 function Html($string, $attr=null, $escape=true)
 {
-	//	Escape tag and quote.
-	if( $escape ){
-		$string = Escape($string);
+	//	...
+	if(!Unit::Load('html') ){
+		return false;
 	}
 
 	//	...
-	if( $attr ){
-		$attr = Attribute($attr);
-	}
-
-	//	...
-	$tag = $id = $class = null;
-	foreach( ['tag','id','class'] as $key ){
-		${$key} = $attr[$key] ?? null;
-	}
-
-	//	...
-	if( empty($tag) ){
-		$tag = 'div';
-	}
-
-	//	...
-	$attr = $id    ? " id='$id'"      :'';
-	$attr.= $class ? " class='$class'":'';
-
-	//	...
-	if( $tag === 'a' ){
-		$attr = ' href="' . $string . '"';
-		printf('<%s%s>%s</%s>'.PHP_EOL, $tag, $attr, $string, $tag);
-	}else{
-		printf('<%s%s>%s</%s>'.PHP_EOL, $tag, $attr, $string, $tag);
-	}
-}
+	echo \OP\UNIT\Html::Generate($string, $attr, $escape);
+};

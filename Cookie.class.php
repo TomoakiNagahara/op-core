@@ -32,6 +32,12 @@ class Cookie
 	 */
 	use OP_CORE;
 
+	/** Debug information.
+	 *
+	 * @var array
+	 */
+	static $_debug;
+
 	/** Initialize App ID.
 	 *
 	 */
@@ -55,7 +61,16 @@ class Cookie
 	 */
 	static function _Key($key)
 	{
-		return Hasha1($key.', '.self::_AppID());
+		//	...
+		$hash = Hasha1($key.', '.self::_AppID());
+
+		//	...
+		if( Env::isAdmin() ){
+			self::$_debug['keys'][$key]['hash'] = $hash;
+		};
+
+		//	...
+		return $hash;
 	}
 
 	/** Get cookie value of key.
@@ -80,7 +95,7 @@ class Cookie
 	 */
 	static function Set($key, $val, $expire=null, $option=null)
 	{
-		//	...
+		//	For Eclipse (Undefined error)
 		$file = $line = null;
 
 		//	Failed.
@@ -93,9 +108,27 @@ class Cookie
 		$key = self::_Key($key);
 
 		//	...
-		if( $expire === null ){
-			$expire = Time::Get() + (60*60*24*365*10);
-		}
+		$time = Time::Get();
+
+		//	...
+		switch( $type = gettype($expire) ){
+			case 'NULL':
+				$expire = $time + (60*60*24*365*10);
+				break;
+
+			case 'string':
+				$expire = strtotime($expire, $time);
+				break;
+
+			case 'integer':
+				if( $expire <  $time ){
+					$expire += $time;
+				};
+				break;
+
+			default:
+				Notice::Set("Has not been support this variable type. ($type)");
+		};
 
 		//	...
 		$path = ifset( $option['path'], '/');
@@ -136,5 +169,32 @@ class Cookie
 			self::Set('uuid', $uuid);
 		}
 		return $uuid;
+	}
+
+	/** For developers.
+	 *
+	 * @param	 null	$config
+	 */
+	static function Debug($config=null)
+	{
+		//	...
+		$info = [];
+
+		//	...
+		foreach( self::$_debug['keys'] as $key => $val ){
+			//	...
+			$hash = $val['hash'];
+			$orig = Cookie::Get($key);
+
+			//	...
+			$temp = [];
+			$temp['key']   = $key;
+			$temp['hash']  = $hash;
+			$temp['value'] = $orig;
+			$info[] = $temp;
+		};
+
+		//	...
+		D( $info );
 	}
 }

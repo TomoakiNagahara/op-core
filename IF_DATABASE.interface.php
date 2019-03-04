@@ -22,7 +22,7 @@ interface IF_DATABASE
 	/** Return PDO instance.
 	 *
 	 * <pre>
-	 * $db->PDO()->Query();
+	 * $this->PDO()->Query();
 	 * </pre>
 	 *
 	 * @addition 2018-04-20
@@ -41,6 +41,7 @@ interface IF_DATABASE
 	 * $conifg['user']     = 'username';
 	 * $conifg['password'] = 'password';
 	 * $conifg['charset']  = 'utf8';
+	 * $conifg['database'] = 'databasename';
 	 * </pre>
 	 *
 	 * @addition 2018-11-13
@@ -55,6 +56,13 @@ interface IF_DATABASE
 	 * @return	\PDO
 	 */
 	public function Connect($config);
+
+	/** Is connected.
+	 *
+	 * @addition 2019-01-28
+	 * @return	 boolean
+	 */
+	public function isConnect();
 
 	/** Count number of records at SELECT conditions.
 	 *
@@ -92,12 +100,21 @@ interface IF_DATABASE
 	 */
 	public function Delete($config);
 
+	/** Execute to SQL query string. And return records array.
+	 *
+	 * @addition 2018-04-20
+	 * @param	 string	 $SQL
+	 * @param	 string	 $type
+	 * @return	 array	 $record
+	 */
+	public function SQL(string $SQL, string $type);
+
 	/** Execute Quick Query Language string.
 	 *
 	 * @addition 2018-04-20
-	 * @param	 array	 $config
+	 * @param	 string	 $qql
 	 */
-	public function Quick($config, $options);
+	public function QQL($qql, $options);
 
 	/** Quote to SQL at each product.
 	 *
@@ -106,19 +123,24 @@ interface IF_DATABASE
 	 */
 	public function Quote($config);
 
-	/** Execute to SQL query string. And return records array.
+	/** Begin transaction.
 	 *
-	 * @addition 2018-04-20
-	 * @param	 string	 $SQL
-	 * @param	 string	 $type
-	 * @return	 array	 $record
+	 * @addition 2019-01-25
+	 * @return	 boolean
 	 */
-	public function SQL($SQL, $type);
+	public function Transaction();
 
-	/** Display debug information.
+	/** Commit transaction.
 	 *
-	 * @addition 2018-04-20
-	 * @param	 array	 $config
+	 * @addition 2019-01-25
+	 * @return	 boolean
 	 */
-	public function Debug();
+	public function Commit();
+
+	/** Rollback transaction.
+	 *
+	 * @addition 2019-01-25
+	 * @return	 boolean
+	 */
+	public function Rollback();
 }
