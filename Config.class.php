@@ -37,6 +37,7 @@ class Config
 	 *
 	 * @created   2019-12-27
 	 * @param     string       $name
+	 * @return    string       $name
 	 */
 	static private function _Init($name)
 	{
