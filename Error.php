@@ -25,7 +25,7 @@ error_reporting(E_ALL);
  * @param integer $line
  * @param array   $context
  */
-set_error_handler( function($errno, $error, $file, $line, $context)
+set_error_handler( function($errno, $error, $file, $line, $context=null)
 {
 	//	...
 	if( class_exists('OP\Notice', true) ){
