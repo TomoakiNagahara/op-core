@@ -81,11 +81,6 @@ include_once(__DIR__.'/Defines.php');
  */
 include_once(__DIR__.'/Functions.php');
 
-/** Include custome functions.
- *
- */
-include_once(__DIR__.'/D.php');
-
 /** Include OP CORE.
  *
  */
