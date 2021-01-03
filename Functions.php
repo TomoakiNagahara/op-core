@@ -22,6 +22,7 @@ namespace OP;
  *
  * @created   2020-01-01
  */
+include(__DIR__.'/function/D.php');
 include(__DIR__.'/function/Load.php');
 include(__DIR__.'/function/Unit.php');
 include(__DIR__.'/function/encode.php');
