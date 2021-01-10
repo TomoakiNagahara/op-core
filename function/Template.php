@@ -19,9 +19,10 @@ namespace OP;
  * @version   1.0
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
- * @param     string      $file
- * @param     array       $args
- * @throws   \Exception
+ * @param     string       $file
+ * @param     array        $args
+ * @throws   \Exception    $e
+ * @return    NULL|mixed   $result
  */
 function Template(string $file, array $args=[])
 {
