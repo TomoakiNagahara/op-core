@@ -454,11 +454,11 @@ class Env
 	/** Get request value.
 	 *
 	 * @created   2020-05-04
-	 * @param     string       $key
-	 * @param     mixed        $default
+	 * @param     string       $_key
+	 * @param     mixed        $_default
 	 * @return    mixed        $request
 	 */
-	static function Request($key=null, $default=null)
+	static function Request($_key=null, $_default=null)
 	{
 		//	...
 		static $_request = null;
@@ -482,6 +482,6 @@ class Env
 		}
 
 		//	...
-		return empty($key) ? $_request: ($_request[$key] ?? $default);
+		return empty($_key) ? $_request: ($_request[$_key] ?? $_default);
 	}
 }
