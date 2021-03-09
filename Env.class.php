@@ -484,4 +484,24 @@ class Env
 		//	...
 		return empty($_key) ? $_request: ($_request[$_key] ?? $_default);
 	}
+
+	/** Get Admin IP address.
+	 *
+	 * @created   2021-03-09
+	 * @return    NULL|string
+	 */
+	static function AdminIP()
+	{
+		return Config::Get('admin')[Env::_ADMIN_IP_] ?? null;
+	}
+
+	/** Get Admin EMail address.
+	 *
+	 * @created   2021-03-09
+	 * @return    NULL|string
+	 */
+	static function AdminMail()
+	{
+		return Config::Get('admin')[Env::_ADMIN_MAIL_] ?? null;
+	}
 }
