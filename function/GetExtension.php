@@ -21,6 +21,11 @@ namespace OP;
 function GetExtension(string $file):string
 {
 	//	...
+	if( $pos  = strpos($file, '?') ){
+		$file = substr($file, 0, $pos);
+	}
+
+	//	...
 	if(!$pos = strrpos($file, '.') ){
 		return false;
 	}
