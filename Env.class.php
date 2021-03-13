@@ -339,11 +339,12 @@ class Env
 			/* @var $file null */
 			/* @var $line null */
 			if( headers_sent($file, $line) ){
-				throw new \Exception("Header has already sent. ($file, $line)");
-			}else{
-				//	...
-				self::$_env['mime'] = strtolower($mime);
+				$message = "Header has already sent. ($file, $line)";
+				Notice::Set($message);
+			}
 
+			//	...
+			if( self::isHttp() ){
 				//	...
 				$header = "Content-type: $mime";
 
@@ -354,11 +355,14 @@ class Env
 
 				//	...
 				header($header);
+			}
 
-				//	...
-				if( self::$_env['mime'] !== 'text/html' ){
-					self::$_env['layout']['execute'] = false;
-				}
+			//	...
+			self::$_env['mime'] = strtolower($mime);
+
+			//	...
+			if( self::$_env['mime'] !== 'text/html' ){
+				self::$_env['layout']['execute'] = false;
 			}
 		}
 
