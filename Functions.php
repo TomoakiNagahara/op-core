@@ -22,15 +22,17 @@ namespace OP;
  *
  * @created   2020-01-01
  */
-include(__DIR__.'/function/D.php');
-include(__DIR__.'/function/Load.php');
-include(__DIR__.'/function/Unit.php');
-include(__DIR__.'/function/encode.php');
-include(__DIR__.'/function/Notice.php');
-include(__DIR__.'/function/RootPath.php');
-include(__DIR__.'/function/ConvertPath.php');
-include(__DIR__.'/function/ConvertURL-2.php');
-include(__DIR__.'/function/Template.php');
+require(__DIR__.'/function/D.php');
+require(__DIR__.'/function/Load.php');
+require(__DIR__.'/function/Unit.php');
+require(__DIR__.'/function/encode.php');
+require(__DIR__.'/function/Notice.php');
+require(__DIR__.'/function/RootPath.php');
+require(__DIR__.'/function/ConvertPath.php');
+require(__DIR__.'/function/ConvertURL-2.php');
+require(__DIR__.'/function/Template.php');
+require(__DIR__.'/function/GetTemplate.php');
+require(__DIR__.'/function/Content.php');
 
 /** Compress to meta path from local file path.
  *
