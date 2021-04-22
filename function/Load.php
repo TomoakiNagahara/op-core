@@ -39,6 +39,6 @@ function Load(string $function):void
 
 	//	...
 	if( true ){
-		throw new \Exception("Not found function file. ($function)");
+		throw new \Exception("This function file cannot be found. ($function)");
 	}
 }
