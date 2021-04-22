@@ -61,7 +61,7 @@ function ConvertPath(string $path, bool $throw_exception=true):string
 			//	Return false.
 			$path = false;
 		}else{
-			throw new \Exception("File is not exists. ($path)");
+			throw new \Exception("This file does not exist. ($path)");
 		}
 	}
 
