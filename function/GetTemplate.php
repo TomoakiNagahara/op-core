@@ -29,9 +29,6 @@ function GetTemplate(string $path, array $args=[]):string
 	}
 
 	//	...
-	Load('Template');
-
-	//	...
 	Template($path, $args);
 
 	//	...
