@@ -23,13 +23,9 @@ namespace OP;
  * @copyright Tomoaki Nagahara All right reserved.
  */
 function Markdown($file){
-	/*
-	//	...
-	if(!file_exists($file) ){
-		D("This file does not exist. ($file)");
-		return;
-	}
-	*/
+
+	//	Checking if the file actually exists.
+	ConvertPath($file);
 
 	//	...
 	echo '<div class="markdown"><pre><code>';
