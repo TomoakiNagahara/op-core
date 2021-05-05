@@ -38,3 +38,11 @@ function Content(?string $path=null, array $args=[])
 	//	...
 	$_content = null;
 }
+
+/** If it is not called from anywhere, it will be output here.
+ *
+ * @created   2021-05-05
+ */
+register_shutdown_function(function(){
+	Content();
+});
