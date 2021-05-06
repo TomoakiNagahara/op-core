@@ -14,4 +14,4 @@
 namespace OP;
 
 //	...
-Notice('This is test.');
+Notice("<h1>This is test.</h1>\nSub message.");
