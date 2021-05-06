@@ -29,19 +29,19 @@ function Layout($value=null){
 		//	...
 		if( is_string($value) ){
 			//	...
-			Env::Set('layout',['name'=>$value]);
+			Config::Set('layout',['name'=>$value]);
 			$value = true;
 		}
 
 		//	...
 		if( is_bool($value) ){
 			//	...
-			Env::Set('layout',['execute'=>$value]);
+			Config::Set('layout',['execute'=>$value]);
 		}
 	}
 
 	//	...
-	$config = Env::Get('layout');
+	$config = Config::Get('layout');
 
 	//	...
 	return $config['execute'] ? $config['name'] : false;
