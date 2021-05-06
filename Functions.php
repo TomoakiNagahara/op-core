@@ -27,6 +27,7 @@ require(__DIR__.'/function/Load.php');
 require(__DIR__.'/function/Unit.php');
 require(__DIR__.'/function/Encode.php');
 require(__DIR__.'/function/Notice.php');
+require(__DIR__.'/function/Layout.php');
 require(__DIR__.'/function/RootPath.php');
 require(__DIR__.'/function/ConvertPath.php');
 require(__DIR__.'/function/ConvertURL-2.php');
