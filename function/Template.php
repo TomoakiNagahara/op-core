@@ -80,6 +80,9 @@ function Template(string $file, array $args=[], $throw_exception=true)
 				extract($args, null, null);
 			};
 
+			//	Flush arguments.
+			unset($path, $args);
+
 			//	Execute file.
 			return include(${$md5});
 		},$path, $args);
