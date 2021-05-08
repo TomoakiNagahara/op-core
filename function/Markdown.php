@@ -21,11 +21,15 @@ namespace OP;
  * @package   op-core
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
+ * @param     string       $meta_file_path
+ * @param     boolean      $throw_exception
  */
-function Markdown($file){
-
+function Markdown($file, $throw_exception=true)
+{
 	//	Checking if the file actually exists.
-	ConvertPath($file);
+	if(!ConvertPath($file, $throw_exception) ){
+		return;
+	}
 
 	//	...
 	echo '<div class="markdown"><pre><code>';
