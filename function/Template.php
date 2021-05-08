@@ -24,7 +24,7 @@ namespace OP;
  * @throws   \Exception    $e
  * @return    NULL|mixed   $result
  */
-function Template(string $file, array $args=[])
+function Template(string $file, array $args=[], $throw_exception=true)
 {
 	//	Trim white space.
 	$file = trim($file);
@@ -41,7 +41,9 @@ function Template(string $file, array $args=[])
 
 	//	Check if meta path.
 	if( strpos($file, ':') ){
-		$file = ConvertPath($file);
+		if(!$file = ConvertPath($file, $throw_exception) ){
+			return;
+		}
 	}
 
 	//	Check file exists.
