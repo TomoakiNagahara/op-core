@@ -21,7 +21,7 @@ namespace OP;
  * @throws   \Exception
  * @return   ?string       $hash of $_content
  */
-function Content(?string $path=null, array $args=[]) : ?string
+function Content( string $path=null, array $args=[])
 {
 	//	...
 	static $_content;
