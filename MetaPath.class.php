@@ -83,7 +83,7 @@ class MetaPath
 	 * @param     string     $meta
 	 * @return    string|boolean
 	 */
-	static function Get(string $meta) : ?string
+	static function Get(string $meta)
 	{
 		//	...
 		require_once(__DIR__.'/function/RootPath.php');
