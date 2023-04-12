@@ -16,7 +16,7 @@ namespace OP;
 /** Charset
  *
  */
-function Charset(?string $charset=null)
+function Charset( string $charset=null)
 {
 	return Env::Charset($charset);
 }
