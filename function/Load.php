@@ -17,7 +17,7 @@ namespace OP;
  *
  * @param string $function
  */
-function Load(string $function):void
+function Load(string $function)
 {
 	//	Deny relative path
 	if( strpos($function, '/') ){
