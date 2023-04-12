@@ -145,7 +145,7 @@ trait OP_OBJECT
 	 * @throws    \Exception
 	 * @return    \OP\MetaPath
 	 */
-	static function MetaPath(?string $path=null, ?bool $url=null)
+	static function MetaPath( string $path=null,  bool $url=null)
 	{
 		//	...
 		static $_meta_path;
@@ -208,7 +208,7 @@ trait OP_OBJECT
 	 * @param      array      $config
 	 * @return
 	 */
-	static function Config(?string $name=null, ?array $config=null)
+	static function Config( string $name=null,  array $config=null)
 	{
 		//	...
 		if( $name ){
@@ -503,7 +503,7 @@ trait OP_ENV
 	 * @param      string     $key
 	 * @return
 	 */
-	static function Request(?string $key=null)
+	static function Request( string $key=null)
 	{
 		return Env::Request($key);
 	}
@@ -520,7 +520,7 @@ trait OP_ENV
 	 * @param      string     $app_id
 	 * @return     string
 	 */
-	static function AppID(?string $app_id=null)
+	static function AppID( string $app_id=null)
 	{
 		return Env::AppID($app_id);
 	}
