@@ -30,7 +30,7 @@ namespace OP;
  * @param    string      $time
  * @return   integer     $time
  */
-function Time(?bool $utc=false, ?string $time=''):int
+function Time(      $utc=false,  string $time=''):int
 {
     //  ...
     static $_time;

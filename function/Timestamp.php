@@ -36,7 +36,7 @@ namespace OP;
  * @param    string      $offset
  * @return   string      $timestamp
  */
-function Timestamp(?bool $utc=false, $offset=null):string
+function Timestamp(      $utc=false, $offset=null):string
 {
     //  ...
     require_once(__DIR__.'/Time.php');
