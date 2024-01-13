@@ -28,13 +28,13 @@ namespace OP;
  * @param     array        $args
  * @return    NULL|mixed   $result
  */
-function Template(string $file, array $args=[])
+function Template(string $file_name, array $args=[])
 {
 	//	...
 	$result = null;
 
 	//	Trim white space.
-	$file = trim($file);
+	$file = $file_name = trim($file_name);
 
 	//	Check if empty.
 	if( empty($file) ){
