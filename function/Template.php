@@ -36,6 +36,12 @@ function Template(string $file, array $args=[])
 	//	Trim white space.
 	$file = trim($file);
 
+	//	Check if empty.
+	if( empty($file) ){
+		Notice::Set("Passed empty string. ($file)");
+		return;
+	}
+
 	//	Check if full path.
 	if( $file[0] === '/' ){
 		Notice::Set("Template function can not specify the full path from root. ($file)");
