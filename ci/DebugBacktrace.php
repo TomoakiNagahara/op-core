@@ -37,6 +37,7 @@ $ci->Set('Auto', $result, $args);
 
 //  Numerator
 $args   = [$backtraces[0]];
+$result = 'core:/function/Template.php  95 - include()';
 $ci->Set('Numerator', $result, $args);
 
 //  Args
