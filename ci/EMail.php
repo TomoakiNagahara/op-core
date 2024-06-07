@@ -228,7 +228,7 @@ if( version_compare(PHP_VERSION, '8.0.0') >= 0 ){
 $core_path = \OP\RootPath('git').'asset/core/trait/OP_CI.php';
 $core_path = realpath($core_path);
 $method = '_set_error';
-$result = "Exception: {$error} type string, null given, called in {$core_path} on line 66";
+$result = "Exception: {$error} type string, null given, called in {$core_path} on line 50";
 $args   = null;
 $ci->Set($method, $result, $args);
 

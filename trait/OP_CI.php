@@ -28,22 +28,6 @@ namespace OP;
  */
 trait OP_CI
 {
-	/** CI
-	 *
-	 * @deprecated 2023-02-10
-	 * @created    2022-10-12
-	 */
-	function CI()
-	{
-		/*
-		//	...
-		require_once(__DIR__.'/../function/CI.php');
-
-		//	...
-		require(__DIR__.'/../include/CI.php');
-		*/
-	}
-
 	/** Return all method names that the instance has.
 	 *
 	 * @created    2023-02-10
