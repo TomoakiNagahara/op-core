@@ -132,6 +132,10 @@ class Unit
 
 	/** Return already instantiated instance that unit name.
 	 *
+	 * <pre>
+	 * OP()->Unit()->Instantiated('unit_name');
+	 * </pre>
+	 *
 	 * @created  2019-09-18
 	 * @renamed  2024-03-20  Singleton() --> Instantiated()
 	 * @param    string      $name
@@ -139,7 +143,16 @@ class Unit
 	 */
 	static function & Instantiated(string $name) : IF_UNIT
 	{
-		return self::Singleton($name);
+		//	...
+		static $_unit;
+
+		//	...
+		if( empty($_unit[$name]) ){
+			$_unit[$name] = self::Instantiate($name);
+		}
+
+		//	...
+		return $_unit[$name];
 	}
 
 	/** Singleton
