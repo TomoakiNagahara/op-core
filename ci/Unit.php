@@ -26,6 +26,11 @@ $args   = 'Dump';
 $result = 'OP\UNIT\Dump';
 $ci->Set('Instantiate', $result, $args);
 
+//	Instantiated
+$args   = 'Dump';
+$result = 'OP\UNIT\Dump';
+$ci->Set('Instantiated', $result, $args);
+
 //	Load
 $args   = 'Dump';
 $result =  true;

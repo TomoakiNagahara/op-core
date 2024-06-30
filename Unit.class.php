@@ -130,6 +130,18 @@ class Unit
 		return require_once($path);
 	}
 
+	/** Return already instantiated instance that unit name.
+	 *
+	 * @created  2019-09-18
+	 * @renamed  2024-03-20  Singleton() --> Instantiated()
+	 * @param    string      $name
+	 * @return  &IF_UNIT     $unit
+	 */
+	static function & Instantiated(string $name) : IF_UNIT
+	{
+		return self::Singleton($name);
+	}
+
 	/** Singleton
 	 *
 	 * <pre>
