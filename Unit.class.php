@@ -168,7 +168,7 @@ class Unit
 	 */
 	static function & Singleton(string $name)
 	{
-		return Unit($name);
+		return self::Instantiated($name);
 	}
 
 	/** Check if that unit is installed.
