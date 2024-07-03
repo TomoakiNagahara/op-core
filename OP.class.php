@@ -371,9 +371,9 @@ trait OP_FUNCTION
 	 *
 	 * @created   2022-10-07
 	 * @param     string     $name
-	 * @return   &IF_UNIT
+	 * @return    IF_UNIT_MAPPER
 	 */
-	static function & Unit(string $name) : IF_UNIT
+	static function & Unit(string $name='')
 	{
 		/*
 		return Unit($unit_name);
@@ -396,6 +396,15 @@ trait OP_FUNCTION
 		if( $name ){
 			return Unit::Instantiated($name);
 		}
+
+		//	...
+		static $_unit;
+		//	...
+		if(!$_unit ){
+			$_unit = new Unit();
+		}
+		//	...
+		return $_unit;
 	}
 
 	/** Set / Get meta root path.
