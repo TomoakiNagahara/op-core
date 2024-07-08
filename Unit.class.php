@@ -26,7 +26,7 @@ use Exception;
  * $obj = Unit::Instance('UnitName');
  *
  * //	Load static class.
- * \OP\Unit::Load('unitname');
+ * \OP\Unit::Load('unit_name');
  *
  * //	Use static class.
  * $val = \OP\UNIT\NAME::Get();
@@ -66,6 +66,7 @@ class Unit
 			throw new Exception("Has not been exists class. ($class)");
 		};
 
+		/* This checking mechanism is built in to OP_UNIT_MAPPER.
 		//	Get the interface implemented by the class.
 		$classes = class_implements($class);
 
@@ -73,7 +74,9 @@ class Unit
 		if(!isset($classes['OP\IF_UNIT']) ){
 			throw new Exception("This unit has not implemented IF_UNIT. ($class)");
 		};
+		*/
 
+		/* This checking mechanism is built in to OP_UNIT_MAPPER.
 		//	Check implemented restriction.
 		switch( strtolower($name) ){
 			case 'form':
@@ -88,6 +91,7 @@ class Unit
 				};
 			break;
 		};
+		*/
 
 		//	Return new instance.
 		return new $class();
