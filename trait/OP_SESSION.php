@@ -44,6 +44,9 @@ trait OP_SESSION
 			$explode[1] = 'CORE';
 		}
 
+		//	OP --> NAME_SPACE
+		$explode[0] = _OP_NAME_SPACE_;
+
 		//	Reference
 		$session = & $_SESSION[$explode[0]][$explode[1]][$explode[2]][$app_id];
 
