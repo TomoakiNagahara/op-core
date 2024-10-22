@@ -58,5 +58,11 @@ $args   = 'Core';
 $result =  false;
 $ci->Set($method, $result, $args);
 
+//	_Map
+$method = '_Map';
+$args   = 'Dump';
+$result = 'OP\UNIT\Dump';
+$ci->Set($method, $result, $args);
+
 //	...
 return $ci->GenerateConfig();

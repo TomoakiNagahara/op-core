@@ -23,4 +23,26 @@ namespace OP;
  */
 trait OP_UNIT_MAPPER
 {
+	/** Map unit name.
+	 *
+	 * @created  2024-07-08
+	 * @param    string     $name
+	 * @return   IF_UNIT
+	 */
+	static private function & _Map(string $name) : IF_UNIT
+	{
+		//	Get unit config.
+		static $_config;
+		if(!$_config){
+			$_config = Config::Get('unit');
+		}
+
+		//	Do mapping.
+		if( isset($_config[$name]) ){
+			$name = $_config[$name];
+		}
+
+		//	Return already instantiated unit object.
+		return self::Instantiated($name);
+	}
 }

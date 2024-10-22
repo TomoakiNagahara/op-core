@@ -19,3 +19,9 @@ declare(strict_types=1);
 namespace OP;
 
 /* @var $ci UNIT\CI\CI_Config */
+
+//	...
+$method = '_Map';
+$args   = 'App';
+$result = 'OP\UNIT\App';
+$ci->Set($method, $result, $args);
