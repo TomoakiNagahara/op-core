@@ -64,5 +64,30 @@ $args   = 'Dump';
 $result = 'OP\UNIT\Dump';
 $ci->Set($method, $result, $args);
 
+//	Each unit
+$unit = [
+	'App',
+	'Api',
+	'Router',
+	'Layout',
+	'WebPack',
+	'Form',
+	'Validate',
+	'Database',
+	'ORM',
+	'QQL',
+];
+foreach( $unit as $class ){
+	$method = $class;
+	$args   = $class;
+	if( OP()->Unit()->isInstalled($class) ){
+		$result = "OP\UNIT\\{$class}";
+	}else{
+		$result = "Exception: Does not install \"{$class}\" unit. (git:/asset/unit/".strtolower($class).")";
+	}
+
+	$ci->Set($method, $result, $args);
+}
+
 //	...
 return $ci->GenerateConfig();
