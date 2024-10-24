@@ -46,14 +46,15 @@ $config['Set'][]    = [
 
 /* @var $ci \OP\UNIT\CI\CI_Config */
 $ci = OP()->Unit()->CI()->Config();
+$ci = OP::Unit('CI')->Config();
 
 //	...
-$key = md5(__FILE__);
+$file   = 'ci';
 
 //	...
 $method = '_Init';
-$result = 'ci';
-$args   = 'CI';
+$result = strtolower($file);
+$args   = strtoupper($file);
 $ci->Set($method, $result, $args);
 
 //	...
@@ -73,6 +74,10 @@ $method = 'Get';
 $core   = OP::MetaPath('core:/');
 $core   = realpath($core);
 switch( PHP_MAJOR_VERSION.PHP_MINOR_VERSION ){
+	case '70':
+	case '71':
+	case '72':
+	case '73':
 	case '74':
 		$result = 'Exception: Argument 1 passed to OP\Config::_Init() must be of the type string, null given, called in '.$core.'/Config.class.php on line 164';
 		break;
@@ -83,20 +88,21 @@ $args   = null;
 $ci->Set($method, $result, $args);
 
 //	Get
-$result = "Notice: This config file does not exists. ({$key})";
-$args   = $key;
+$file   = 'no_exist';
+$result = "Notice: This config file does not exists. ({$file})";
+$args   = $file;
 $ci->Set('Get', $result, $args);
 
 //	Set - Init
 $method = 'Set';
-$args   = [$key, ['a' => 'A', 'b' => 'B']];
+$args   = [$file, ['a' => 'A', 'b' => 'B']];
 $result = ['a' => 'A', 'b' => 'B'];
 $ci->Set($method, $result, $args);
 
 //	Set - Add
 $method = 'Set';
 $result = ['a' => 'A', 'b' => 'B', 'c' => 'C'];
-$args   = [$key, ['c' => 'C']];
+$args   = [$file, ['c' => 'C']];
 $ci->Set($method, $result, $args);
 
 //	...
