@@ -18,8 +18,8 @@ declare(strict_types=1);
  */
 namespace OP;
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	_iv
 $result = '3ba0f40775d6d6ac';
@@ -42,4 +42,4 @@ $args   = 'PINL3C+1XaiCb/1QZNdGZA==';
 $ci->Set('Dec', $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
