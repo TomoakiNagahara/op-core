@@ -44,8 +44,8 @@ $config['Set'][]    = [
 ];
 */
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	...
 $key = md5(__FILE__);
@@ -100,4 +100,4 @@ $args   = [$key, ['c' => 'C']];
 $ci->Set($method, $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
