@@ -18,8 +18,8 @@ declare(strict_types=1);
  */
 namespace OP;
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	Set - Not exists directory
 $result = 'Exception: This directory not exists. (/foo/bar/)';
@@ -120,4 +120,4 @@ $result = "Notice: This path is not the document root path. (doc={$doc}, full=/e
 $ci->Set('URL', $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
