@@ -22,8 +22,8 @@ namespace OP;
 $core = OP::MetaPath('core:/');
 $core = str_replace('/', '\\/', $core);
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	Get
 $result =  null;
@@ -50,4 +50,4 @@ $args   = null;
 $ci->Set('Debug', $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
