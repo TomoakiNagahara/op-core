@@ -18,8 +18,8 @@ declare(strict_types=1);
  */
 namespace OP;
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	Instantiate
 $args   = 'Dump';
@@ -95,4 +95,4 @@ foreach( $unit as $class ){
 }
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
