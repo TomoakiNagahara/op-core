@@ -23,8 +23,8 @@ $subject = 'This is self-check test';
 $content = 'This is self-check test mail.';
 $attach_file_name = 'email.txt';
 
-//	...
-$ci = OP::Unit('CI')::Config();
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	init
 $user_name = get_current_user();
