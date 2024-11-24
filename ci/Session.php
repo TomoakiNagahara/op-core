@@ -18,8 +18,8 @@ declare(strict_types=1);
  */
 namespace OP;
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	Get
 $args   = 'self-check';
@@ -37,4 +37,4 @@ $result = ['self-check'=>true];
 $ci->Set('Session', $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
