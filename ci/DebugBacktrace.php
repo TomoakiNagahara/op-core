@@ -18,8 +18,8 @@ declare(strict_types=1);
  */
 namespace OP;
 
-//  ...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //  Auto
 $backtrace  = [
@@ -63,4 +63,4 @@ $result = 'core:/ci/DebugBacktrace.php';
 $ci->Set($method, $result, $args);
 
 //  ...
-return $ci->GenerateConfig();
+return $ci->Get();
