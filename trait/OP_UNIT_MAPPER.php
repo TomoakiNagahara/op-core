@@ -145,4 +145,14 @@ trait OP_UNIT_MAPPER
 	{
 		return self::_Map(__FUNCTION__);
 	}
+
+	/** CI
+	 *
+	 * @created    2024-11-24
+	 * @return     IF_QQL
+	 */
+	static function & CI() : IF_CI
+	{
+		return self::_Map(__FUNCTION__);
+	}
 }
