@@ -18,8 +18,8 @@ declare(strict_types=1);
  */
 namespace OP;
 
-//	...
-$ci = OP::Unit('CI');
+/* @var $ci \OP\UNIT\CI\CI_Config */
+$ci = OP()->Unit()->CI()->Config();
 
 //	_Session
 $args   = null;
@@ -47,4 +47,4 @@ $result = false;
 $ci->Set('Has', $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
