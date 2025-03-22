@@ -31,9 +31,9 @@ trait OP_TEMPLATE
 	 *  2. You can pass arguments.
 	 *
 	 * Rules:
-	 *  1. You Can not specify full path.
-	 *  2. You Can specify the meta path.
-	 *  3. You Can specify relative path.
+	 *  1. You can not specify full path.
+	 *  2. You can specify the meta path.
+	 *  3. You can specify relative path.
 	 *  4. You can not access the upper path.
 	 *
 	 * Search order:
@@ -53,10 +53,10 @@ trait OP_TEMPLATE
 	 * ```
 	 * </pre>
 	 *
-	 * @genesis    A long time ago...
-	 * @evoluted   2017-05-09 to op-core-7
-	 * @evoluted   2019-02-22 to op-unit-template
-	 * @branched   2020-04-25 to OP\Template()
+	 * @created    A long time ago...
+	 * @updated    2017-05-09 to op-core-7
+	 * @updated    2019-02-22 to op-unit-template
+	 * @updated    2020-04-25 to OP\Template()
 	 * @moved      2024-06-28 to OP_TEMPLATE
 	 * @param      string       $file
 	 * @param      array        $args
@@ -117,7 +117,7 @@ trait OP_TEMPLATE
 
 		//	Load file.
 		try {
-			//	Seal to the SandBox.
+			//	Sealed inside the closure.
 			$result = call_user_func(function($template_path, $args){
 
 				//	Swap file name. Because avoid conflicts. --> $args['path']
