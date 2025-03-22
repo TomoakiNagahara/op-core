@@ -82,6 +82,7 @@ trait OP_TEMPLATE
 			return;
 		}
 
+		/*
 		//	Check if meta path.
 		if( strpos($file, ':') ){
 			if(!$file = ConvertPath($file, false, false) ){
@@ -89,7 +90,9 @@ trait OP_TEMPLATE
 				return;
 			}
 		}
+		*/
 
+		/*
 		//	Check file exists.
 		if( file_exists($path = realpath($file)) ){
 			//	Relative path.
@@ -97,6 +100,48 @@ trait OP_TEMPLATE
 			//	Template path.
 		}else{
 			Notice::Set("This file is not located in the template directory. ($file)");
+			return;
+		}
+		*/
+
+		//	Check if meta path.
+		if( strpos($file, ':') ){
+			//	Convert to real path.
+			$path = ConvertPath($file, false, false);
+		}else{
+			//	Init variables.
+			$asset  = RootPath('asset');
+			$layout = Config::Get('layout')['name'] ?? null;
+			if( __NAMESPACE__ === 'OP\UNIT' ){
+				$unit = explode('\\', self::class)[2];
+			}
+
+			//	Search order.
+			$dirs   = [];
+			$dirs[] = getcwd().'/';
+			if(!empty($unit  )){ $dirs[] = "{$asset}/unit/{$unit}/template/";     }
+			if(!empty($layout)){ $dirs[] = "{$asset}/layout/{$layout}/template/"; }
+			$dirs[] = "{$asset}/template/";
+
+			//	Search file.
+			foreach( $dirs as $dir ){
+				//	Full path.
+				$path = $dir . $file;
+
+				//	Check file exists.
+				if( file_exists($path) ){
+					//	Break loop.
+					break;
+				}
+
+				//	Reset path.
+				$path = null;
+			}
+		}
+
+		//	Check file exists.
+		if( empty($path) or !file_exists($path) ){
+			Notice::Set("This file is not located in the template directory. ($path)");
 			return;
 		}
 
