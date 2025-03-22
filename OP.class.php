@@ -35,6 +35,11 @@ class OP implements IF_OP
         OP_FUNCTION::__call       insteadof OP_CORE;
 		OP_FUNCTION::__callstatic insteadof OP_CORE;
 	}
+
+	//	...
+	use OP_TEMPLATE {
+		OP_TEMPLATE::Template insteadof OP_OBJECT;
+	}
 }
 
 /** OP_OBJECT
