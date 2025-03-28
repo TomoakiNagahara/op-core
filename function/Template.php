@@ -77,7 +77,7 @@ function Template(string $file_name, array $args=[])
 		//	Get current directory.
 		$save_directory = getcwd();
 
-		//	Chenge direcotry.
+		//	Change directory.
 		chdir(dirname($path));
 	}
 
@@ -116,7 +116,7 @@ function Template(string $file_name, array $args=[])
 
 	//	Check if directory changed.
 	if( $save_directory ?? null ){
-		//	Recovery save direcotry.
+		//	Recovery save directory.
 		chdir($save_directory);
 	}
 
