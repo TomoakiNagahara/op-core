@@ -19,7 +19,7 @@ declare(strict_types=1);
 namespace OP;
 
 //	...
-$ci = OP::Unit('CI');
+$ci = OP::Unit('CI')->Config();
 
 //	Set
 $result =  null;
@@ -32,4 +32,4 @@ $args   = null;
 $ci->Set('GenerateConfig', $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
