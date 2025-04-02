@@ -26,7 +26,7 @@ namespace OP;
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-class OP
+class OP implements IF_OP
 {
 	/** trait.
 	 *
