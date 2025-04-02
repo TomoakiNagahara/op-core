@@ -379,6 +379,7 @@ trait OP_FUNCTION
 		return Unit($unit_name);
 		*/
 
+		/*
 		//	...
 		static $_unit;
 
@@ -389,6 +390,12 @@ trait OP_FUNCTION
 
 		//	...
 		return $_unit[$name];
+		*/
+
+		//	...
+		if( $name ){
+			return Unit::Instantiated($name);
+		}
 	}
 
 	/** Set / Get meta root path.
