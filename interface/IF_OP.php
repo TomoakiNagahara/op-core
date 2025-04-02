@@ -38,4 +38,10 @@ interface IF_OP
 
 	public function Content();
 	*/
+
+	/** Unit
+	 *
+	 * @created    2025-04-02
+	 */
+	public static function Unit();
 }
