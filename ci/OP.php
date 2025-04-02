@@ -190,4 +190,4 @@ $result = '<h1 class="test">'."It's test".'</h1>';
 $ci->Set($method, $result, $args);
 
 //	...
-return $ci->GenerateConfig();
+return $ci->Get();
