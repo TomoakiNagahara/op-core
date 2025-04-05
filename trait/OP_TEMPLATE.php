@@ -141,6 +141,9 @@ trait OP_TEMPLATE
 
 		//	Check file exists.
 		if( empty($path) or !file_exists($path) ){
+			if(!$path ){
+				$path = $file;
+			}
 			Notice::Set("This file is not located in the template directory. ($path)");
 			return;
 		}
