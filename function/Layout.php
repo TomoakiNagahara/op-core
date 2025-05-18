@@ -19,6 +19,7 @@ namespace OP;
 
 /** Get/Set Layout config value.
  *
+ * @deprecated 2025-05-19
  * @created   2021-01-10
  * @param     null|boolean|string $value  is execute flag or layout name.
  * @return    boolean|string      $result is execute flag or layout name.
