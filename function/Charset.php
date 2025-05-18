@@ -15,6 +15,7 @@ namespace OP;
 
 /** Charset
  *
+ * @deprecated 2025-05-19
  */
 function Charset(?string $charset=null)
 {
