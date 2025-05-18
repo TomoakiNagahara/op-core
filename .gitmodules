@@ -1,0 +1,3 @@
+[submodule "interfaces"]
+	path = interfaces
+	url = https://github.com/onepiece-framework/op-core-interfaces.git
