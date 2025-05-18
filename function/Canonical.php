@@ -15,6 +15,7 @@ namespace OP;
 
 /** Canonical
  *
+ * @deprecated 2025-05-19
  * @param    string     $url
  * @return   string     $fqdn
  */
