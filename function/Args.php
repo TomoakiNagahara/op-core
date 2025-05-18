@@ -24,6 +24,7 @@ namespace OP;
 
 /** Return \OP\Unit('Router')->Args();
  *
+ * @deprecated 2025-05-19
  * @created   2020-12-30
  * @return    array        $args
  */
